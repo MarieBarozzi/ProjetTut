@@ -1,5 +1,10 @@
 <?php
 namespace Annonce; 
+use Annonce\Model\Annonce;
+use Annonce\Model\AnnonceTable;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\TableGateway\TableGateway;
+
 
 class Module
 {
@@ -41,8 +46,4 @@ class Module
             ),
         );
     }
-}
-	
-	
-	
 }

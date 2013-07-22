@@ -18,7 +18,6 @@ class Annonce
 	public $mail_auteur; 
 
  
-
     public function exchangeArray($data)
     {
         $this->id_annonce  = (!empty($data['id_annonce'])) ? $data['id_annonce'] : null; /*si la clé id correspond à une valeur on prend cette valeurr là)*/
