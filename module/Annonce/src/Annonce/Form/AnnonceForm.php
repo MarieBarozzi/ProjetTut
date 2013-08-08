@@ -32,12 +32,16 @@ class AnnonceForm extends Form
             ),
         ));
 		
-  		$this->add(array(
-            'name' => 'type_annonce',
-            'type' => 'Text',
-            'options' => array(
-                'label' => 'Type de l annonce',
-            ),
+  		$this->add(array( //pas de validateur ? 
+  		 'type' => 'Select',
+             'name' => 'type_annonce',
+             'options' => array(
+                     'label' => 'Type de l annonce',
+                     'value_options' => array(
+                             'offre' => 'Offre',
+                             'demande' => 'Demande',
+                     ),
+             )
         ));		
 		$this->add(array(
             'name' => 'prix',
@@ -61,32 +65,50 @@ class AnnonceForm extends Form
             'name' => 'date_modif',
             'type' => 'Hidden',
         ));
-		 $this->add(array(
+		
+          $this->add(array(
+            'name' => 'categorie',
+            'type' => 'Text',
+            'options' => array(
+                'label' => 'Categorie',
+            ),
+        )); 
+         
+                  
+         /* $this->add(array(
              'type' => 'Select',
              'name' => 'categorie',
              'options' => array(
                      'label' => 'Categorie',
-                     'value_options' => array(/*comment recuperer les bons champs*/
+                     'value_options' => array(/*comment recuperer les bons champs* / 
                              '0' => 'French',
                              '1' => 'English',
                              '2' => 'Japanese',
                              '3' => 'Chinese',
                      ),
              )
-     ));
-	  $this->add(array(
+     ));*/
+      $this->add(array(
+            'name' => 'departement',
+            'type' => 'Text',
+            'options' => array(
+                'label' => 'Departement',
+            ),
+        ));
+     
+	 /* $this->add(array(
              'type' => 'Select',
              'name' => 'departement',
              'options' => array(
                      'label' => 'Departement',
-                     'value_options' => array(/*comment recuperer les bons champs*/
+                     'value_options' => array(/*comment recuperer les bons champs* /
                              '0' => 'French',
                              '1' => 'English',
                              '2' => 'Japanese',
                              '3' => 'Chinese',
                      ),
              )
-     ));
+     ));*/
 	$this->add(array(
 		'type' => 'Email',
      	'name' => 'email',
