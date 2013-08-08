@@ -67,7 +67,7 @@ class AnnonceForm extends Form
         ));
 		
           $this->add(array(
-            'name' => 'categorie',
+            'name' => 'id_cat',
             'type' => 'Text',
             'options' => array(
                 'label' => 'Categorie',
@@ -89,7 +89,7 @@ class AnnonceForm extends Form
              )
      ));*/
       $this->add(array(
-            'name' => 'departement',
+            'name' => 'id_dept',
             'type' => 'Text',
             'options' => array(
                 'label' => 'Departement',
@@ -111,7 +111,7 @@ class AnnonceForm extends Form
      ));*/
 	$this->add(array(
 		'type' => 'Email',
-     	'name' => 'email',
+     	'name' => 'mail_auteur',
      	'options' => array(
          	'label' => 'Email Address'
      	),

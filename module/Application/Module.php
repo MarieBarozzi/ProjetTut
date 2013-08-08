@@ -12,6 +12,9 @@ namespace Application;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
+use Zend\Mvc\I18n\Translator;
+use Zend\Validator\AbstractValidator;
+
 class Module
 {
     public function onBootstrap(MvcEvent $e)
@@ -19,6 +22,14 @@ class Module
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+        
+        $translator = new Translator();
+        $translator->addTranslationFile(
+            'phpArray',
+            'vendor/zendframework/zendframework/resources/languages/fr/Zend_Validate.php'
+        );
+        AbstractValidator::setDefaultTranslator($translator);
+        
     }
 
     public function getConfig()

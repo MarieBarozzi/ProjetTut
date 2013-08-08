@@ -71,7 +71,7 @@ class AnnonceFormValidator implements InputFilterAwareInterface
                 ),
         ))); 
         $inputFilter->add($factory->createInput(array(
-            'name' => 'number', 
+            'name' => 'prix', 
             'required' => false, 
             'filters' => array( 
                 array('name' => 'StripTags'), 
@@ -124,27 +124,17 @@ class AnnonceFormValidator implements InputFilterAwareInterface
         ))); 
  
         $inputFilter->add($factory->createInput(array( 
-            'name' => 'email', 
+            'name' => 'mail_auteur', 
             'filters' => array( 
                 array('name' => 'StripTags'), 
                 array('name' => 'StringTrim'), 
             ), 
             'validators' => array( 
                 array ( 
-                    'name' => 'EmailAddress', 
-                    'options' => array( 
-                        'messages' => array( 
-                            'emailAddressInvalidFormat' => 'L\'adresse email n\'est pas valide', 
-                        ) 
-                    ), 
+                    'name' => 'EmailAddress'
                 ), 
                 array ( 
-                    'name' => 'NotEmpty', 
-                    'options' => array( 
-                        'messages' => array( 
-                            'isEmpty' => 'L\'adresse email est requise', 
-                        ) 
-                    ), 
+                    'name' => 'NotEmpty'
                 ), 
                  array(
                         'name'    => 'StringLength',
