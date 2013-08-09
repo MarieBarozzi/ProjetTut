@@ -33,4 +33,10 @@ class Annonce
         $this->id_dept = (!empty($data['id_dept'])) ? $data['id_dept'] : null;
         $this->mail_auteur = (!empty($data['mail_auteur'])) ? $data['mail_auteur'] : null;
     }
+
+    public function getArrayCopy()
+    {
+        return get_object_vars($this);
+    }
+    
 }

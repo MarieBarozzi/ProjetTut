@@ -7,15 +7,19 @@ $this->headTitle($title);
 <?php
 $form = $this->form;
 $form->setAttribute('action', $this->url('annonce', array('action' => 'add')));
-$form->prepare();
+echo $this->form($form);
 
+/*
+voir les classes de Zend\Form\View\Helper
+les appeler via les mots cles de Zend\Form\View\HeleperConfig
+$form->prepare();
 echo $this->form()->openTag($form);
 echo $this->formHidden($form->get('id_annonce'));
 echo $this->formLabel($form->get('titre'));
-echo $this->formInput($form->get('titre'));
+echo $this->formText($form->get('titre'));
 echo $this->formElementErrors($form->get('titre'));
 echo $this->formLabel($form->get('descr'));
-echo $this->formInput($form->get('descr'));
+echo $this->formTextArea($form->get('descr'));
 echo $this->formElementErrors($form->get('descr'));
 echo $this->formLabel($form->get('type_annonce'));
 echo $this->formInput($form->get('type_annonce'));
@@ -39,3 +43,5 @@ echo $this->formInput($form->get('mail_auteur'));
 echo $this->formElementErrors($form->get('mail_auteur'));
 echo $this->formSubmit($form->get('submit'));
 echo $this->form()->closeTag();
+ * 
+ */

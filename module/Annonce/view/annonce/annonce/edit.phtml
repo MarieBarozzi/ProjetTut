@@ -1,0 +1,19 @@
+<?php
+
+$title = 'Editer une annonce';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<?php
+$form = $this->form; 
+$form->setAttribute('action', $this->url(
+    'annonce',
+    array(
+        'action' => 'edit',
+        'id'     => $this->id_annonce,
+    )
+));
+$form->prepare();
+
+echo $this->form($form);
