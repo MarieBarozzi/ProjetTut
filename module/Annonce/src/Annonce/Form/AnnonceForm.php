@@ -90,25 +90,13 @@ class AnnonceForm extends Form
      ));*/
       $this->add(array(
             'name' => 'id_dept',
-            'type' => 'Text',
+            'type' => 'Select',
             'options' => array(
                 'label' => 'Departement',
             ),
         ));
      
-	 /* $this->add(array(
-             'type' => 'Select',
-             'name' => 'departement',
-             'options' => array(
-                     'label' => 'Departement',
-                     'value_options' => array(/*comment recuperer les bons champs* /
-                             '0' => 'French',
-                             '1' => 'English',
-                             '2' => 'Japanese',
-                             '3' => 'Chinese',
-                     ),
-             )
-     ));*/
+
 	$this->add(array(
 		'type' => 'Email',
      	'name' => 'mail_auteur',

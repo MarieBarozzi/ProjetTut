@@ -11,6 +11,7 @@ class AnnonceController extends AbstractActionController
 {
 	
 	protected $annonceTable;
+    protected $departementTable; 
 	
     public function indexAction()
     {
@@ -21,7 +22,14 @@ class AnnonceController extends AbstractActionController
 
     public function addAction()
     {
+        $departements = $this->getDepartementTable()->fetchAll();
+        $choixDepartement = array();
+        foreach ($departements as $departement) {
+            $choixDepartement[$departement->id_dept] = $departement->id_dept . ' - ' . $departement->lib_dept;
+        }        
+        
         $form = new AnnonceForm();
+        $form->get('id_dept')->setValueOptions($choixDepartement);
         $form->get('date_crea')->setValue(date('Y-m-d'));
         $form->get('date_modif')->setValue(date('Y-m-d'));
         $form->get('submit')->setValue('Ajout'); //change le bouton "submit" en "ajout"
@@ -66,8 +74,16 @@ class AnnonceController extends AbstractActionController
                 'action' => 'index'
             ));
         }
-
+        
+        $departements = $this->getDepartementTable()->fetchAll();
+        $choixDepartement = array();
+        foreach ($departements as $departement) {
+            $choixDepartement[$departement->id_dept] = $departement->id_dept . ' - ' . $departement->lib_dept;
+        }    
+        
         $form  = new AnnonceForm();
+        $form->get('id_dept')->setValueOptions($choixDepartement);
+        
         $form->bind($annonce); //pré-remplit
         $form->get('date_modif')->setValue(date('Y-m-d'));
         
@@ -128,4 +144,16 @@ class AnnonceController extends AbstractActionController
         }
         return $this->annonceTable;
     }
+    
+    public function getDepartementTable()
+    {
+        if (!$this->departementTable) {
+            $sm = $this->getServiceLocator();
+            $this->departementTable = $sm->get('Annonce\Model\DepartementTable');
+        }
+        return $this->departementTable;
+    }
+    
+    
+    
 }

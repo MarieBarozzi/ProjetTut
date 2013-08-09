@@ -4,6 +4,8 @@ use Annonce\Model\Annonce;
 use Annonce\Model\AnnonceTable;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
+use Annonce\Model\Departement;
+use Annonce\Model\DepartementTable;
 
 
 class Module
@@ -43,6 +45,21 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Annonce());
                     return new TableGateway('annonce', $dbAdapter, null, $resultSetPrototype);
                 },
+                
+                'Annonce\Model\DepartementTable' =>  function($sm) {
+                    $tableGateway = $sm->get('DepartementTableGateway');
+                    $table = new DepartementTable($tableGateway);
+                    return $table;
+                },
+                'DepartementTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Departement());
+                    return new TableGateway('departement', $dbAdapter, null, $resultSetPrototype);
+                },
+                
+                
+                
             ),
         );
     }
