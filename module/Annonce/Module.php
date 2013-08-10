@@ -6,6 +6,9 @@ use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Annonce\Model\Departement;
 use Annonce\Model\DepartementTable;
+use Annonce\Model\Categorie;
+use Annonce\Model\CategorieTable;
+
 
 
 class Module
@@ -28,9 +31,9 @@ class Module
     {
         return include __DIR__ . '/config/module.config.php';
     }
-	
-	
-	    public function getServiceConfig()
+    
+    
+    public function getServiceConfig()
     {
         return array(
             'factories' => array(
@@ -58,9 +61,18 @@ class Module
                     return new TableGateway('departement', $dbAdapter, null, $resultSetPrototype);
                 },
                 
-                
-                
-            ),
+                 'Annonce\Model\CategorieTable' =>  function($sm) {
+                    $tableGateway = $sm->get('CategorieTableGateway');
+                    $table = new CategorieTable($tableGateway);
+                    return $table;
+                },
+                'CategorieTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Categorie());
+                    return new TableGateway('categorie', $dbAdapter, null, $resultSetPrototype);
+                }
+             )  
         );
     }
 }

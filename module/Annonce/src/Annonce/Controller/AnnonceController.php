@@ -12,6 +12,7 @@ class AnnonceController extends AbstractActionController
 	
 	protected $annonceTable;
     protected $departementTable; 
+    protected $categorieTable; 
 	
     public function indexAction()
     {
@@ -22,14 +23,13 @@ class AnnonceController extends AbstractActionController
 
     public function addAction()
     {
-        $departements = $this->getDepartementTable()->fetchAll();
-        $choixDepartement = array();
-        foreach ($departements as $departement) {
-            $choixDepartement[$departement->id_dept] = $departement->id_dept . ' - ' . $departement->lib_dept;
-        }        
+        
         
         $form = new AnnonceForm();
-        $form->get('id_dept')->setValueOptions($choixDepartement);
+        
+        
+        $form->get('id_dept')->setValueOptions($this->getChoixDepartement());
+        $form->get('id_cat')->setValueOptions($this->getChoixCategorie());
         $form->get('date_crea')->setValue(date('Y-m-d'));
         $form->get('date_modif')->setValue(date('Y-m-d'));
         $form->get('submit')->setValue('Ajout'); //change le bouton "submit" en "ajout"
@@ -74,15 +74,12 @@ class AnnonceController extends AbstractActionController
                 'action' => 'index'
             ));
         }
-        
-        $departements = $this->getDepartementTable()->fetchAll();
-        $choixDepartement = array();
-        foreach ($departements as $departement) {
-            $choixDepartement[$departement->id_dept] = $departement->id_dept . ' - ' . $departement->lib_dept;
-        }    
+       
         
         $form  = new AnnonceForm();
-        $form->get('id_dept')->setValueOptions($choixDepartement);
+        $form->get('id_dept')->setValueOptions($this->getChoixDepartement());
+        $form->get('id_cat')->setValueOptions($this->getChoixCategorie());
+        
         
         $form->bind($annonce); //pré-remplit
         $form->get('date_modif')->setValue(date('Y-m-d'));
@@ -154,6 +151,31 @@ class AnnonceController extends AbstractActionController
         return $this->departementTable;
     }
     
+    public function getCategorieTable()
+    {
+        if (!$this->categorieTable) {
+            $sm = $this->getServiceLocator();
+            $this->categorieTable = $sm->get('Annonce\Model\CategorieTable');
+        }
+        return $this->categorieTable;
+    }
     
+    public function getChoixDepartement() {
+        $departements = $this->getDepartementTable()->fetchAll();
+        $choixDepartement = array();
+        foreach ($departements as $departement) {
+            $choixDepartement[$departement->id_dept] = $departement->id_dept . ' - ' . $departement->lib_dept;
+        }    
+        return $choixDepartement;     
+    }
+    
+    public function getChoixCategorie() {
+        $categories = $this->getCategorieTable()->fetchAll();
+        $choixCategorie = array();
+        foreach ($categories as $categorie) {
+            $choixCategorie[$categorie->id_cat] = $categorie->lib_cat;
+        } 
+        return $choixCategorie;  
+    }
     
 }

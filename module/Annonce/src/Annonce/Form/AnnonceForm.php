@@ -68,26 +68,12 @@ class AnnonceForm extends Form
 		
           $this->add(array(
             'name' => 'id_cat',
-            'type' => 'Text',
+            'type' => 'Select',
             'options' => array(
                 'label' => 'Categorie',
             ),
         )); 
          
-                  
-         /* $this->add(array(
-             'type' => 'Select',
-             'name' => 'categorie',
-             'options' => array(
-                     'label' => 'Categorie',
-                     'value_options' => array(/*comment recuperer les bons champs* / 
-                             '0' => 'French',
-                             '1' => 'English',
-                             '2' => 'Japanese',
-                             '3' => 'Chinese',
-                     ),
-             )
-     ));*/
       $this->add(array(
             'name' => 'id_dept',
             'type' => 'Select',
