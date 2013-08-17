@@ -15,11 +15,31 @@ return array(
                 'options' => array(
                     'route'    => '/',
                     'defaults' => array(
-                        'controller' => 'Annonce\Controller\Annonce',
+                        'controller' => 'Annoncea\Controller\Annonce',
                         'action'     => 'index',
                     ),
                 ),
             ),
+            'connexion' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route'    => '/connexion',
+                    'defaults' => array(
+                        'controller' => 'Annoncea\Controller\Utilisateur',
+                        'action'     => 'connexion',
+                    ),
+                ),
+             ),
+             'inscription' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route'    => '/inscription',
+                    'defaults' => array(
+                        'controller' => 'Annoncea\Controller\Utilisateur',
+                        'action'     => 'inscription',
+                    ),
+                ),
+             ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
