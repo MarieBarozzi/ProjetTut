@@ -1,0 +1,27 @@
+<?php
+
+$title = 'Annonces';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<p>
+    <a href="<?php echo $this->url('annonce', array('action'=>'add'));?>">Ajouter une annonce</a>
+</p>
+
+<table class="table">
+<?php foreach ($annonces as $annonce) : ?>
+<tr>
+    <td><?php echo $this->escapeHtml($annonce->titre);?></td>
+    <td><?php echo $this->escapeHtml($annonce->prix);?></td>
+    <td><?php echo $this->escapeHtml($annonce->id_cat);?></td>
+    <td><?php echo $this->escapeHtml($annonce->id_dept);?></td>
+    <td>
+        <a href="<?php echo $this->url('annonce',
+            array('action'=>'edit', 'id' => $annonce->id_annonce));?>">Edit</a>
+        <a href="<?php echo $this->url('annonce',
+            array('action'=>'delete', 'id' => $annonce->id_annonce));?>">Delete</a>
+    </td>
+</tr>
+
+<?php endforeach; ?>
+</table>
