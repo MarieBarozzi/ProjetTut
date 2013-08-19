@@ -35,18 +35,18 @@ class Module
     
     public function getServiceConfig()
     {
-        return array(
+        return array(/*L’objectif du modèle de conception Fabrique est de fournir un objet prêt à l’emploi, configuré correctement, en libérant le code client de toute responsabilité (choix de l’implémentation, configuration, instanciation, …).*/
             'factories' => array(
                 'Annoncea\Model\AnnonceTable' =>  function($sm) {
                     $tableGateway = $sm->get('AnnonceTableGateway');
                     $table = new AnnonceTable($tableGateway);
-                    return $table;
+                    return $table; /*retourne un objet correspondant à la table Annonce*/
                 },
                 'AnnonceTableGateway' => function ($sm) {
-                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Annonce());
-                    return new TableGateway('annonce', $dbAdapter, null, $resultSetPrototype);
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');/*fait le lien avec ma bd*/
+                    $resultSetPrototype = new ResultSet();/*sert à modéliser les résultats d'une requete*/
+                    $resultSetPrototype->setArrayObjectPrototype(new Annonce());/*transforme le resultset générique en resultset de Annonce*/
+                    return new TableGateway('annonce', $dbAdapter, null, $resultSetPrototype);/*crée une passerelle vers la table = les methodes d'interaction avec la table sont appelées sur cet objet*/
                 },
                 
                 'Annoncea\Model\DepartementTable' =>  function($sm) {

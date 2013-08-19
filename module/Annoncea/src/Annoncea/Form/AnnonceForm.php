@@ -5,8 +5,6 @@ use Zend\Form\Form;
 
 class AnnonceForm extends Form
 {
-
-	public $visible; //
 	
     public function __construct($name = null)
     {
@@ -22,6 +20,9 @@ class AnnonceForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => 'Titre',
+            ),
+            'attributes' => array( 
+                'required' => 'required', 
             ),
         ));
         $this->add(array(

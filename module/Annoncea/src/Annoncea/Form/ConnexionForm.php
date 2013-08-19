@@ -3,10 +3,8 @@ namespace Annoncea\Form;
 
 use Zend\Form\Form;
 
-class AnnonceForm extends Form
+class ConnexionForm extends Form
 {
-
-    public $visible; //
     
     public function __construct($name = null)
     {
@@ -24,3 +22,7 @@ class AnnonceForm extends Form
                 'label' => 'Titre',
             ),
         ));
+        
+    }
+    
+}
