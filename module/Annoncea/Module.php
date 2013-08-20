@@ -48,7 +48,6 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Annonce());/*transforme le resultset générique en resultset de Annonce*/
                     return new TableGateway('annonce', $dbAdapter, null, $resultSetPrototype);/*crée une passerelle vers la table = les methodes d'interaction avec la table sont appelées sur cet objet*/
                 },
-                
                 'Annoncea\Model\DepartementTable' =>  function($sm) {
                     $tableGateway = $sm->get('DepartementTableGateway');
                     $table = new DepartementTable($tableGateway);
@@ -71,6 +70,24 @@ class Module
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Categorie());
                     return new TableGateway('categorie', $dbAdapter, null, $resultSetPrototype);
+                },
+                'SelecteurDepartement' => function ($sm) {
+                    $departementTable = $sm->get('Annoncea\Model\DepartementTable');
+                    $departements = $departementTable->fetchAll();
+                    $choixDepartement = array();
+                    foreach ($departements as $departement) {
+                        $choixDepartement[$departement->id_dept] = $departement->id_dept . ' - ' . $departement->lib_dept;
+                    }    
+                    return $choixDepartement;   
+                },                
+                'SelecteurCategorie' => function ($sm) {
+                    $categorieTable = $sm->get('Annoncea\Model\CategorieTable');
+                    $categories = $categorieTable->fetchAll();
+                    $choixCategorie = array();
+                    foreach ($categories as $categorie) {
+                        $choixCategorie[$categorie->id_cat] = $categorie->lib_cat;
+                    } 
+                     return $choixCategorie;  
                 }
              )  
         );

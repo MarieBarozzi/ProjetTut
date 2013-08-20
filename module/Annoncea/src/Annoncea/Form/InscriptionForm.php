@@ -113,6 +113,35 @@ class InscriptionForm extends Form
              ),
         ));
         
+                  
+        $this->add(array(
+            'name' => 'mdp',
+            'type' => 'Password',
+            'options' => array(
+                'label' => 'Mot de passe',
+            ),
+            'attributes' => array( 
+                'required' => 'required', 
+             ),
+        ));
+        $this->add(array(
+            'name' => 'mdp',
+            'type' => 'Password',
+            'options' => array(
+                'label' => 'Confirmez le mot de passe : ',
+            ),
+            'attributes' => array( 
+                'required' => 'required', 
+             ),
+        ));
+        
+        $this->add(array( 
+            'name' => 'csrf', 
+            'type' => 'Zend\Form\Element\Csrf', 
+        ));        
+        
+        
+        
     }
     
 }

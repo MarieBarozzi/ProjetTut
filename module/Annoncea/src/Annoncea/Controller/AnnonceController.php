@@ -11,8 +11,8 @@ class AnnonceController extends AbstractActionController
 {
 	
 	protected $annonceTable;
-    protected $departementTable; 
-    protected $categorieTable; 
+    /*protected $departementTable; 
+    protected $categorieTable; */
 	
     public function indexAction()
     {
@@ -23,13 +23,17 @@ class AnnonceController extends AbstractActionController
 
     public function addAction()
     {
-        
-        
+               
         $form = new AnnonceForm();
         
-        
-        $form->get('id_dept')->setValueOptions($this->getChoixDepartement());
+        $sm = $this->getServiceLocator();
+        $form->get('id_dept')->setValueOptions($sm->get('SelecteurDepartement'));
+        $form->get('id_cat')->setValueOptions($sm->get('SelecteurCategorie'));   
+    
+        /*$form->get('id_dept')->setValueOptions($this->getChoixDepartement());
         $form->get('id_cat')->setValueOptions($this->getChoixCategorie());
+        */
+        
         $form->get('date_crea')->setValue(date('Y-m-d'));
         $form->get('date_modif')->setValue(date('Y-m-d'));
         $form->get('submit')->setValue('Ajout'); //change le bouton "submit" en "ajout"
@@ -77,8 +81,13 @@ class AnnonceController extends AbstractActionController
        
         
         $form  = new AnnonceForm();
-        $form->get('id_dept')->setValueOptions($this->getChoixDepartement());
-        $form->get('id_cat')->setValueOptions($this->getChoixCategorie());
+        
+        $sm = $this->getServiceLocator();
+        $form->get('id_dept')->setValueOptions($sm->get('SelecteurDepartement'));
+        $form->get('id_cat')->setValueOptions($sm->get('SelecteurCategorie'));   
+        
+        /*$form->get('id_dept')->setValueOptions($this->getChoixDepartement());
+        $form->get('id_cat')->setValueOptions($this->getChoixCategorie());*/
         
         
         $form->bind($annonce); //pré-remplit
@@ -136,13 +145,13 @@ class AnnonceController extends AbstractActionController
 	public function getAnnonceTable()
     {
         if (!$this->annonceTable) {
-            $sm = $this->getServiceLocator();
+            $sm = $this->getServiceLocator();//permet de récupérer la chose ?? sur laquelle on appelle les factory
             $this->annonceTable = $sm->get('Annoncea\Model\AnnonceTable');
         }
         return $this->annonceTable;
     }
     
-    public function getDepartementTable()
+    /*public function getDepartementTable()
     {
         if (!$this->departementTable) {
             $sm = $this->getServiceLocator();
@@ -176,6 +185,6 @@ class AnnonceController extends AbstractActionController
             $choixCategorie[$categorie->id_cat] = $categorie->lib_cat;
         } 
         return $choixCategorie;  
-    }
+    }*/
     
 }
