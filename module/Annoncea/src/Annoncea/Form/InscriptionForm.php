@@ -90,7 +90,7 @@ class InscriptionForm extends Form
             ),
         ));
         
-        /*à ajouter dans la base*/
+  
         $this->add(array(
             'name' => 'tel',
             'type' => 'Text',
@@ -108,6 +108,9 @@ class InscriptionForm extends Form
             'options' => array(
                 'label' => 'Departement',
             ),
+            'attributes' => array( 
+                'required' => 'required', 
+             ),
         ));
         
     }
