@@ -19,7 +19,7 @@ class AnnonceForm extends Form
             'name' => 'titre',
             'type' => 'Text',
             'options' => array(
-                'label' => 'Titre',
+                'label' => 'Titre : ',
             ),
             'attributes' => array( 
                 'required' => 'required', 
@@ -29,7 +29,7 @@ class AnnonceForm extends Form
             'name' => 'descr',
             'type' => 'Textarea',
             'options' => array(
-                'label' => 'Description',
+                'label' => 'Description : ',
             ),
         ));
 		
@@ -37,7 +37,7 @@ class AnnonceForm extends Form
   		 'type' => 'Select',
              'name' => 'type_annonce',
              'options' => array(
-                     'label' => 'Type de l annonce',
+                     'label' => 'Type de l\'annonce : ',
                      'value_options' => array(
                              'offre' => 'Offre',
                              'demande' => 'Demande',
@@ -48,14 +48,14 @@ class AnnonceForm extends Form
             'name' => 'prix',
             'type' => 'Text',
             'options' => array(
-                'label' => 'Prix',
+                'label' => 'Prix : ',
             ),
         ));
 		$this->add(array(
             'name' => 'etat',
             'type' => 'Text',
             'options' => array(
-                'label' => 'Etat',
+                'label' => 'Etat : ',
             ),
         ));	
 		$this->add(array(
@@ -71,7 +71,7 @@ class AnnonceForm extends Form
             'name' => 'id_cat',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Categorie',
+                'label' => 'Catégorie : ',
             ),
         )); 
          
@@ -79,7 +79,7 @@ class AnnonceForm extends Form
             'name' => 'id_dept',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Departement',
+                'label' => 'Département : ',
             ),
         ));
      
@@ -88,7 +88,7 @@ class AnnonceForm extends Form
 		'type' => 'Email',
      	'name' => 'mail_auteur',
      	'options' => array(
-         	'label' => 'Email Address'
+         	'label' => 'Adresse Mail : '
      	),
 	));
 		
