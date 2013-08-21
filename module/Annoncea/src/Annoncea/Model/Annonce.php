@@ -1,5 +1,9 @@
 <?php
 namespace Annoncea\Model;
+/*
+ * donne la structure d'une ligne de la table annonce 
+ */
+
 
 class Annonce
 {

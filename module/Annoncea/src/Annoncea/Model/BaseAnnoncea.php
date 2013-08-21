@@ -1,6 +1,10 @@
 <?php
 namespace Annoncea\Model;
 
+/*
+ * sert à verifier que l'on a un seul objet représentant chaque table (genre de singleton)
+ */
+
 class BaseAnnoncea{
     
     public static $annonceTable;

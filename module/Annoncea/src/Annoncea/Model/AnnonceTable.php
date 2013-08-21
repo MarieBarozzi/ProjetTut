@@ -2,6 +2,9 @@
 namespace Annoncea\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+/*
+ * contient le lien avec la table annonce et execute les opérations dessus
+*/
 
 class AnnonceTable
 {
