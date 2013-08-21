@@ -1,0 +1,56 @@
+<?php
+namespace Annoncea\Model;
+
+class BaseAnnoncea{
+    
+    public static $annonceTable;
+    public static $departementTable; 
+    public static $categorieTable;
+    
+    public static function getAnnonceTable($sm)
+    {
+        if (!self::$annonceTable) {
+            self::$annonceTable = $sm->get('Annoncea\Model\AnnonceTable');
+        }
+        return self::$annonceTable;
+    }
+    
+    public static function getDepartementTable($sm)
+    {
+        if (!self::$departementTable) {
+            self::$departementTable = $sm->get('Annoncea\Model\DepartementTable');
+        }
+        return self::$departementTable;
+    }
+    
+    public static function getCategorieTable($sm)
+    {
+        if (!self::$categorieTable) {
+            self::$categorieTable = $sm->get('Annoncea\Model\CategorieTable');
+        }
+        return self::$categorieTable;
+    }
+    
+    public static function getSelecteurCategorie($sm)
+    {
+        $categorieTable = self::getCategorieTable($sm);
+        $categories = $categorieTable->fetchAll();
+        $choixCategorie = array();
+        foreach ($categories as $categorie) {
+            $choixCategorie[$categorie->id_cat] = $categorie->lib_cat;
+        } 
+        return $choixCategorie;  
+    }
+    
+    public static function getSelecteurDepartement($sm)
+    {
+         $departementTable = self::getDepartementTable($sm);
+         $departements = $departementTable->fetchAll();
+         $choixDepartement = array();
+         foreach ($departements as $departement) {
+               $choixDepartement[$departement->id_dept] = $departement->id_dept . ' - ' . $departement->lib_dept;
+         }    
+         return $choixDepartement;   
+    }
+    
+}
