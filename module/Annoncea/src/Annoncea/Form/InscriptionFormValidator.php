@@ -164,6 +164,31 @@ class InscriptionFormValidator implements InputFilterAwareInterface
                 ),
             )));
         
+          $inputFilter->add($factory->createInput(array(
+            'name' => 'mail', 
+            'filters' => array( 
+                array('name' => 'StripTags'), 
+                array('name' => 'StringTrim'), 
+            ), 
+            'validators' => array( 
+                array ( 
+                    'name' => 'EmailAddress', 
+                ), 
+                array ( 
+                    'name' => 'NotEmpty', 
+ 
+                ),
+                 array(
+                        'name'    => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8', 
+                            'min'      => 1,
+                            'max'      => 32, 
+                        ),
+                    ),  
+            ), 
+        ))); 
+        
          $this->inputFilter = $inputFilter;
         
                    

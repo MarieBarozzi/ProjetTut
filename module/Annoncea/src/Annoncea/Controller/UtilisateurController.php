@@ -2,6 +2,10 @@
 namespace Annoncea\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Annoncea\Form\InscriptionForm;
+use Annoncea\Form\InscriptionFormValidator;
+use Annoncea\Model\Utilisateur;
+use Annoncea\Model\BaseAnnoncea as BDD;
 
 class UtilisateurController extends AbstractActionController
 {
@@ -22,24 +26,23 @@ class UtilisateurController extends AbstractActionController
     public function inscriptionAction()
     {
         $form = new InscriptionForm();
-                
-        $form->get('id_dept')->setValueOptions($this->getChoixDepartement());
+                       
+        $form->get('id_dept')->setValueOptions(BDD::getSelecteurDepartement($this->serviceLocator));
         $form->get('submit')->setValue('Inscription'); //change le bouton "submit" en "inscription"
 
         $request = $this->getRequest();//récupère la requete pour voir si c'est la 1ere fois ou pas qu'on vient sur la page
         if ($request->isPost()) {//si c'est pas la 1ere fois
-            $annonceFormValidator = new AnnonceFormValidator();
-            $form->setInputFilter($annonceFormValidator->getInputFilter());
+            $inscriptionFormValidator = new InscriptionFormValidator();
+            $form->setInputFilter($inscriptionFormValidator->getInputFilter());
             $form->setData($request->getPost()); //on récupère ce qu'il y a dans la requete et on le met dans le formulaire
             
             if ($form->isValid()) { //si il passe le validateur 
               
-                $annonce = new Annonce();
-                $annonce->exchangeArray($form->getData()); //remplit l'objet à partir d'un tableau qu'on récupère du formulaire 
-                $this->getAnnonceTable()->saveAnnonce($annonce);
+                $utilisateur = new Utilisateur();
+                $utilisateur->exchangeArray($form->getData()); //remplit l'objet à partir d'un tableau qu'on récupère du formulaire 
+                BDD::getUtilisateurTable($this->serviceLocator)->saveUtilisateur($utilisateur);
 
-                // Redirect to list of albums
-                return $this->redirect()->toRoute('annonce');
+                return $this->redirect()->toRoute('home');
             }
         }
         return array('form' => $form);

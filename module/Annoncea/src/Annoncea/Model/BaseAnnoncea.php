@@ -10,6 +10,7 @@ class BaseAnnoncea{
     public static $annonceTable;
     public static $departementTable; 
     public static $categorieTable;
+    public static $utilisateurTable;
     
     public static function getAnnonceTable($sm)
     {
@@ -34,6 +35,17 @@ class BaseAnnoncea{
         }
         return self::$categorieTable;
     }
+    
+    
+    public static function getUtilisateurTable($sm)
+    {
+        if (!self::$utilisateurTable) {
+            self::$utilisateurTable = $sm->get('Annoncea\Model\UtilisateurTable');
+        }
+        return self::$utilisateurTable;
+    }
+    
+    
     
     public static function getSelecteurCategorie($sm)
     {

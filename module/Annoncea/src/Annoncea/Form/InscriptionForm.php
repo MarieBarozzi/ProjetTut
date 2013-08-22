@@ -113,6 +113,19 @@ class InscriptionForm extends Form
              ),
         ));
         
+         
+        $this->add(array( 
+            'name' => 'mail', 
+            'type' => 'Email', 
+            'attributes' => array( 
+                'placeholder' => 'Email Address...', 
+                'required' => 'required', 
+            ), 
+            'options' => array( 
+                'label' => 'Email', 
+            ), 
+        )); 
+         
                   
         $this->add(array(
             'name' => 'mdp',
@@ -134,6 +147,18 @@ class InscriptionForm extends Form
                 'required' => 'required', 
              ),
         ));
+        
+       $this->add(array(
+            'name' => 'submit',
+            'type' => 'Submit',
+            'attributes' => array(
+                'value' => 'Go',
+                'id' => 'submitbutton',
+            ),
+        ));
+        
+        
+        
         
         $this->add(array( 
             'name' => 'csrf', 

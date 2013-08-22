@@ -8,6 +8,9 @@ use Annoncea\Model\Departement;
 use Annoncea\Model\DepartementTable;
 use Annoncea\Model\Categorie;
 use Annoncea\Model\CategorieTable;
+use Annoncea\Model\Utilisateur;
+use Annoncea\Model\UtilisateurTable;
+
 
 
 
@@ -70,7 +73,22 @@ class Module
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Categorie());
                     return new TableGateway('categorie', $dbAdapter, null, $resultSetPrototype);
-                }
+                }, 
+                
+                'Annoncea\Model\UtilisateurTable' =>  function($sm) {
+                    $tableGateway = $sm->get('UtilisateurTableGateway');
+                    $table = new UtilisateurTable($tableGateway);
+                    return $table;
+                },
+                  'UtilisateurTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Utilisateur());
+                    return new TableGateway('utilisateur', $dbAdapter, null, $resultSetPrototype);
+                }, 
+                
+                
+                
              )  
         );
     }
