@@ -11,6 +11,13 @@ class InscriptionFormValidator implements InputFilterAwareInterface
 
 { 
     protected $inputFilter; 
+    private $dbAdapter;
+   
+   
+    public function setDbAdapter($dbAdapter) {
+        $this->dbAdapter = $dbAdapter;
+    }
+   
     
     public function setInputFilter(InputFilterInterface $inputFilter) 
     { 
@@ -49,16 +56,16 @@ class InscriptionFormValidator implements InputFilterAwareInterface
                 'name'     => 'prenom',
                 'required' => true,
                 'filters'  => array(
-                    array('name' => 'StripTags'), //pour enlever le html
-                    array('name' => 'StringTrim'), //enlève les espaces au debut et à la fin
+                    array('name' => 'StripTags'), 
+                    array('name' => 'StringTrim'), 
                 ),
                 'validators' => array(
                     array(
                         'name'    => 'StringLength',
                         'options' => array(
-                            'encoding' => 'UTF-8', //encodage de caractères
+                            'encoding' => 'UTF-8', 
                             'min'      => 1,
-                            'max'      => 32, //voir dans la base
+                            'max'      => 32,
                         ),
                     ),
                 ),
@@ -89,6 +96,16 @@ class InscriptionFormValidator implements InputFilterAwareInterface
                 array('name' => 'StripTags'), 
                 array('name' => 'StringTrim'), 
             ), 
+             'validators' => array(
+                    array(
+                        'name'    => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8', 
+                            'min'      => 1,
+                            'max'      => 32, 
+                        ),
+                    ),
+                ),
         ))); 
  
         $inputFilter->add($factory->createInput(array(
@@ -116,14 +133,9 @@ class InscriptionFormValidator implements InputFilterAwareInterface
                     array('name' => 'StripTags'), 
                     array('name' => 'StringTrim'), 
                 ),
-                'validators' => array(
-                    array(
-                        'name'    => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8', 
-                            'min'      => 1,
-                            'max'      => 32, 
-                        ),
+                'validators' => array( 
+                    array ( 
+                        'name' => 'digits', 
                     ),
                 ),
             )));
@@ -158,7 +170,7 @@ class InscriptionFormValidator implements InputFilterAwareInterface
                         'options' => array(
                             'encoding' => 'UTF-8', 
                             'min'      => 1,
-                            'max'      => 32, 
+                            'max'      => 20, 
                         ),
                     ),
                 ),
@@ -179,22 +191,72 @@ class InscriptionFormValidator implements InputFilterAwareInterface
  
                 ),
                  array(
-                        'name'    => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8', 
-                            'min'      => 1,
-                            'max'      => 32, 
-                        ),
-                    ),  
+                     'name'    => 'StringLength',
+                     'options' => array(
+                        'encoding' => 'UTF-8', 
+                        'min'      => 1,
+                        'max'      => 32, 
+                     ),
+                ),
+                array( 
+                    'name' => 'Db\NoRecordExists', // Db\Blabla car dans un sous dossier de Validator
+                    'options' => array(
+                         'table' => 'utilisateur',
+                         'field' => 'mail',
+                         'adapter' => $this->dbAdapter,
+                     ),
+                ),  
             ), 
         ))); 
         
-         $this->inputFilter = $inputFilter;
         
+        $inputFilter->add($factory->createInput(array(
+            'name' => 'mdp', 
+            'filters' => array( 
+                array('name' => 'StripTags'), 
+                array('name' => 'StringTrim'), 
+            ), 
+            'validators' => array(
+                   array(
+                     'name'    => 'StringLength',
+                     'options' => array(
+                        'encoding' => 'UTF-8', 
+                        'min'      => 8,
+                        'max'      => 32, 
+                     ),
+                ),   
+            ), 
+        ))); 
+ 
+        $inputFilter->add($factory->createInput(array(
+            'name' => 'mdp_verif', 
+            'filters' => array( 
+                array('name' => 'StripTags'), 
+                array('name' => 'StringTrim'), 
+            ), 
+            'validators' => array( 
+                array ( 
+                    'name' => 'identical', 
+                    'options' => array( 
+                        'token' => 'mdp', 
+                    ), 
+                ), 
+
+            ), 
+        )));
+        
+        $inputFilter->add($factory->createInput(array(
+                'name'     => 'rang',
+                'required' => true, 
+                'filters'  => array(
+                     array('name' => 'StripTags'), 
+                     array('name' => 'StringTrim'), 
+                ),
+            )));
+        
+         $this->inputFilter = $inputFilter;
                    
         }
-
         return $this->inputFilter;
- 
     } 
 }

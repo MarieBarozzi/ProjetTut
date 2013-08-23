@@ -47,19 +47,15 @@ class UtilisateurTable
             'id_dept' => $utilisateur->id_dept,
             'tel' => $utilisateur->tel,  
         );
-
+       
         $mail = (string) $utilisateur->mail;
-        if ($mail == '') {
-            $this->tableGateway->insert($data);
-        } else {
-            if ($this->getUtilisateur($mail)) {
-                $this->tableGateway->update($data, array('mail' => $mail));
-            } else {
-                throw new \Exception('Form id does not exist');
-            }
-        }
-    }
-
+         try {
+             $this->getUtilisateur($mail);
+         } catch (\Exception $e){
+             $this->tableGateway->insert($data);
+         }
+         $this->tableGateway->update($data, array('mail' => $mail));        
+    }       
 
     public function deleteUtilisateur($mail)
     {

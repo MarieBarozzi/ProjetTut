@@ -138,7 +138,7 @@ class InscriptionForm extends Form
              ),
         ));
         $this->add(array(
-            'name' => 'mdp',
+            'name' => 'mdp_verif',
             'type' => 'Password',
             'options' => array(
                 'label' => 'Confirmez le mot de passe : ',
@@ -156,9 +156,12 @@ class InscriptionForm extends Form
                 'id' => 'submitbutton',
             ),
         ));
-        
-        
-        
+           
+         $this->add(array(
+            'name' => 'rang',
+            'type' => 'Hidden',
+        ));   
+           
         
         $this->add(array( 
             'name' => 'csrf', 
