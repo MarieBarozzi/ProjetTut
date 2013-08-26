@@ -31,9 +31,27 @@
                     <a class="brand" href="<?php echo $this->url('home') ?>"><?php echo 'Annoncea' ?></a>
                     <div class="nav-collapse collapse">
                         <ul class="nav">
+						
+							<!-- Début du menu. -->
+							<!-- Le Home est accessible à tous et doit aboutirà la fonction de recherche. -->
                             <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
+							
+							<!-- Les autres sections doivent être accessible aux membres connectés. -->
+							<!-- Il est a noté qu'il faut remplacé echo $this->url('home') par le bon echo pour adapté le lien. -->
+							<li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Messagerie') ?></a></li>
+							<li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Favoris') ?></a></li>
+							<li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Mes Annonces') ?></a></li>
+							<li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Mon Compte') ?></a></li>
+							<li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Déconnexion') ?></a></li>
+							
+							<!-- Connexion est visible uniquement si la personne est déconnecté. -->
                             <li class="active"><a href="<?php echo $this->url('connexion') ?>"><?php echo 'Connexion' ?></a></li>
+							
+							<!-- Inscription est visible uniquement si la personne est déconnecté. -->
                             <li class="active"><a href="<?php echo $this->url('inscription') ?>"><?php echo 'Inscription' ?></a></li>
+							
+							<!-- Fin du menu. -->
+					
                         </ul>
                     </div><!--/.nav-collapse -->
                 </div>
