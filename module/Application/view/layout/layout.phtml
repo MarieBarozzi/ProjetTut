@@ -33,7 +33,7 @@
                         <ul class="nav">
 						
 							<!-- Début du menu. -->
-							<!-- Le Home est accessible à tous et doit aboutirà la fonction de recherche. -->
+							<!-- Le Home est accessible à tous et doit aboutir à la fonction de recherche. -->
                             <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
 							
 							<!-- Les autres sections doivent être accessible aux membres connectés. -->
@@ -41,9 +41,10 @@
 							<li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Messagerie') ?></a></li>
 							<li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Favoris') ?></a></li>
 							<li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Mes Annonces') ?></a></li>
+							<li class="active"><a href="<?php echo $this->url('annonce', array('action'=>'add')); ?>"><?php echo $this->translate('Ajouter une Annonce') ?></a></li>
 							<li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Mon Compte') ?></a></li>
 							<li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Déconnexion') ?></a></li>
-							
+			
 							<!-- Connexion est visible uniquement si la personne est déconnecté. -->
                             <li class="active"><a href="<?php echo $this->url('connexion') ?>"><?php echo 'Connexion' ?></a></li>
 							
