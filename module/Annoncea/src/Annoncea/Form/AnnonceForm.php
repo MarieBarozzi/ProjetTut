@@ -100,5 +100,14 @@ class AnnonceForm extends Form
                 'id' => 'submitbutton',
             ),
         ));
+        
+                
+        $this->add(array( 
+            'name' => 'csrf', 
+            'type' => 'Zend\Form\Element\Csrf', 
+        ));        
+        
+        
+        
     }
 }
