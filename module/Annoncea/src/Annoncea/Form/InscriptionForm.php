@@ -16,7 +16,7 @@ class InscriptionForm extends Form
             'name' => 'nom',
             'type' => 'Text',
              'options' => array(
-                'label' => 'Nom',
+                'label' => 'Nom : ',
             ),
             'attributes' => array( 
                 'required' => 'required', 
@@ -26,7 +26,7 @@ class InscriptionForm extends Form
             'name' => 'prenom',
             'type' => 'Text',
             'options' => array(
-                'label' => 'Prénom',
+                'label' => 'Prénom : ',
             ),
             'attributes' => array( 
                 'required' => 'required', 
@@ -36,7 +36,7 @@ class InscriptionForm extends Form
             'name' => 'pseudo',
             'type' => 'Text',
             'options' => array(
-                'label' => 'Pseudonyme',
+                'label' => 'Pseudonyme : ',
             ),
             'attributes' => array( 
                 'required' => 'required', 
@@ -62,7 +62,7 @@ class InscriptionForm extends Form
             'name' => 'adresse',
             'type' => 'Text',
             'options' => array(
-                'label' => 'Adresse',
+                'label' => 'Adresse : ',
             ),
             'attributes' => array( 
                 'required' => 'required', 
@@ -73,7 +73,7 @@ class InscriptionForm extends Form
             'name' => 'cp',
             'type' => 'Text',
             'options' => array(
-                'label' => 'Code Postal',
+                'label' => 'Code Postal : ',
             ),
             'attributes' => array( 
                 'required' => 'required', 
@@ -84,7 +84,7 @@ class InscriptionForm extends Form
             'name' => 'ville',
             'type' => 'Text',
             'options' => array(
-                'label' => 'Ville',
+                'label' => 'Ville : ',
             ),
             'attributes' => array( 
                 'required' => 'required', 
@@ -96,7 +96,7 @@ class InscriptionForm extends Form
             'name' => 'tel',
             'type' => 'Text',
             'options' => array(
-                'label' => 'Téléphone',
+                'label' => 'Téléphone : ',
             ),
             'attributes' => array( 
                 'required' => 'required', 
@@ -107,7 +107,7 @@ class InscriptionForm extends Form
             'name' => 'id_dept',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Departement',
+                'label' => 'Departement : ',
             ),
             'attributes' => array( 
                 'required' => 'required', 
@@ -123,7 +123,7 @@ class InscriptionForm extends Form
                 'required' => 'required', 
             ), 
             'options' => array( 
-                'label' => 'Email', 
+                'label' => 'Email : ', 
             ), 
         )); 
          
@@ -132,7 +132,7 @@ class InscriptionForm extends Form
             'name' => 'mdp',
             'type' => 'Password',
             'options' => array(
-                'label' => 'Mot de passe',
+                'label' => 'Mot de passe : ',
             ),
             'attributes' => array( 
                 'required' => 'required', 
@@ -149,21 +149,21 @@ class InscriptionForm extends Form
              ),
         ));
         
-      /* $this->add(array( 
+    /*   $this->add(array( 
             'name' => 'captcha', 
             'type' => 'Captcha',
             'options' => array(
                   'label'=> 'Merci de recopier le texte de l\'image ci-dessus',
                   'captcha' => new Image(array(
                     'font'=> __DIR__ . '\..\..\..\..\..\public\fonts\arial.ttf',
-                   /* 'width' => 250,
-                    'height' => 100,*/
-                   /* 'imgUrl'=> str_replace('\\', '/', __DIR__) . '/../../../../../public/img/captcha',
+                    'width' => 250,
+                    'height' => 100,
+                    'imgUrl'=> str_replace('\\', '/', __DIR__) . '/../../../../../public/img/captcha',
                     'imgDir'=> __DIR__ . '\..\..\..\..\..\public\img\captcha'
                     )
                  )
             ), 
-        )); */
+        ));*/
         
        $this->add(array(
             'name' => 'submit',
