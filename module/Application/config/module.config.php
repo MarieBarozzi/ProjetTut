@@ -40,6 +40,16 @@ return array(
                     ),
                 ),
              ),
+             'deconnexion' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route'    => '/deconnexion',
+                    'defaults' => array(
+                        'controller' => 'Annoncea\Controller\Utilisateur',
+                        'action'     => 'deconnexion',
+                    ),
+                ),
+             ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them

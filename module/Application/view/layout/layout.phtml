@@ -33,22 +33,22 @@
                         <ul class="nav">
 						
 							<!-- Début du menu. --
-							<!-- Le Home est accessible à tous et doit aboutirà la fonction de recherche. -->
+							<!-- Le Home est accessible à tous et doit aboutir à la fonction de recherche. -->
                             <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo 'Accueil' ?></a></li>
 							
 							<!-- Les autres sections doivent être accessible aux membres connectés. -->
-							<!-- Il est a noté qu'il faut remplacé echo $this->url('home') par le bon echo pour adapté le lien. -->
+							<!-- Il est à noter qu'il faut remplacer echo $this->url('home') par le bon echo pour adapter le lien. -->
 							<li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo 'Messagerie' ?></a></li>
 							<li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo 'Favoris' ?></a></li>
 							<li class="active"><a href="<?php echo $this->url('annonce', array('action'=>'add')) ?>"><?php echo 'Ajouter une Annonce' ?></a></li>
 							<li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo 'Mes Annonces' ?></a></li>
-							<li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo 'Mon Compte' ?></a></li>
-							<li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo 'Déconnexion' ?></a></li>
+							<li class="active"><a href="<?php echo $this->url('utilisateur') ?>"><?php echo 'Mon Compte' ?></a></li>
+							<li class="active"><a href="<?php echo $this->url('deconnexion') ?>"><?php echo 'Déconnexion' ?></a></li>
 							
-							<!-- Connexion est visible uniquement si la personne est déconnecté. -->
+							<!-- Connexion est visible uniquement si la personne est déconnectée. -->
                             <li class="active"><a href="<?php echo $this->url('connexion') ?>"><?php echo 'Connexion' ?></a></li>
 							
-							<!-- Inscription est visible uniquement si la personne est déconnecté. -->
+							<!-- Inscription est visible uniquement si la personne est déconnectée. -->
                             <li class="active"><a href="<?php echo $this->url('inscription') ?>"><?php echo 'Inscription' ?></a></li>
 							
 							<!-- Fin du menu. -->

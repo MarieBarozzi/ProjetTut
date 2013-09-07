@@ -8,21 +8,36 @@ use Annoncea\Form\ConnexionForm;
 use Annoncea\Form\ConnexionFormValidator;
 use Annoncea\Model\Utilisateur;
 use Annoncea\Model\BaseAnnoncea as BDD;
+use Zend\Authentication\AuthenticationService;
 
 class UtilisateurController extends AbstractActionController
 {
     public function indexAction(){
-        if(true){ //a remplacer par un test si l'utilisateur n'est pas connecté
+        $auth = new AuthenticationService();
+        if(!$auth->hasIdentity()){ //si l'utilisateur n'est pas connecté
             return $this->redirect()->toRoute('utilisateur', array(
                 'action' => 'connexion'
             ));
-        }    
+        }
+        return array('auth' => $auth);    
     }
     
     public function connexionAction()
     {
+        //instancie le service authentification 
+        $auth = new AuthenticationService();
+        
+        //test si déjà connecté
+        if($auth->hasIdentity()) {
+            return $this->redirect()->toRoute('home');
+        }
+        
         $form = new ConnexionForm();
+        
+        $retour = array('form' => $form);
+        
         $form->get('submit')->setValue('Connexion');
+        //adaptateur d'authentification (sert uniquement à la connexion)
         $authAdapter = $this->serviceLocator->get('AuthAdapter');
 
         $request = $this->getRequest();//récupère la requete pour voir si c'est la 1ere fois ou pas qu'on vient sur la page
@@ -31,16 +46,28 @@ class UtilisateurController extends AbstractActionController
             $form->setInputFilter($connexionFormValidator->getInputFilter());
             $form->setData($request->getPost()); //on récupère ce qu'il y a dans la requete et on le met dans le formulaire
             
-            if ($form->isValid()) { //si il passe le validateur 
+            if ($form->isValid()) { //si il passe le validateur (verif que c'est bien un email etc...)
                        
               $authAdapter->setIdentity($form->get('mail')->getValue());
               $authAdapter->setCredential($form->get('mdp')->getValue());
-              return $this->redirect()->toRoute('home');
+              
+              $result = $auth->authenticate($authAdapter); //verif si les données sont correctes
+              
+
+            if ($result->isValid()) {
+               return $this->redirect()->toRoute('home');
+            } else {
+                $retour['erreur'] = 'Email ou mot de passe incorrect';
             }
+         }
         }
-        return array('form' => $form); //passé à ce qui crée la vue 
+        return $retour; //passé à ce qui crée la vue 
     }
 
+    public function deconnexionAction(){
+        $auth = new AuthenticationService();
+        $auth->clearIdentity();
+    }
     
     public function inscriptionAction()
     {
