@@ -10,6 +10,7 @@ use Annoncea\Model\Categorie;
 use Annoncea\Model\CategorieTable;
 use Annoncea\Model\Utilisateur;
 use Annoncea\Model\UtilisateurTable;
+use Zend\Authentication\Adapter\DbTable;
 
 
 
@@ -86,10 +87,12 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Utilisateur());
                     return new TableGateway('utilisateur', $dbAdapter, null, $resultSetPrototype);
                 }, 
+                'AuthAdapter' => function($sm){
+                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                     return new DbTable($dbAdapter,'utilisateur','mail','mdp');
+                 }
                 
-                
-                
-             )  
+                ) 
         );
     }
 }

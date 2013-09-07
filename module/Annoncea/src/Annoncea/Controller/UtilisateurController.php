@@ -19,6 +19,8 @@ class UtilisateurController extends AbstractActionController
     
     public function connexionAction()
     {
+        
+        $this->serviceLocator->get('AuthAdapter');
          return array(
         );
     }
