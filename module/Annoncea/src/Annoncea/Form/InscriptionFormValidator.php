@@ -11,7 +11,7 @@ class InscriptionFormValidator implements InputFilterAwareInterface
 
 { 
     protected $inputFilter; 
-    private $dbAdapter;
+    private $dbAdapter; //lien avec db qui sert pour le validateur qui vérifie que l'email (entrée) n'est pas déjà dans la table
    
    
     public function setDbAdapter($dbAdapter) {

@@ -118,8 +118,7 @@ class InscriptionForm extends Form
         $this->add(array( 
             'name' => 'mail', 
             'type' => 'Email', 
-            'attributes' => array( 
-                'placeholder' => 'Email Address...', 
+            'attributes' => array(  
                 'required' => 'required', 
             ), 
             'options' => array( 
