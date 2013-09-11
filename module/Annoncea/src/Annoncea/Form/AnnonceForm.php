@@ -33,7 +33,7 @@ class AnnonceForm extends Form
             ),
         ));
 		
-  		$this->add(array( //pas de validateur ? 
+  		$this->add(array( //validé via csrf
   		 'type' => 'Select',
              'name' => 'type_annonce',
              'options' => array(
@@ -42,7 +42,10 @@ class AnnonceForm extends Form
                              'offre' => 'Offre',
                              'demande' => 'Demande',
                      ),
-             )
+             ),
+            'attributes' => array( 
+                'required' => 'required', 
+            )
         ));		
 		$this->add(array(
             'name' => 'prix',
@@ -50,6 +53,9 @@ class AnnonceForm extends Form
             'options' => array(
                 'label' => 'Prix : ',
             ),
+            'attributes' => array( 
+                'required' => 'required', 
+            )
         ));
 		$this->add(array(
             'name' => 'etat',
@@ -73,6 +79,9 @@ class AnnonceForm extends Form
             'options' => array(
                 'label' => 'Catégorie : ',
             ),
+            'attributes' => array( 
+                'required' => 'required', 
+            )
         )); 
          
       $this->add(array(
@@ -81,6 +90,9 @@ class AnnonceForm extends Form
             'options' => array(
                 'label' => 'Département : ',
             ),
+           'attributes' => array( 
+                'required' => 'required', 
+            )
         ));
      
 
@@ -90,6 +102,9 @@ class AnnonceForm extends Form
      	'options' => array(
          	'label' => 'Adresse Mail : '
      	),
+        'attributes' => array( 
+            'required' => 'required', 
+       )
 	));
 		
         $this->add(array(

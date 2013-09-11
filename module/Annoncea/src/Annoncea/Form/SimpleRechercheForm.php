@@ -15,7 +15,7 @@ class SimpleRechercheForm extends Form
 		// Ecrire un mot type qui sera recherché dans les titres d'annonces.
 		$this->add(array(
 			'name' => 'nom',
-			'type' => 'Text'
+			'type' => 'Text',
 			'options' => array(
                 'label' => 'Recherche par titre : ',
             ),
@@ -24,7 +24,7 @@ class SimpleRechercheForm extends Form
 		// selection d'une région.
 		$this->add(array(
 			'name' => 'id_reg',
-			'type' => 'Select'
+			'type' => 'Select',
 			'options' => array(
                 'label' => 'Région de Recherche : ',
             ),
@@ -33,7 +33,7 @@ class SimpleRechercheForm extends Form
 		// selection d'un département. -->Faire apparaître uniquement les département d'une région.
 		$this->add(array(
 			'name' => 'id_dept',
-			'type' => 'Select'
+			'type' => 'Select',
 			'options' => array(
                 'label' => 'Région de Recherche : ',
             ),
@@ -42,7 +42,7 @@ class SimpleRechercheForm extends Form
 		// catégorie dans laquelle recherché.	
 		$this->add(array(
 			'name' => 'id_cat',
-			'type' => 'Select'
+			'type' => 'Select',
 			'options' => array(
 				'label' => 'Catégorie : ',
 			),

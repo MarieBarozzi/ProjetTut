@@ -53,9 +53,8 @@ class UtilisateurController extends AbstractActionController
               
               $result = $auth->authenticate($authAdapter); //verif si les données sont correctes
               
-
             if ($result->isValid()) {
-               return $this->redirect()->toRoute('home');
+              return $this->redirect()->toRoute('home');
             } else {
                 $retour['erreur'] = 'Email ou mot de passe incorrect';
             }
@@ -87,10 +86,22 @@ class UtilisateurController extends AbstractActionController
             
             if ($form->isValid()) { //si il passe le validateur 
                        
-              
+                //création de l'utilisateur
                 $utilisateur = new Utilisateur();
                 $utilisateur->exchangeArray($form->getData()); //remplit l'objet à partir d'un tableau qu'on récupère du formulaire 
                 BDD::getUtilisateurTable($this->serviceLocator)->saveUtilisateur($utilisateur);
+
+                //connexion de l'utilisateur
+                //instancie le service authentification 
+                $auth = new AuthenticationService();
+                //adaptateur d'authentification (sert uniquement à la connexion)
+                $authAdapter = $this->serviceLocator->get('AuthAdapter');
+                
+                $authAdapter->setIdentity($form->get('mail')->getValue());
+                $authAdapter->setCredential($form->get('mdp')->getValue());
+              
+                $result = $auth->authenticate($authAdapter); //verif si les données sont correctes
+              
 
                 return $this->redirect()->toRoute('home');
             }

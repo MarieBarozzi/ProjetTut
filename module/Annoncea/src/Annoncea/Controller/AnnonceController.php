@@ -7,19 +7,33 @@ use Annoncea\Model\Annonce;
 use Annoncea\Form\AnnonceForm;
 use Annoncea\Form\AnnonceFormValidator;
 use Annoncea\Model\BaseAnnoncea as BDD;
+use Zend\Authentication\AuthenticationService;
 
 class AnnonceController extends AbstractActionController
 {
 	
     public function indexAction()
     {
-    	 return array(
-            'annonces' => BDD::getAnnonceTable($this->serviceLocator)->fetchAll(),
-        );
+        $auth = new AuthenticationService();
+        $retour = array();
+        if($auth->hasIdentity()) {
+            $retour['co'] = 'true';
+        }
+        
+        $retour['annonces'] = BDD::getAnnonceTable($this->serviceLocator)->fetchAll();
+    	return $retour;
     }
 
     public function addAction()
     {
+        //si utilisateur n'est pas connecté  
+        $auth = new AuthenticationService();
+        if(!$auth->hasIdentity()) {
+             return $this->redirect()->toRoute('utilisateur', array(
+                'action' => 'connexion' //ajouter un message lui disant qu'il doit etre co pour ajouter une annonce ? 
+            ));
+        }
+         
                
         $form = new AnnonceForm();
         
