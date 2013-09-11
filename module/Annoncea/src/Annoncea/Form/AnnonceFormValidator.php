@@ -123,31 +123,7 @@ class AnnonceFormValidator implements InputFilterAwareInterface
             ), 
         ))); 
  
-        $inputFilter->add($factory->createInput(array( 
-            'name' => 'mail_auteur', 
-            'filters' => array( 
-                array('name' => 'StripTags'), 
-                array('name' => 'StringTrim'), 
-            ), 
-            'validators' => array( 
-                array ( 
-                    'name' => 'EmailAddress'
-                ), 
-                array ( 
-                    'name' => 'NotEmpty'
-                ), 
-                 array(
-                        'name'    => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8', //encodage de caractères
-                            'min'      => 1,
-                            'max'      => 32, //voir dans la base
-                        ),
-                    ), 
-            ),
-        )));  
-        
-        
+     
          $this->inputFilter = $inputFilter;
         
                    

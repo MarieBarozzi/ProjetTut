@@ -15,9 +15,8 @@ class AnnonceController extends AbstractActionController
     public function indexAction()
     {
         $auth = new AuthenticationService();
-        $retour = array();
         if($auth->hasIdentity()) {
-            $retour['co'] = 'true';
+            $retour['co'] = true;
         }
         
         $retour['annonces'] = BDD::getAnnonceTable($this->serviceLocator)->fetchAll();
@@ -34,18 +33,20 @@ class AnnonceController extends AbstractActionController
             ));
         }
          
+        $retour['co'] = true; 
                
         $form = new AnnonceForm();
         
         $form->get('id_dept')->setValueOptions(BDD::getSelecteurDepartement($this->serviceLocator));
         $form->get('id_cat')->setValueOptions(BDD::getSelecteurCategorie($this->serviceLocator));   
     
+        $form->get('mail_auteur')->setValue($auth->getIdentity());
         $form->get('date_crea')->setValue(date('Y-m-d'));
         $form->get('date_modif')->setValue(date('Y-m-d'));
         $form->get('submit')->setValue('Ajout'); //change le bouton "submit" en "ajout"
 
         $request = $this->getRequest();//récupère la requete pour voir si c'est la 1ere fois ou pas qu'on vient sur la page
-        if ($request->isPost()) {//si c'est pas la 1ere fois
+        if ($request->isPost()) {//quand on vient depuis le bouton submit  
             $annonceFormValidator = new AnnonceFormValidator();
             $form->setInputFilter($annonceFormValidator->getInputFilter());
             $form->setData($request->getPost()); //on récupère ce qu'il y a dans la requete et on le met dans le formulaire
@@ -57,17 +58,24 @@ class AnnonceController extends AbstractActionController
                 
                 BDD::getAnnonceTable($this->serviceLocator)->saveAnnonce($annonce);
                 
-                // Redirect to list of albums
+                
                 return $this->redirect()->toRoute('annonce');
             }
         }
-        return array('form' => $form);
+        $retour['form'] = $form;
+        return $retour;
     }
         
       
 
     public function editAction()
     {
+        $auth = new AuthenticationService();
+        if($auth->hasIdentity()) {
+            $retour['co'] = true;
+        }
+        
+        //si il n'y a pas d'id d'annonce dans url
         $id_annonce = (int) $this->params()->fromRoute('id', 0);
         if (!$id_annonce) {
             return $this->redirect()->toRoute('annonce', array(
@@ -75,8 +83,7 @@ class AnnonceController extends AbstractActionController
             ));
         }
                 
-        // Get the Album with the specified id.  An exception is thrown
-        // if it cannot be found, in which case go to the index page.
+        //si l'id annonce n'est pas dans la base
         try {
             $annonce = BDD::getAnnonceTable($this->serviceLocator)->getAnnonce($id_annonce);
         }
@@ -86,7 +93,11 @@ class AnnonceController extends AbstractActionController
             ));
         }
        
-        
+       if($annonce->mail_auteur !== $auth->getIdentity()){
+           return $this->redirect()->toRoute('annonce', array(
+                'action' => 'index' ));
+       }
+            
         $form  = new AnnonceForm();
         
         $form->get('id_dept')->setValueOptions(BDD::getSelecteurDepartement($this->serviceLocator));
@@ -111,10 +122,9 @@ class AnnonceController extends AbstractActionController
             }
         }
 
-        return array(
-            'id_annonce' => $id_annonce,
-            'form' => $form,
-        );
+        $retour['id_annonce'] = $id_annonce;
+        $retour['form'] = $form; 
+        return $retour;
     }
 
     public function deleteAction()

@@ -97,14 +97,8 @@ class AnnonceForm extends Form
      
 
 	$this->add(array(
-		'type' => 'Email',
+		'type' => 'Hidden',
      	'name' => 'mail_auteur',
-     	'options' => array(
-         	'label' => 'Adresse Mail : '
-     	),
-        'attributes' => array( 
-            'required' => 'required', 
-       )
 	));
 		
         $this->add(array(
