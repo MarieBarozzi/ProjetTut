@@ -6,6 +6,12 @@ $this->headTitle($title);
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 
 <table class="table">
+<tr>
+    <th>Titre</th>
+    <th>Prix</th>
+    <th>Catégorie</th>
+    <th>Département</th>
+</tr>
 <?php foreach ($annonces as $annonce) : ?>
 <tr>
     <td><?php echo $this->escapeHtml($annonce->titre);?></td>
