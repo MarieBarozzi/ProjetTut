@@ -12,6 +12,22 @@ use Zend\Authentication\AuthenticationService;
 
 class UtilisateurController extends AbstractActionController
 {
+    
+    
+    public function voirAnnoncesAction() {
+        $auth = new AuthenticationService();
+        if(!$auth->hasIdentity()){ //si l'utilisateur n'est pas connecté
+            return $this->redirect()->toRoute('utilisateur', array(
+                'action' => 'connexion'
+            ));
+        }
+        
+        $retour['annonces'] = BDD::getAnnonceTable($this->serviceLocator)->getAnnonceAuteur($auth->getIdentity());
+        return $retour;
+    }
+
+    
+    
     public function indexAction(){
         $auth = new AuthenticationService();
         if(!$auth->hasIdentity()){ //si l'utilisateur n'est pas connecté

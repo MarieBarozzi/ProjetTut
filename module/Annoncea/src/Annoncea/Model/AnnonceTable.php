@@ -21,6 +21,16 @@ class AnnonceTable
         return $resultSet;
     }
 
+
+    //ajout 
+    public function getAnnonceAuteur($mail_auteur){
+          $resultSet = $this->tableGateway->select(array('mail_auteur' => $mail_auteur));
+          return $resultSet;
+    }
+    
+
+
+
     public function getAnnonce($id_annonce)
     {
         $id_annonce  = (int) $id_annonce;
