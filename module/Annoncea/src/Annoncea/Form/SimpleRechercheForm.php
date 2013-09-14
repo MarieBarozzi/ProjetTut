@@ -12,7 +12,7 @@ class SimpleRechercheForm extends Form
         $this->setAttribute('method', 'post');
 		
 		// Ajout des différentes parties du formulaire simple.
-		// Ecrire un mot type qui sera recherché dans les titres d'annonces.
+		// Ecrire un mot/phrase type qui sera recherché dans les titres d'annonces.
 		$this->add(array(
 			'name' => 'nom',
 			'type' => 'Text',

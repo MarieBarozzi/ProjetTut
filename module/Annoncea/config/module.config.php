@@ -16,7 +16,6 @@ return array(
              * une action "toto" appelle la fonction "totoAction" et correspond a la vue toto.phtml
              */
             'annonce' => array(
-            
                 'type'    => 'segment',
                 'options' => array(
                     'route'    => '/annonce[/][:action][/:id]',
