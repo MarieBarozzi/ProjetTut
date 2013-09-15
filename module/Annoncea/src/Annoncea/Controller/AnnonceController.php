@@ -4,6 +4,7 @@ namespace Annoncea\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Annoncea\Model\Annonce;
+use Annoncea\Model\Photo;
 use Annoncea\Form\AnnonceForm;
 use Annoncea\Form\AnnonceFormValidator;
 use Annoncea\Model\BaseAnnoncea as BDD;
@@ -19,7 +20,12 @@ class AnnonceController extends AbstractActionController
             $retour['co'] = true;
         }
         
+        $annonces = BDD::getAnnonceTable($this->serviceLocator)->fetchAll();
+        foreach($annonces as $annonce) {
+            $photos[$annonce->id_annonce] = BDD::getPhotoTable($this->serviceLocator)->getByIdAnnonce($annonce->id_annonce);    
+        }
         $retour['annonces'] = BDD::getAnnonceTable($this->serviceLocator)->fetchAll();
+        $retour['photos'] = $photos;
     	return $retour;
     }
 
@@ -47,20 +53,34 @@ class AnnonceController extends AbstractActionController
 
         $request = $this->getRequest();//récupère la requete pour voir si c'est la 1ere fois ou pas qu'on vient sur la page
         if ($request->isPost()) {//quand on vient depuis le bouton submit  
+             $post = array_merge_recursive(
+                $request->getPost()->toArray(),
+                $request->getFiles()->toArray()
+            );
+
             $annonceFormValidator = new AnnonceFormValidator();
             $form->setInputFilter($annonceFormValidator->getInputFilter());
-            $form->setData($request->getPost()); //on récupère ce qu'il y a dans la requete et on le met dans le formulaire
+            $form->setData($post); //on récupère ce qu'il y a dans la requete et on le met dans le formulaire
             
             if ($form->isValid()) { //si il passe le validateur 
-              
                 $annonce = new Annonce();
-                $annonce->exchangeArray($form->getData()); //remplit l'objet à partir d'un tableau qu'on récupère du formulaire 
-                
-                BDD::getAnnonceTable($this->serviceLocator)->saveAnnonce($annonce);
-                
-                
+                $annonce->exchangeArray($form->getData()); //remplit l'objet à partir d'un tableau qu'on récupère du formulaire            
+                $id_annonce = BDD::getAnnonceTable($this->serviceLocator)->saveAnnonce($annonce);
+                 
+                //pour les images  
+                $fichiers = $form->get('upload')->getValue();  
+                foreach($fichiers as $fichier){
+                    $photo = new Photo(); 
+                    $photo->id_annonce = $id_annonce;
+                    $id_photo = BDD::getPhotoTable($this->serviceLocator)->savePhoto($photo);
+                    
+                    $adapter = new \Zend\File\Transfer\Adapter\Http(); 
+                    $adapter->setDestination(__DIR__.'\..\..\..\..\..\public\photos');
+                    $adapter->receive($fichier['name']);
+                    rename(__DIR__.'\..\..\..\..\..\public\photos\\'.$fichier['name'], __DIR__.'\..\..\..\..\..\public\photos\\'.$id_photo);
+                }
                 return $this->redirect()->toRoute('annonce');
-            }
+              }
         }
         $retour['form'] = $form;
         return $retour;
@@ -110,16 +130,33 @@ class AnnonceController extends AbstractActionController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
+             $post = array_merge_recursive(
+                $request->getPost()->toArray(),
+                $request->getFiles()->toArray()
+            );
+ 
             $annonceFormValidator = new AnnonceFormValidator(); 
             $form->setInputFilter($annonceFormValidator->getInputFilter());
-            $form->setData($request->getPost());
+            $form->setData($post);
 
             if ($form->isValid()) {
                 BDD::getAnnonceTable($this->serviceLocator)->saveAnnonce($annonce);
                 
-                // Redirect to list of albums
+                $fichiers = $form->get('upload')->getValue();  
+                foreach($fichiers as $fichier){
+                    $photo = new Photo(); 
+                    $photo->id_annonce = $id_annonce;
+                    $id_photo = BDD::getPhotoTable($this->serviceLocator)->savePhoto($photo);
+                    
+                    $adapter = new \Zend\File\Transfer\Adapter\Http(); 
+                    $adapter->setDestination(__DIR__.'\..\..\..\..\..\public\photos');
+                    $adapter->receive($fichier['name']);
+                    rename(__DIR__.'\..\..\..\..\..\public\photos\\'.$fichier['name'], __DIR__.'\..\..\..\..\..\public\photos\\'.$id_photo);
+                
+                }
                 return $this->redirect()->toRoute('annonce');
             }
+                  
         }
 
         $retour['id_annonce'] = $id_annonce;

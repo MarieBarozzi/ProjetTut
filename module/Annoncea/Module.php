@@ -10,6 +10,8 @@ use Annoncea\Model\Categorie;
 use Annoncea\Model\CategorieTable;
 use Annoncea\Model\Utilisateur;
 use Annoncea\Model\UtilisateurTable;
+use Annoncea\Model\Photo;
+use Annoncea\Model\PhotoTable;
 use Zend\Authentication\Adapter\DbTable;
 
 
@@ -87,6 +89,20 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Utilisateur());
                     return new TableGateway('utilisateur', $dbAdapter, null, $resultSetPrototype);
                 }, 
+                
+                'Annoncea\Model\PhotoTable' =>  function($sm) {
+                    $tableGateway = $sm->get('PhotoTableGateway');
+                    $table = new PhotoTable($tableGateway);
+                    return $table;
+                },
+                  'PhotoTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Photo());
+                    return new TableGateway('photo', $dbAdapter, null, $resultSetPrototype);
+                }, 
+                
+                
                 'AuthAdapter' => function($sm){
                      $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                      return new DbTable($dbAdapter,'utilisateur','mail','mdp');

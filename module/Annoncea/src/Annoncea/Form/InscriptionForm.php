@@ -148,7 +148,7 @@ class InscriptionForm extends Form
              ),
         ));
         
-    /*   $this->add(array( 
+      /* $this->add(array( 
             'name' => 'captcha', 
             'type' => 'Captcha',
             'options' => array(

@@ -21,15 +21,10 @@ class AnnonceTable
         return $resultSet;
     }
 
-
-    //ajout 
     public function getAnnonceAuteur($mail_auteur){
           $resultSet = $this->tableGateway->select(array('mail_auteur' => $mail_auteur));
           return $resultSet;
     }
-    
-
-
 
     public function getAnnonce($id_annonce)
     {
@@ -67,7 +62,10 @@ class AnnonceTable
             } else {
                 throw new \Exception('Form id does not exist');
             }
+          
         }
+        
+        
 		/*
 		 * Si ce n'était pas un auto-increment
 		 if ($this->getAnnonce($id_annonce)) {
@@ -76,6 +74,7 @@ class AnnonceTable
                 $this->tableGateway->insert($data);
             }
 		 */
+       return $this->tableGateway->getLastInsertValue();
     }
 
 

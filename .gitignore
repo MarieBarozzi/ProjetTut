@@ -225,3 +225,6 @@ nbproject
 .settings
 composer.lock
 vendor/bin
+
+#my ignore
+public/photos

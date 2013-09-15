@@ -101,6 +101,20 @@ class AnnonceForm extends Form
      	'name' => 'mail_auteur',
 	));
 		
+        
+     $this->add(array( 
+            'name' => 'upload', 
+            'type' => 'File', 
+            'attributes' => array( 
+                'multiple'=>true,
+            ), 
+            'options' => array( 
+                'label' => 'Ajouter une ou plusieurs photos : ', 
+            ),
+        )); 
+    
+        
+        
         $this->add(array(
             'name' => 'submit',
             'type' => 'Submit',

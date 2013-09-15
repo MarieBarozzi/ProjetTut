@@ -7,13 +7,24 @@ $this->headTitle($title);
 
 <table class="table">
 <tr>
+    <th>Photo</th>
     <th>Titre</th>
     <th>Prix</th>
     <th>Catégorie</th>
     <th>Département</th>
 </tr>
+
 <?php foreach ($annonces as $annonce) : ?>
 <tr>
+    
+    <?php
+    $photo = $photos[$annonce->id_annonce]->current();
+    if($photo)
+        echo "<td><img src=\"" . $this->basePath() . "/photos/" . $photo->id_photo . "\"
+        style = \"max-height:120px;max-width:160px;\"/></td>";
+    else echo "<td><img src=\"" . $this->basePath() . "/photos/no-image.png\"
+        style = \"max-height:120px;max-width:160px;\"/></td>";
+    ?>
     <td><?php echo $this->escapeHtml($annonce->titre);?></td>
     <td><?php echo $this->escapeHtml($annonce->prix);?></td>
     <td><?php echo $this->escapeHtml($annonce->id_cat);?></td>

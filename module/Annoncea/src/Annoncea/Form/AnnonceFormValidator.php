@@ -3,6 +3,7 @@ namespace Annoncea\Form;
 
 use Zend\InputFilter\Factory as InputFactory; 
 use Zend\InputFilter\InputFilter; 
+use Zend\InputFilter\FileInput;
 use Zend\InputFilter\InputFilterAwareInterface; 
 use Zend\InputFilter\InputFilterInterface; 
 
@@ -123,6 +124,17 @@ class AnnonceFormValidator implements InputFilterAwareInterface
             ), 
         ))); 
  
+
+          $inputFilter->add($factory->createInput(array(
+            'name' => 'upload',  
+            'type' => 'Zend\InputFilter\FileInput',
+            'validators' => array( 
+                array ( 
+                    'name' => 'File\IsImage', 
+                ), 
+            ), 
+        ))); 
+
      
          $this->inputFilter = $inputFilter;
         

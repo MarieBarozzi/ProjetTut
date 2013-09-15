@@ -8,6 +8,7 @@ namespace Annoncea\Model;
 class BaseAnnoncea{
     
     public static $annonceTable;
+    public static $photoTable;
     public static $departementTable; 
     public static $categorieTable;
     public static $utilisateurTable;
@@ -19,6 +20,17 @@ class BaseAnnoncea{
         }
         return self::$annonceTable;
     }
+    
+       public static function getPhotoTable($sm)
+    {
+        if (!self::$photoTable) {
+            self::$photoTable = $sm->get('Annoncea\Model\PhotoTable');
+        }
+        return self::$photoTable;
+    }
+    
+    
+    
     
     public static function getDepartementTable($sm)
     {
