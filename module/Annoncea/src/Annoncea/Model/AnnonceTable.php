@@ -2,6 +2,8 @@
 namespace Annoncea\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Select;
+
 /*
  * contient le lien avec la table annonce et execute les opérations dessus
 */
@@ -15,15 +17,26 @@ class AnnonceTable
         $this->tableGateway = $tableGateway;
     }
 
-    public function fetchAll()
+    public function fetchAll($orderByDate = false)
     {
-        $resultSet = $this->tableGateway->select();
+        $select = new Select();
+        $select->from($this->tableGateway->table);
+        if($orderByDate)
+            $select->order('date_modif DESC');
+        $resultSet = $this->tableGateway->selectWith($select);
         return $resultSet;
+
     }
 
-    public function getAnnonceAuteur($mail_auteur){
-          $resultSet = $this->tableGateway->select(array('mail_auteur' => $mail_auteur));
-          return $resultSet;
+    public function getAnnonceAuteur($mail_auteur, $orderByDate = false){
+        
+        $select = new Select();
+        $select->from($this->tableGateway->table);
+        if($orderByDate)
+            $select->order('date_modif DESC');
+        $select->where(array('mail_auteur' => $mail_auteur));
+        $resultSet = $this->tableGateway->selectWith($select);
+        return $resultSet;
     }
 
     public function getAnnonce($id_annonce)

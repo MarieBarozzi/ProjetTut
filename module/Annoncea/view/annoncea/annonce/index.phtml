@@ -7,6 +7,7 @@ $this->headTitle($title);
 
 <table class="table">
 <tr>
+    <th>Date</th>
     <th>Photo</th>
     <th>Titre</th>
     <th>Prix</th>
@@ -16,20 +17,17 @@ $this->headTitle($title);
 
 <?php foreach ($annonces as $annonce) : ?>
 <tr>
-    
-    <?php
-    $photo = $photos[$annonce->id_annonce]->current();
-    if($photo)
-        echo "<td><img src=\"" . $this->basePath() . "/photos/" . $photo->id_photo . "\"
-        style = \"max-height:120px;max-width:160px;\"/></td>";
-    else echo "<td><img src=\"" . $this->basePath() . "/photos/no-image.png\"
-        style = \"max-height:120px;max-width:160px;\"/></td>";
-    ?>
+    <td><?php echo $this->escapeHtml($annonce->date_modif);?></td>
+    <td><img src="<?php
+        if($meta[$annonce->id_annonce]['photo'])
+            echo $this->basePath() . "/photos/" . $meta[$annonce->id_annonce]['photo']->id_photo ;
+        else
+            echo $this->basePath() . "/photos/no-image.png";
+    ?>" class="miniature" /></td>
     <td><?php echo $this->escapeHtml($annonce->titre);?></td>
     <td><?php echo $this->escapeHtml($annonce->prix);?></td>
-    <td><?php echo $this->escapeHtml($annonce->id_cat);?></td>
-    <td><?php echo $this->escapeHtml($annonce->id_dept);?></td>
+    <td><?php echo $this->escapeHtml($meta[$annonce->id_annonce]['categorie']->lib_cat);?></td>
+    <td><?php echo $this->escapeHtml($meta[$annonce->id_annonce]['departement']->lib_dept);?></td>
 </tr>
-
 <?php endforeach; ?>
 </table>

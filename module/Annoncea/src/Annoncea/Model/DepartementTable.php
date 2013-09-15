@@ -20,7 +20,7 @@ class DepartementTable
 
     public function getDepartement($id_dept)
     {
-        $id_dept  = (int) $id_dept;
+        $id_dept  = $id_dept;
         $rowset = $this->tableGateway->select(array('id_dept' => $id_dept));
         $row = $rowset->current();
         if (!$row) {

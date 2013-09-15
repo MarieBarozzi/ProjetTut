@@ -22,7 +22,18 @@ class UtilisateurController extends AbstractActionController
             ));
         }
         
+        $annonces = BDD::getAnnonceTable($this->serviceLocator)->getAnnonceAuteur($auth->getIdentity());
+        $metaAnnonces = array();
+        foreach($annonces as $annonce) {
+            $metaAnnonces[$annonce->id_annonce] = array(
+                'photo'=> BDD::getPhotoTable($this->serviceLocator)->getByIdAnnonce($annonce->id_annonce)->current(),
+                'departement' => BDD::getDepartementTable($this->serviceLocator)->getDepartement($annonce->id_dept),
+                'categorie' => BDD::getCategorieTable($this->serviceLocator)->getCategorie($annonce->id_cat),
+            );
+        }
+    
         $retour['annonces'] = BDD::getAnnonceTable($this->serviceLocator)->getAnnonceAuteur($auth->getIdentity());
+        $retour['meta'] = $metaAnnonces;   
         return $retour;
     }
 

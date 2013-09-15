@@ -21,11 +21,16 @@ class AnnonceController extends AbstractActionController
         }
         
         $annonces = BDD::getAnnonceTable($this->serviceLocator)->fetchAll();
+        $metaAnnonces = array();
         foreach($annonces as $annonce) {
-            $photos[$annonce->id_annonce] = BDD::getPhotoTable($this->serviceLocator)->getByIdAnnonce($annonce->id_annonce);    
+            $metaAnnonces[$annonce->id_annonce] = array(
+                'photo'=> BDD::getPhotoTable($this->serviceLocator)->getByIdAnnonce($annonce->id_annonce)->current(),
+                'departement' => BDD::getDepartementTable($this->serviceLocator)->getDepartement($annonce->id_dept),
+                'categorie' => BDD::getCategorieTable($this->serviceLocator)->getCategorie($annonce->id_cat),
+            );
         }
-        $retour['annonces'] = BDD::getAnnonceTable($this->serviceLocator)->fetchAll();
-        $retour['photos'] = $photos;
+        $retour['annonces'] = BDD::getAnnonceTable($this->serviceLocator)->fetchAll(true);
+        $retour['meta'] = $metaAnnonces;
     	return $retour;
     }
 
@@ -47,8 +52,8 @@ class AnnonceController extends AbstractActionController
         $form->get('id_cat')->setValueOptions(BDD::getSelecteurCategorie($this->serviceLocator));   
     
         $form->get('mail_auteur')->setValue($auth->getIdentity());
-        $form->get('date_crea')->setValue(date('Y-m-d'));
-        $form->get('date_modif')->setValue(date('Y-m-d'));
+        $form->get('date_crea')->setValue(date('Y-m-d H:i:s'));
+        $form->get('date_modif')->setValue(date('Y-m-d H:i:s'));
         $form->get('submit')->setValue('Ajout'); //change le bouton "submit" en "ajout"
 
         $request = $this->getRequest();//récupère la requete pour voir si c'est la 1ere fois ou pas qu'on vient sur la page
@@ -124,7 +129,7 @@ class AnnonceController extends AbstractActionController
         $form->get('id_cat')->setValueOptions(BDD::getSelecteurCategorie($this->serviceLocator)); 
         
         $form->bind($annonce); //pré-remplit
-        $form->get('date_modif')->setValue(date('Y-m-d'));
+        $form->get('date_modif')->setValue(date('Y-m-d H:i:s'));
         
         $form->get('submit')->setAttribute('value', 'Edition');
 
