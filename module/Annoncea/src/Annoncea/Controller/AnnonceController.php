@@ -80,9 +80,10 @@ class AnnonceController extends AbstractActionController
                     $id_photo = BDD::getPhotoTable($this->serviceLocator)->savePhoto($photo);
                     
                     $adapter = new \Zend\File\Transfer\Adapter\Http(); 
-                    $adapter->setDestination(__DIR__.'\..\..\..\..\..\public\photos');
+                    $adapter->setDestination($_SERVER['CONTEXT_DOCUMENT_ROOT'].$this->getRequest()->getBasePath().'/photos');
                     $adapter->receive($fichier['name']);
-                    rename(__DIR__.'\..\..\..\..\..\public\photos\\'.$fichier['name'], __DIR__.'\..\..\..\..\..\public\photos\\'.$id_photo);
+                    rename($_SERVER['CONTEXT_DOCUMENT_ROOT'].$this->getRequest()->getBasePath().'/photos/'.$fichier['name'],
+                        $_SERVER['CONTEXT_DOCUMENT_ROOT'].$this->getRequest()->getBasePath().'/photos/'.$id_photo);
                 }
                 return $this->redirect()->toRoute('annonce');
               }
@@ -154,10 +155,10 @@ class AnnonceController extends AbstractActionController
                     $id_photo = BDD::getPhotoTable($this->serviceLocator)->savePhoto($photo);
                     
                     $adapter = new \Zend\File\Transfer\Adapter\Http(); 
-                    $adapter->setDestination(__DIR__.'\..\..\..\..\..\public\photos');
+                    $adapter->setDestination($_SERVER['CONTEXT_DOCUMENT_ROOT'].$this->getRequest()->getBasePath().'/photos');
                     $adapter->receive($fichier['name']);
-                    rename(__DIR__.'\..\..\..\..\..\public\photos\\'.$fichier['name'], __DIR__.'\..\..\..\..\..\public\photos\\'.$id_photo);
-                
+                    rename($_SERVER['CONTEXT_DOCUMENT_ROOT'].$this->getRequest()->getBasePath().'/photos/'.$fichier['name'],
+                        $_SERVER['CONTEXT_DOCUMENT_ROOT'].$this->getRequest()->getBasePath().'/photos/'.$id_photo);
                 }
                 return $this->redirect()->toRoute('annonce');
             }

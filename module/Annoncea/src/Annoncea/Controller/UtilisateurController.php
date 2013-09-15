@@ -32,7 +32,7 @@ class UtilisateurController extends AbstractActionController
             );
         }
     
-        $retour['annonces'] = BDD::getAnnonceTable($this->serviceLocator)->getAnnonceAuteur($auth->getIdentity());
+        $retour['annonces'] = BDD::getAnnonceTable($this->serviceLocator)->getAnnonceAuteur($auth->getIdentity(), true);
         $retour['meta'] = $metaAnnonces;   
         return $retour;
     }
@@ -103,6 +103,12 @@ class UtilisateurController extends AbstractActionController
                        
         $form->get('id_dept')->setValueOptions(BDD::getSelecteurDepartement($this->serviceLocator));
         $form->get('submit')->setValue('Inscription'); //change le bouton "submit" en "inscription"
+        
+        $form->get('captcha')->getCaptcha()->setOptions(array(
+            'imgUrl'=> $this->getRequest()->getBasePath() . "/img/captcha",
+            'imgDir'=> $_SERVER['CONTEXT_DOCUMENT_ROOT'] . $this->getRequest()->getBasePath() . "/img/captcha/",
+            'font'=> $_SERVER['CONTEXT_DOCUMENT_ROOT'] . $this->getRequest()->getBasePath() . "/fonts/arial.ttf",
+        ));
 
         $request = $this->getRequest();//récupère la requete pour voir si c'est la 1ere fois ou pas qu'on vient sur la page
         if ($request->isPost()) {//si c'est pas la 1ere fois

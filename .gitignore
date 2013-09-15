@@ -228,3 +228,4 @@ vendor/bin
 
 #my ignore
 public/photos
+public/img/captcha

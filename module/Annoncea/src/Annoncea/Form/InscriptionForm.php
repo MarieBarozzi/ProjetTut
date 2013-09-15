@@ -148,21 +148,18 @@ class InscriptionForm extends Form
              ),
         ));
         
-      /* $this->add(array( 
+     $this->add(array( 
             'name' => 'captcha', 
             'type' => 'Captcha',
             'options' => array(
                   'label'=> 'Merci de recopier le texte de l\'image ci-dessus',
                   'captcha' => new Image(array(
-                    'font'=> __DIR__ . '\..\..\..\..\..\public\fonts\arial.ttf',
                     'width' => 250,
                     'height' => 100,
-                    'imgUrl'=> str_replace('\\', '/', __DIR__) . '/../../../../../public/img/captcha',
-                    'imgDir'=> __DIR__ . '\..\..\..\..\..\public\img\captcha'
                     )
                  )
             ), 
-        ));*/
+        ));
         
        $this->add(array(
             'name' => 'submit',

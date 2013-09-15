@@ -131,7 +131,13 @@ class AnnonceFormValidator implements InputFilterAwareInterface
             'validators' => array( 
                 array ( 
                     'name' => 'File\IsImage', 
-                ), 
+                ),                
+                 array ( 
+                    'name' => 'File\Count', 
+                    'options' => array( 
+                        'min' => '0', 
+                    ), 
+                ),
             ), 
         ))); 
 
