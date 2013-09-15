@@ -27,7 +27,7 @@ class SimpleRechercheFormValidator implements InputFilterAwareInterface
 			// Argument à vérifié : titre/phrase recherché.
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'nom',
-                'required' => false, // 
+                'required' => false, 
                 'filters'  => array(
                     array('name' => 'StripTags'), 
                     array('name' => 'StringTrim'),

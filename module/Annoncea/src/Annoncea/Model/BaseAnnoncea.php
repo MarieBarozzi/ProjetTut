@@ -80,5 +80,16 @@ class BaseAnnoncea{
          }    
          return $choixDepartement;   
     }
+	
+	    public static function getSelecteurRegion($sm)
+    {
+         $regionTable = self::getRegionTable($sm);
+         $regions = $regionTable->fetchAll();
+         $choixregion = array();
+         foreach ($regions as $region) {
+               $choixregion[$region->id_reg] = $region->id_reg . ' - ' . $region->lib_reg;
+         }    
+         return $choixregion;   
+    }
     
 }
