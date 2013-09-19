@@ -51,14 +51,22 @@ class AnnonceController extends AbstractActionController
         //si l'id annonce n'est pas dans la base
         try {
             $retour['annonce'] = BDD::getAnnonceTable($this->serviceLocator)->getAnnonce($id_annonce);
+                 
         }
         catch (\Exception $ex) {
             return $this->redirect()->toRoute('annonce', array(
                 'action' => 'index'
             ));
         }
-        
+
+       $metaAnnonces[$retour['annonce']->id_annonce] = array(
+                'photo'=> BDD::getPhotoTable($this->serviceLocator)->getByIdAnnonce($retour['annonce']->id_annonce),
+                'departement' => BDD::getDepartementTable($this->serviceLocator)->getDepartement($retour['annonce']->id_dept),
+                'categorie' => BDD::getCategorieTable($this->serviceLocator)->getCategorie($retour['annonce']->id_cat),
+            );
+        $retour['meta'] = $metaAnnonces;
         return $retour; 
+        
     }
 
 
