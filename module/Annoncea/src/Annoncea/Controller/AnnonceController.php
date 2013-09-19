@@ -34,6 +34,34 @@ class AnnonceController extends AbstractActionController
     	return $retour;
     }
 
+    public function annonceAction() {
+        $auth = new AuthenticationService();
+        if($auth->hasIdentity()) {
+            $retour['co'] = true;
+        }
+        
+        //si il n'y a pas d'id d'annonce dans url
+        $id_annonce = (int) $this->params()->fromRoute('id', 0);
+        if (!$id_annonce) {
+            return $this->redirect()->toRoute('annonce', array(
+                'action' => 'index'
+            ));
+        }
+                
+        //si l'id annonce n'est pas dans la base
+        try {
+            $retour['annonce'] = BDD::getAnnonceTable($this->serviceLocator)->getAnnonce($id_annonce);
+        }
+        catch (\Exception $ex) {
+            return $this->redirect()->toRoute('annonce', array(
+                'action' => 'index'
+            ));
+        }
+        
+        return $retour; 
+    }
+
+
     public function addAction()
     {
         //si utilisateur n'est pas connecté  

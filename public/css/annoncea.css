@@ -2,3 +2,9 @@
 	max-height : 120px;
 	max-width : 160px;
 }
+.tableSurvol{
+	cursor:pointer;
+}
+.tableSurvol:hover{
+	background-color: #EEEEEE;
+}
