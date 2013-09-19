@@ -9,6 +9,7 @@ use Annoncea\Form\ConnexionFormValidator;
 use Annoncea\Model\Utilisateur;
 use Annoncea\Model\BaseAnnoncea as BDD;
 use Zend\Authentication\AuthenticationService;
+use Zend\Mail;
 
 class UtilisateurController extends AbstractActionController
 {
@@ -122,10 +123,20 @@ class UtilisateurController extends AbstractActionController
                 //création de l'utilisateur
                 $utilisateur = new Utilisateur();
                 $utilisateur->exchangeArray($form->getData()); //remplit l'objet à partir d'un tableau qu'on récupère du formulaire 
-                BDD::getUtilisateurTable($this->serviceLocator)->saveUtilisateur($utilisateur);
+                //$mdpcrypt = $form->get('mdp')->getValue();
 
-                //connexion de l'utilisateur
-                //instancie le service authentification 
+                $email = $form->get('mail')->getValue();
+
+                $mail = new Mail\Message();
+                $mail->setBody('Welcome on Annoncea.');
+                $mail->setFrom('julien.hoffmann80@orange.fr', 'Sender\'s name');
+                $mail->addTo($email, 'Name o. recipient');
+                $mail->setSubject('TestSubject');
+                
+                $transport = new Mail\Transport\Sendmail();
+                $transport->send($mail);
+
+                BDD::getUtilisateurTable($this->serviceLocator)->saveUtilisateur($utilisateur);
                 $auth = new AuthenticationService();
                 //adaptateur d'authentification (sert uniquement à la connexion)
                 $authAdapter = $this->serviceLocator->get('AuthAdapter');
@@ -141,6 +152,32 @@ class UtilisateurController extends AbstractActionController
         }
         return array('form' => $form);
     }
-        
+       
+    public function crypter($maCleDeCryptage='', $maChaineACrypter)
+    {
+
+        if($maCleDeCryptage==""){
+            $maCleDeCryptage=$GLOBALS['PHPSESSID'];
+        }
+        $maCleDeCryptage = md5($maCleDeCryptage);
+        $letter = -1;
+        $newstr = '';
+        $strlen = strlen($maChaineACrypter);
+
+        for($i = 0; $i < $strlen; $i++ ){
+            $letter++;
+        if ( $letter > 31 ){
+        $letter = 0;
+        }
+
+        $neword = ord($maChaineACrypter{$i}) + ord($maCleDeCryptage{$letter});
+
+        if ( $neword > 255 ){
+        $neword -= 256;
+        }
+        $newstr .= chr($neword);
+        }
+        return base64_encode($newstr);
+    } 
     
 }
