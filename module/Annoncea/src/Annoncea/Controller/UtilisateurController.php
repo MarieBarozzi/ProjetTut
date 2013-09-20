@@ -9,7 +9,11 @@ use Annoncea\Form\ConnexionFormValidator;
 use Annoncea\Model\Utilisateur;
 use Annoncea\Model\BaseAnnoncea as BDD;
 use Zend\Authentication\AuthenticationService;
-use Zend\Mail;
+use Zend\Mail\Message;
+use Zend\Mail\Transport\Smtp as SmtpTransport;
+use Zend\Mime\Message as MimeMessage;
+use Zend\Mime\Part as MimePart;
+use Zend\Mail\Transport\SmtpOptions;
 
 class UtilisateurController extends AbstractActionController
 {
@@ -123,19 +127,43 @@ class UtilisateurController extends AbstractActionController
                 //création de l'utilisateur
                 $utilisateur = new Utilisateur();
                 $utilisateur->exchangeArray($form->getData()); //remplit l'objet à partir d'un tableau qu'on récupère du formulaire 
-                //$mdpcrypt = $form->get('mdp')->getValue();
-
+                
                 $email = $form->get('mail')->getValue();
 
-                $mail = new Mail\Message();
-                $mail->setBody('Welcome on Annoncea.');
-                $mail->setFrom('julien.hoffmann80@orange.fr', 'Sender\'s name');
-                $mail->addTo($email, 'Name o. recipient');
-                $mail->setSubject('TestSubject');
-                
-                $transport = new Mail\Transport\Sendmail();
-                $transport->send($mail);
+                //$hw_modifyobject($connect, $utilisateur); A faire !!!!!
 
+              $message = new Message();
+                $message->addTo('m.barozzi@orange.fr')
+                 ->addFrom('julpark.site@gmail.com')
+                ->setSubject('Test send mail using ZF2');
+    
+            // Setup SMTP transport using LOGIN authentication
+            $transport = new SmtpTransport();
+            $options   = new SmtpOptions(array(
+             'host'              => 'smtp.gmail.com',
+                'connection_class'  => 'login',
+                'connection_config' => array(
+                'ssl'       => 'tls',
+                'username' => 'projetannoncea@gmail.com',
+                'password' => 'a1z2e3r4t5'
+            ),
+            'port' => 587,
+            ));
+ 
+            $html = new MimePart('<b>heii, <i>sorry</i>,Hi its annoncea team</b>');
+            $html->type = "text/html";
+ 
+            $body = new MimeMessage();
+            $body->addPart($html);
+ 
+            $message->setBody($body);
+ 
+            $transport->setOptions($options);
+            $transport->send($message);
+                
+
+
+                
                 BDD::getUtilisateurTable($this->serviceLocator)->saveUtilisateur($utilisateur);
                 $auth = new AuthenticationService();
                 //adaptateur d'authentification (sert uniquement à la connexion)
