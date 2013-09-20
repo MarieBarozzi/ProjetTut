@@ -133,7 +133,7 @@ class UtilisateurController extends AbstractActionController
                 //$hw_modifyobject($connect, $utilisateur); A faire !!!!!
 
               $message = new Message();
-                $message->addTo('m.barozzi@orange.fr')
+                $message->addTo($email)
                  ->addFrom('julpark.site@gmail.com')
                 ->setSubject('Test send mail using ZF2');
     
