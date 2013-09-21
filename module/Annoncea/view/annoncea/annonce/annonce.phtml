@@ -4,3 +4,25 @@ $title = $annonce->titre; //recuperer le nom de l'objet
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<br>
+<?php echo $this->escapeHtml($annonce->date_modif);?>   
+<br>
+<?php
+        if($meta[$annonce->id_annonce]['photo']) {
+            foreach($meta[$annonce->id_annonce]['photo'] as $photo) {
+                echo "<img src=\"" . $this->basePath() . "/photos/" . $photo->id_photo . "\"/>"; 
+            }
+        }
+        else
+            echo "<img src=\"" . $this->basePath() . "/photos/no-image.png" . "\"/>";
+?>
+<br>
+<?php echo "Prix : ";?>
+<?php echo $this->escapeHtml($annonce->prix);?>  <?php echo "€";?>
+<br>
+<?php echo $this->escapeHtml($annonce->descr);?>   
+<br>
+<?php echo $this->escapeHtml($meta[$annonce->id_annonce]['departement']->lib_dept);?>   
+<br>
+<?php echo $this->escapeHtml($meta[$annonce->id_annonce]['categorie']->lib_cat);?>   
