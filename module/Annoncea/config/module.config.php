@@ -18,10 +18,11 @@ return array(
             'annonce' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/annonce[/][:action][/:id]',
+                    'route'    => '/annonce[/][:action][/:id][/page/:page]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',
+                        'page'   => '[0-9]+',
                     ),
                     'defaults' => array(
                         'controller' => 'Annoncea\Controller\Annonce',
@@ -42,6 +43,7 @@ return array(
                     ),
                 ),
             ),
+            
         ),
     ),
 		

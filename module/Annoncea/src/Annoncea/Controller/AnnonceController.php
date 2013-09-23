@@ -15,23 +15,31 @@ class AnnonceController extends AbstractActionController
 {
 	
     public function indexAction()
-    {
+    {         
         $auth = new AuthenticationService();
         if($auth->hasIdentity()) {
             $retour['co'] = true;
         }
         
-        $annonces = BDD::getAnnonceTable($this->serviceLocator)->fetchAll();
+        $annoncesResultSet = BDD::getAnnonceTable($this->serviceLocator)->fetchAll();
+        $annonces = array();
         $metaAnnonces = array();
-        foreach($annonces as $annonce) {
+        foreach($annoncesResultSet as $annonce) {
+            $annonces[$annonce->id_annonce] = $annonce;
             $metaAnnonces[$annonce->id_annonce] = array(
                 'photo'=> BDD::getPhotoTable($this->serviceLocator)->getByIdAnnonce($annonce->id_annonce)->current(),
                 'departement' => BDD::getDepartementTable($this->serviceLocator)->getDepartement($annonce->id_dept),
                 'categorie' => BDD::getCategorieTable($this->serviceLocator)->getCategorie($annonce->id_cat),
             );
         }
-        $retour['annonces'] = BDD::getAnnonceTable($this->serviceLocator)->fetchAll(true);
+        
+        
+        $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($annonces));
+        $paginator->setCurrentPageNumber($this->params()->fromRoute('page', 1));
+        $paginator->setItemCountPerPage(1);
+        
         $retour['meta'] = $metaAnnonces;
+        $retour['pagination'] = $paginator; //contient les annonces
     	return $retour;
     }
 
