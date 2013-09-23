@@ -50,11 +50,11 @@ class UtilisateurTable
        
         $mail = (string) $utilisateur->mail;
          try {
-             $this->getUtilisateur($mail);
+             $this->getUtilisateur($mail); //on essaye de get l'utilisateur qui correspond au mail 
          } catch (\Exception $e){
-             $this->tableGateway->insert($data);
+             $this->tableGateway->insert($data);//si on le trouve pas dans la base il l'insert 
          }
-         $this->tableGateway->update($data, array('mail' => $mail));        
+         $this->tableGateway->update($data, array('mail' => $mail)); //sinon il l'update       
     }       
 
     public function deleteUtilisateur($mail)

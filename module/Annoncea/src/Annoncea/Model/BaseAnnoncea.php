@@ -8,6 +8,7 @@ namespace Annoncea\Model;
 class BaseAnnoncea{
     
     public static $annonceTable;
+    public static $favorisTable;
     public static $photoTable;
     public static $departementTable; 
     public static $categorieTable;
@@ -21,7 +22,7 @@ class BaseAnnoncea{
         return self::$annonceTable;
     }
     
-       public static function getPhotoTable($sm)
+    public static function getPhotoTable($sm)
     {
         if (!self::$photoTable) {
             self::$photoTable = $sm->get('Annoncea\Model\PhotoTable');
@@ -29,6 +30,14 @@ class BaseAnnoncea{
         return self::$photoTable;
     }
     
+    
+    public static function getFavorisTable($sm)
+    {
+        if (!self::$favorisTable) {
+            self::$favorisTable = $sm->get('Annoncea\Model\FavorisTable');
+        }
+        return self::$favorisTable;
+    }
     
     
     

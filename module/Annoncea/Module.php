@@ -12,6 +12,8 @@ use Annoncea\Model\Utilisateur;
 use Annoncea\Model\UtilisateurTable;
 use Annoncea\Model\Photo;
 use Annoncea\Model\PhotoTable;
+use Annoncea\Model\Favoris;
+use Annoncea\Model\FavorisTable;
 use Zend\Authentication\Adapter\DbTable;
 
 
@@ -100,6 +102,18 @@ class Module
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Photo());
                     return new TableGateway('photo', $dbAdapter, null, $resultSetPrototype);
+                }, 
+                
+                'Annoncea\Model\FavorisTable' =>  function($sm) {
+                    $tableGateway = $sm->get('FavorisTableGateway');
+                    $table = new FavorisTable($tableGateway);
+                    return $table;
+                },
+                  'FavorisTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Favoris());
+                    return new TableGateway('favoris', $dbAdapter, null, $resultSetPrototype);
                 }, 
                 
                 

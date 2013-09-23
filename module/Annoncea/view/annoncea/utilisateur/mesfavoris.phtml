@@ -1,0 +1,39 @@
+<?php
+
+$title = 'Mes favoris';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<table class="table">
+ <tr>
+    <th>Date</th>
+    <th>Photo</th>
+    <th>Titre</th>
+    <th>Prix</th>
+    <th>Catégorie</th>
+    <th>Département</th>
+    <th>Actions</th>
+</tr>
+
+<?php foreach ($annonces as $annonce) : ?>
+<tr>
+    <td><?php echo $this->escapeHtml($annonce->date_modif);?></td>
+    
+    <td><img src="<?php
+        if($meta[$annonce->id_annonce]['photo'])
+            echo $this->basePath() . "/photos/" . $meta[$annonce->id_annonce]['photo']->id_photo ;
+        else
+            echo $this->basePath() . "/photos/no-image.png";
+    ?>" class="miniature" /></td>
+    <td><?php echo $this->escapeHtml($annonce->titre);?></td>
+    <td><?php echo $this->escapeHtml($annonce->prix);?></td>
+    <td><?php echo $this->escapeHtml($meta[$annonce->id_annonce]['categorie']->lib_cat);?></td>
+    <td><?php echo $this->escapeHtml($meta[$annonce->id_annonce]['departement']->lib_dept);?></td>
+    <td>
+    <a href="<?php echo $this->url('annonce', array('action'=>'deletefavoris', 'id' => $annonce->id_annonce));?>">Supprimer ce favori</a>
+    </td>
+    
+</tr>
+<?php endforeach; ?>
+</table>
+

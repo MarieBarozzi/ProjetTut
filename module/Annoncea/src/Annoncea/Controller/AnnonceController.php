@@ -4,6 +4,7 @@ namespace Annoncea\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Annoncea\Model\Annonce;
+use Annoncea\Model\Favoris;
 use Annoncea\Model\Photo;
 use Annoncea\Form\AnnonceForm;
 use Annoncea\Form\AnnonceFormValidator;
@@ -233,5 +234,41 @@ class AnnonceController extends AbstractActionController
             'annonce' => BDD::getAnnonceTable($this->serviceLocator)->getAnnonce($id_annonce)
         );
     }
+    
+    
+    //Gestion de la mise en favoris 
+    
+    
+    //mettre en favoris 
+    public function favorisAction() {
+        //besoins d'etre co
+        $auth = new AuthenticationService();
+        if(!$auth->hasIdentity()) {
+             return $this->redirect()->toRoute('utilisateur', array(
+                'action' => 'connexion' //ajouter un message lui disant qu'il doit etre co pour ajouter une annonce ? 
+            ));
+        }
+        $favoris = new Favoris(); 
+        $favoris->mail = $auth->getIdentity();
+        $favoris->id_annonce = (int) $this->params()->fromRoute('id', 0);
+        BDD::getFavorisTable($this->serviceLocator)->saveFavoris($favoris);
+       
+        return $this->redirect($this->serviceLocator)->toRoute('annonce', array('action'=>'annonce', 'id' => $favoris->id_annonce));
+         //mais je preferais rester sur la même page !!!!!!!!!
+        
+    }
+
+    //voir ces favoris 
+    //plutot une fonction dans utilisateur
+    //qui appelera getByMail
+   
+    
+    public function deletefavorisAction() {
+        $id_annonce = (int) $this->params()->fromRoute('id', 0);
+        BDD::getFavorisTable($this->serviceLocator)->deleteFavoris($id_annonce);
+        return $this->redirect($this->serviceLocator)->toRoute('utilisateur', array('action'=>'mesfavoris'));
+        //mais je preferais rester sur la même page !!!!!!!!!
+    }
+    
     
 }
