@@ -14,6 +14,7 @@ use Zend\Mail\Transport\Smtp as SmtpTransport;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mime\Part as MimePart;
 use Zend\Mail\Transport\SmtpOptions;
+use Zend\Crypt\Password\Bcrypt;
 
 class UtilisateurController extends AbstractActionController
 {
@@ -60,39 +61,43 @@ class UtilisateurController extends AbstractActionController
                 $utilisateur->exchangeArray($form->getData()); //remplit l'objet à partir d'un tableau qu'on récupère du formulaire 
                 
                 $email = $form->get('mail')->getValue();
-
-                //$hw_modifyobject($connect, $utilisateur); A faire !!!!!
+                //$utilisateur->mail = 'juju@orange.fr';
 
               $message = new Message();
                 $message->addTo($email)
                  ->addFrom('julpark.site@gmail.com')
                 ->setSubject('Test send mail using ZF2');
     
-            // Setup SMTP transport using LOGIN authentication
-            $transport = new SmtpTransport();
-            $options   = new SmtpOptions(array(
-             'host'              => 'smtp.gmail.com',
-                'connection_class'  => 'login',
-                'connection_config' => array(
-                'ssl'       => 'tls',
-                'username' => 'projetannoncea@gmail.com',
-                'password' => 'a1z2e3r4t5'
-            ),
-            'port' => 587,
-            ));
+                // Setup SMTP transport using LOGIN authentication
+                $transport = new SmtpTransport();
+                $options   = new SmtpOptions(array(
+                 'host'              => 'smtp.gmail.com',
+                    'connection_class'  => 'login',
+                    'connection_config' => array(
+                    'ssl'       => 'tls',
+                    'username' => 'projetannoncea@gmail.com',
+                    'password' => 'a1z2e3r4t5'
+                ),
+                'port' => 587,
+                ));
+     
+                $html = new MimePart('<b>heii, <i>sorry</i>,Hi its annoncea team</b>');
+                $html->type = "text/html";
+     
+                $body = new MimeMessage();
+                $body->addPart($html);
+     
+                $message->setBody($body);
  
-            $html = new MimePart('<b>heii, <i>sorry</i>,Hi its annoncea team</b>');
-            $html->type = "text/html";
- 
-            $body = new MimeMessage();
-            $body->addPart($html);
- 
-            $message->setBody($body);
- 
-            $transport->setOptions($options);
-            $transport->send($message);
+                $transport->setOptions($options);
+                $transport->send($message);
                 
+                $motDePasse = $form->get('mdp')->getValue();
 
+                //$bcrypt = new Bcrypt();
+                //$securePass = $bcrypt->create($motDePasse);
+
+                //$utilisateur->mdp = $securePass;
 
                 
                 BDD::getUtilisateurTable($this->serviceLocator)->saveUtilisateur($utilisateur);
@@ -102,7 +107,7 @@ class UtilisateurController extends AbstractActionController
                 
                 $authAdapter->setIdentity($form->get('mail')->getValue());
                 $authAdapter->setCredential($form->get('mdp')->getValue());
-              
+                              
                 $result = $auth->authenticate($authAdapter); //verif si les données sont correctes
               
 
@@ -141,6 +146,8 @@ class UtilisateurController extends AbstractActionController
                        
               $authAdapter->setIdentity($form->get('mail')->getValue());
               $authAdapter->setCredential($form->get('mdp')->getValue());
+
+              //$authAdapter->setCredential($bcrypt->verify($form->get('mdp')->getValue(), $securePass); A faire !!!!!
               
               $result = $auth->authenticate($authAdapter); //verif si les données sont correctes
               
