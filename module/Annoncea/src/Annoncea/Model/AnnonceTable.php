@@ -65,6 +65,7 @@ class AnnonceTable
 		    'id_cat'  => $annonce->id_cat,
 		    'id_dept'  => $annonce->id_dept,
 		    'mail_auteur'  => $annonce->mail_auteur,
+		    'id_reg'  => $annonce->id_reg,
 		);
 
         $id_annonce = (int)$annonce->id_annonce;
@@ -98,7 +99,7 @@ class AnnonceTable
     }
     
     
-    public function filtrageStrict($prixmin, $prixmax, $id_cat, $id_dept, $type_annonce) {
+    public function filtrageStrict($prixmin, $prixmax, $id_cat, $id_dept, $type_annonce, $id_reg) {
         
         $requete = new Select();
         
@@ -120,9 +121,11 @@ class AnnonceTable
         if($prixmax != null)
             $where->lessThanOrEqualTo('prix', $prixmax); 
             
-         
+         if($id_reg != null)
+            $where->equalTo('id_reg', $id_reg);  
             
         $requete->where($where);
+        $requete->order('date_modif DESC');
         
         $resultSet = $this->tableGateway->selectWith($requete);
         

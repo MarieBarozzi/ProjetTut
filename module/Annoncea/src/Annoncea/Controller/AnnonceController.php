@@ -8,6 +8,8 @@ use Annoncea\Model\Favoris;
 use Annoncea\Model\Photo;
 use Annoncea\Form\AnnonceForm;
 use Annoncea\Form\AnnonceFormValidator;
+use Annoncea\Form\RechercheForm;
+use Annoncea\Form\RechercheFormValidator;
 use Annoncea\Model\BaseAnnoncea as BDD;
 use Zend\Authentication\AuthenticationService;
 
@@ -21,7 +23,42 @@ class AnnonceController extends AbstractActionController
             $retour['co'] = true;
         }
         
-        $annoncesResultSet = BDD::getAnnonceTable($this->serviceLocator)->fetchAll(true);
+        
+        $prixmin = null;
+        $prixmax = null;
+        $id_cat = null;
+        $id_dept = null;
+        $type_annonce = null;    
+        $id_reg = null;    
+        
+        $form = new RechercheForm();
+        $form->get('submit')->setValue('Chercher');
+        $form->get('id_dept')->setValueOptions(BDD::getSelecteurDepartement($this->serviceLocator));
+        $form->get('id_cat')->setValueOptions(BDD::getSelecteurCategorie($this->serviceLocator));  
+        $form->get('id_reg')->setValueOptions(BDD::getSelecteurRegion($this->serviceLocator));  
+        
+        $request = $this->getRequest();
+        if($request->isPost()){//si ça vient du formulaire
+            $form->setData($request->getPost()); //remplit l'objet formulaire avec les données qui viennent de la requete post
+            $rechercheFormValidator = new RechercheFormValidator(); 
+            $form->setInputFilter($rechercheFormValidator->getInputFilter());
+            if ($form->isValid()) {
+                $prixmin = $form->get('prixmin')->getValue();
+                $prixmax = $form->get('prixmax')->getValue();
+                $id_cat = $form->get('id_cat')->getValue();
+                $id_dept = $form->get('id_dept')->getValue();
+                $type_annonce = $form->get('type_annonce')->getValue();    
+                $id_reg = $form->get('id_reg')->getValue();  
+
+             }        
+        }
+        
+        $retour['form'] = $form;
+        
+        $annoncesResultSet=BDD::getAnnonceTable($this->serviceLocator)->filtrageStrict($prixmin, $prixmax, $id_cat, $id_dept, $type_annonce, $id_reg);
+        
+        
+        //$annoncesResultSet = BDD::getAnnonceTable($this->serviceLocator)->fetchAll(true);
         $annonces = array();
         $metaAnnonces = array();
         foreach($annoncesResultSet as $annonce) {
@@ -31,7 +68,6 @@ class AnnonceController extends AbstractActionController
                 'departement' => BDD::getDepartementTable($this->serviceLocator)->getDepartement($annonce->id_dept),
                 'categorie' => BDD::getCategorieTable($this->serviceLocator)->getCategorie($annonce->id_cat),
             );
-            
         }
         
         $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($annonces));
@@ -115,7 +151,10 @@ class AnnonceController extends AbstractActionController
             if ($form->isValid()) { //si il passe le validateur 
                 $annonce = new Annonce();
                 $annonce->exchangeArray($form->getData()); //remplit l'objet à partir d'un tableau qu'on récupère du formulaire            
+                $annonce->id_reg = BDD::getDepartementTable($this->serviceLocator)->getDepartement($annonce->id_dept)->id_reg;
+              
                 $id_annonce = BDD::getAnnonceTable($this->serviceLocator)->saveAnnonce($annonce);
+                
                  
                 //pour les images  
                 $fichiers = $form->get('upload')->getValue();  
@@ -191,7 +230,10 @@ class AnnonceController extends AbstractActionController
             $form->setData($post);
 
             if ($form->isValid()) {
+                $annonce->id_reg = BDD::getDepartementTable($this->serviceLocator)->getDepartement($annonce->id_dept)->id_reg;
+                
                 BDD::getAnnonceTable($this->serviceLocator)->saveAnnonce($annonce);
+                
                 
                 $fichiers = $form->get('upload')->getValue();  
                 foreach($fichiers as $fichier){
@@ -265,11 +307,6 @@ class AnnonceController extends AbstractActionController
         return $this->redirect($this->serviceLocator)->toRoute('annonce', array('action'=>'annonce', 'id' => $favoris->id_annonce));
         
     }
-
-    //voir ces favoris 
-    //plutot une fonction dans utilisateur
-    //qui appelera getByMail
-   
     
     public function deletefavorisAction() {
         $id_annonce = (int) $this->params()->fromRoute('id', 0);
@@ -277,21 +314,43 @@ class AnnonceController extends AbstractActionController
         return $this->redirect($this->serviceLocator)->toRoute('utilisateur', array('action'=>'mesfavoris'));
     }
     
-    public function testrechercheAction(){
+    /*public function testrechercheAction(){
         $prixmin = null;
-        $prixmax = 30;
+        $prixmax = null;
         $id_cat = null;
-        $id_dept = '01';
-        $type_annonce = null;        
+        $id_dept = null;
+        $type_annonce = null;    
+        $id_reg = null;    
         
-        $annoncesBDD=BDD::getAnnonceTable($this->serviceLocator)->filtrageStrict(null, 30, null, '01', null);
-         $annonces = array();
+        $form = new RechercheForm();
+        $form->get('submit')->setValue('Chercher');
+        $form->get('id_dept')->setValueOptions(BDD::getSelecteurDepartement($this->serviceLocator));
+        $form->get('id_cat')->setValueOptions(BDD::getSelecteurCategorie($this->serviceLocator));  
+        $form->get('id_reg')->setValueOptions(BDD::getSelecteurRegion($this->serviceLocator));  
+        
+        $request = $this->getRequest();
+        if($request->isPost()){//si ça vient du formulaire
+            $form->setData($request->getPost()); //remplit l'objet formulaire avec les données qui viennent de la requete post
+            $rechercheFormValidator = new RechercheFormValidator(); 
+            $form->setInputFilter($rechercheFormValidator->getInputFilter());
+            if ($form->isValid()) {
+                $prixmin = $form->get('prixmin')->getValue();
+                $prixmax = $form->get('prixmax')->getValue();
+                $id_cat = $form->get('id_cat')->getValue();
+                $id_dept = $form->get('id_dept')->getValue();
+                $type_annonce = $form->get('type_annonce')->getValue();    
+                $id_reg = $form->get('id_reg')->getValue();  
+
+             }        
+        }
+        $annoncesBDD=BDD::getAnnonceTable($this->serviceLocator)->filtrageStrict($prixmin, $prixmax, $id_cat, $id_dept, $type_annonce, $id_reg);
+        $annonces = array();
         foreach($annoncesBDD as $annonce){
             $annonces[$annonce->id_annonce] = $annonce;
         }
         $retour['annonces'] = $annonces;
-        
+        $retour['form'] = $form;
         return $retour;
-    }
+    }*/
     
 }

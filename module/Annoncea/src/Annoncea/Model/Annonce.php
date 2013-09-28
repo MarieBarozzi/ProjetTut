@@ -20,6 +20,7 @@ class Annonce
 	public $id_cat; 
 	public $id_dept; 
 	public $mail_auteur; 
+    public $id_reg;
 
  
     public function exchangeArray($data)
@@ -36,6 +37,7 @@ class Annonce
         $this->id_cat = (!empty($data['id_cat'])) ? $data['id_cat'] : null;
         $this->id_dept = (!empty($data['id_dept'])) ? $data['id_dept'] : null;
         $this->mail_auteur = (!empty($data['mail_auteur'])) ? $data['mail_auteur'] : null;
+        $this->id_reg = (!empty($data['id_reg'])) ? $data['id_reg'] : null;
     }
 
     public function getArrayCopy()

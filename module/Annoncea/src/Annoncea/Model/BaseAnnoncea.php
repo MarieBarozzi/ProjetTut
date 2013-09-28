@@ -13,6 +13,7 @@ class BaseAnnoncea{
     public static $departementTable; 
     public static $categorieTable;
     public static $utilisateurTable;
+    public static $regionTable;
     
     public static function getAnnonceTable($sm)
     {
@@ -66,6 +67,14 @@ class BaseAnnoncea{
         return self::$utilisateurTable;
     }
     
+        
+    public static function getRegionTable($sm)
+    {
+        if (!self::$regionTable) {
+            self::$regionTable = $sm->get('Annoncea\Model\RegionTable');
+        }
+        return self::$regionTable;
+    }
     
     
     public static function getSelecteurCategorie($sm)
@@ -96,7 +105,7 @@ class BaseAnnoncea{
          $regions = $regionTable->fetchAll();
          $choixregion = array();
          foreach ($regions as $region) {
-               $choixregion[$region->id_reg] = $region->id_reg . ' - ' . $region->lib_reg;
+               $choixregion[$region->id_reg] = $region->lib_reg;
          }    
          return $choixregion;   
     }

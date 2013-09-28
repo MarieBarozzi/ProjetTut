@@ -14,6 +14,8 @@ use Annoncea\Model\Photo;
 use Annoncea\Model\PhotoTable;
 use Annoncea\Model\Favoris;
 use Annoncea\Model\FavorisTable;
+use Annoncea\Model\Region;
+use Annoncea\Model\RegionTable;
 use Zend\Authentication\Adapter\DbTable;
 
 
@@ -115,6 +117,21 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Favoris());
                     return new TableGateway('favoris', $dbAdapter, null, $resultSetPrototype);
                 }, 
+                
+                
+                 'Annoncea\Model\RegionTable' =>  function($sm) {
+                    $tableGateway = $sm->get('RegionTableGateway');
+                    $table = new RegionTable($tableGateway);
+                    return $table;
+                },
+                  'RegionTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Region());
+                    return new TableGateway('region', $dbAdapter, null, $resultSetPrototype);
+                }, 
+                
+                
                 
                 
                 'AuthAdapter' => function($sm){
