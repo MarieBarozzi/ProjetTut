@@ -21,7 +21,7 @@ class AnnonceController extends AbstractActionController
             $retour['co'] = true;
         }
         
-        $annoncesResultSet = BDD::getAnnonceTable($this->serviceLocator)->fetchAll();
+        $annoncesResultSet = BDD::getAnnonceTable($this->serviceLocator)->fetchAll(true);
         $annonces = array();
         $metaAnnonces = array();
         foreach($annoncesResultSet as $annonce) {
@@ -31,12 +31,12 @@ class AnnonceController extends AbstractActionController
                 'departement' => BDD::getDepartementTable($this->serviceLocator)->getDepartement($annonce->id_dept),
                 'categorie' => BDD::getCategorieTable($this->serviceLocator)->getCategorie($annonce->id_cat),
             );
+            
         }
-        
         
         $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($annonces));
         $paginator->setCurrentPageNumber($this->params()->fromRoute('page', 1));
-        $paginator->setItemCountPerPage(1);
+        $paginator->setItemCountPerPage(10);
         
         $retour['meta'] = $metaAnnonces;
         $retour['pagination'] = $paginator; //contient les annonces
@@ -234,7 +234,8 @@ class AnnonceController extends AbstractActionController
             }
 
             // Redirect to list of albums
-            return $this->redirect($this->serviceLocator)->toRoute('annonce');
+           // return $this->redirect($this->serviceLocator)->toRoute('annonce');
+            return $this->redirect($this->serviceLocator)->toRoute('utilisateur', array('action'=>'mesannonces'));
         }
 
         return array(
@@ -262,7 +263,6 @@ class AnnonceController extends AbstractActionController
         BDD::getFavorisTable($this->serviceLocator)->saveFavoris($favoris);
        
         return $this->redirect($this->serviceLocator)->toRoute('annonce', array('action'=>'annonce', 'id' => $favoris->id_annonce));
-         //mais je preferais rester sur la même page !!!!!!!!!
         
     }
 
@@ -275,8 +275,23 @@ class AnnonceController extends AbstractActionController
         $id_annonce = (int) $this->params()->fromRoute('id', 0);
         BDD::getFavorisTable($this->serviceLocator)->deleteFavoris($id_annonce);
         return $this->redirect($this->serviceLocator)->toRoute('utilisateur', array('action'=>'mesfavoris'));
-        //mais je preferais rester sur la même page !!!!!!!!!
     }
     
+    public function testrechercheAction(){
+        $prixmin = null;
+        $prixmax = 30;
+        $id_cat = null;
+        $id_dept = '01';
+        $type_annonce = null;        
+        
+        $annoncesBDD=BDD::getAnnonceTable($this->serviceLocator)->filtrageStrict(null, 30, null, '01', null);
+         $annonces = array();
+        foreach($annoncesBDD as $annonce){
+            $annonces[$annonce->id_annonce] = $annonce;
+        }
+        $retour['annonces'] = $annonces;
+        
+        return $retour;
+    }
     
 }

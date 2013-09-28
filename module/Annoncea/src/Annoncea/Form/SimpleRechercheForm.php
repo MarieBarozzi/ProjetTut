@@ -35,7 +35,7 @@ class SimpleRechercheForm extends Form
 			'name' => 'id_dept',
 			'type' => 'Select',
 			'options' => array(
-                'label' => 'Région de Recherche : ',
+                'label' => 'Departement de Recherche : ',
             ),
 		));
 		

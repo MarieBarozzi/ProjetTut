@@ -3,6 +3,7 @@ namespace Annoncea\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Where;
 
 /*
  * contient le lien avec la table annonce et execute les opérations dessus
@@ -95,4 +96,58 @@ class AnnonceTable
     {
         $this->tableGateway->delete(array('id_annonce' => $id_annonce));
     }
+    
+    
+    public function filtrageStrict($prixmin, $prixmax, $id_cat, $id_dept, $type_annonce) {
+        
+        $requete = new Select();
+        
+        $requete->from($this->tableGateway->table);  
+        
+        $where = new Where();
+        if($id_cat != null)
+            $where->equalTo('id_cat', $id_cat);
+
+        if($id_dept != null)
+            $where->equalTo('id_dept', $id_dept);
+
+        if($type_annonce != null)
+            $where->equalTo('type_annonce', $type_annonce);
+            
+        if($prixmin != null)
+            $where->greaterThanOrEqualTo('prix', $prixmin);    
+        
+        if($prixmax != null)
+            $where->lessThanOrEqualTo('prix', $prixmax); 
+            
+         
+            
+        $requete->where($where);
+        
+        $resultSet = $this->tableGateway->selectWith($requete);
+        
+        return $resultSet;
+        
+        /*
+        $requete = new Select();
+        $requete->from($this->tableGateway->table);   
+        $conditions = array();
+        if($id_cat != null)
+            $conditions['id_cat'] = $id_cat;
+
+        if($id_dept != null)
+            $conditions['id_dept'] = $id_dept;
+
+        if($type_annonce != null)
+            $conditions['type_annonce'] = $type_annonce;
+
+        $requete->where($conditions);
+        $resultSet = $this->tableGateway->selectWith($select);
+        return $resultSet;
+         */
+
+    }
+    
+    
+    
 }
