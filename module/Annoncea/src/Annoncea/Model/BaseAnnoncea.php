@@ -90,7 +90,7 @@ class BaseAnnoncea{
          return $choixDepartement;   
     }
 	
-	    public static function getSelecteurRegion($sm)
+	public static function getSelecteurRegion($sm)
     {
          $regionTable = self::getRegionTable($sm);
          $regions = $regionTable->fetchAll();
