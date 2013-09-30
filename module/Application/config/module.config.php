@@ -16,7 +16,7 @@ return array(
                     'route'    => '/',
                     'defaults' => array(
                         'controller' => 'Annoncea\Controller\Annonce',
-                        'action'     => 'index',
+                        'action'     => 'home',
                     ),
                 ),
             ),

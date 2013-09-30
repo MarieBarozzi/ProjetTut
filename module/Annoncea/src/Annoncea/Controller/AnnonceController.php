@@ -15,27 +15,36 @@ use Zend\Authentication\AuthenticationService;
 
 class AnnonceController extends AbstractActionController
 {
-	
+	public function homeAction(){
+	    $auth = new AuthenticationService();
+        $retour = array();
+        if($auth->hasIdentity()) {
+            $retour['co'] = true;
+        }
+        return $retour;
+	}
+    
     public function indexAction()
     {         
         $auth = new AuthenticationService();
         if($auth->hasIdentity()) {
             $retour['co'] = true;
         }
-        
-        
+
         $prixmin = null;
         $prixmax = null;
         $id_cat = null;
         $id_dept = null;
         $type_annonce = null;    
-        $id_reg = null;    
+        $id_reg = (int) $this->params()->fromRoute('id', null); //null = si jamais il ne trouve pas d'id    
         
         $form = new RechercheForm();
         $form->get('submit')->setValue('Chercher');
         $form->get('id_dept')->setValueOptions(BDD::getSelecteurDepartement($this->serviceLocator));
         $form->get('id_cat')->setValueOptions(BDD::getSelecteurCategorie($this->serviceLocator));  
         $form->get('id_reg')->setValueOptions(BDD::getSelecteurRegion($this->serviceLocator));  
+        
+        $form->get('id_reg')->setValue((int) $this->params()->fromRoute('id', null));
         
         $request = $this->getRequest();
         if($request->isPost()){//si ça vient du formulaire
