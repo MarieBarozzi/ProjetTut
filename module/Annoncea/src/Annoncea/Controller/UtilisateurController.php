@@ -16,6 +16,8 @@ use Zend\Mime\Part as MimePart;
 use Zend\Mail\Transport\SmtpOptions;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Where;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\AdapterInterface;
 
@@ -165,12 +167,12 @@ class UtilisateurController extends AbstractActionController
                 $transport->setOptions($options);
                 $transport->send($message);
                 
-                $motDePasse = $form->get('mdp')->getValue();
+                /*$motDePasse = $form->get('mdp')->getValue();
 
                 $bcrypt = new Bcrypt();
                 $securePass = $bcrypt->create($motDePasse);
 
-                $utilisateur->mdp = $securePass;
+                $utilisateur->mdp = $securePass;*/
 
                 
                 BDD::getUtilisateurTable($this->serviceLocator)->saveUtilisateur($utilisateur);
@@ -181,37 +183,75 @@ class UtilisateurController extends AbstractActionController
                 $authAdapter->setIdentity($form->get('mail')->getValue());
                 $authAdapter->setCredential($form->get('mdp')->getValue());
                 
-                $passw = $form->get('mdp')->getValue();
+                //$passw = $form->get('mdp')->getValue();
 
+                //$authAdapter->setCredential($results);
 
-               /*if ($bcrypt->verify($passw, $securePass)) {
-                    
-                    $sql = new Sql($Adapter);
-
-                    $select = $sql->select();
-
-                    $select->from('utilisateur');
-                    $select->where('mail = ?', $email);
-
-                    $statement = $sql->prepareStatementForSqlObject($select);
-
-                    $results = $statement->execute();
-
-                    $authAdapter->setCredential($results);
-
-                    $result = $auth->authenticate($authAdapter); //verif si les données sont correctes
-
-                } else {
-                    echo 'fuck you';    
-                }*/
-              
-                
-              
+                $result = $auth->authenticate($authAdapter); //verif si les données sont correctes
+                           
 
                 return $this->redirect()->toRoute('home');
             }
         }
         return array('form' => $form);
     }
+
+    //les petites affaires de l'utilisateurs 
+       
+    public function mesannoncesAction() {
+        $auth = new AuthenticationService();
+        if(!$auth->hasIdentity()){ //si l'utilisateur n'est pas connecté
+            return $this->redirect()->toRoute('utilisateur', array(
+                'action' => 'connexion'
+            ));
+        }
+        
+        $retour['co'] = true; 
+        
+        $annonces = BDD::getAnnonceTable($this->serviceLocator)->getAnnonceAuteur($auth->getIdentity());
+        $metaAnnonces = array();
+        foreach($annonces as $annonce) {
+           $metaAnnonces[$annonce->id_annonce] = array(
+                'photo'=> BDD::getPhotoTable($this->serviceLocator)->getByIdAnnonce($annonce->id_annonce)->current(),
+                'departement' => BDD::getDepartementTable($this->serviceLocator)->getDepartement($annonce->id_dept),
+                'categorie' => BDD::getCategorieTable($this->serviceLocator)->getCategorie($annonce->id_cat),
+           );
+        }
     
+        $retour['annonces'] = BDD::getAnnonceTable($this->serviceLocator)->getAnnonceAuteur($auth->getIdentity(), true);
+        $retour['meta'] = $metaAnnonces;   
+        return $retour;
+    }
+
+    public function mesfavorisAction() {
+        $auth = new AuthenticationService();
+        if(!$auth->hasIdentity()){ //si l'utilisateur n'est pas connecté
+            return $this->redirect()->toRoute('utilisateur', array(
+                'action' => 'connexion'
+            ));
+        }
+        
+        $retour['co'] = true; 
+        
+        $favoris = BDD::getFavorisTable($this->serviceLocator)->getByMail($auth->getIdentity());
+        $annonces = array();   
+        foreach($favoris as $fav) {
+            $id_annonce = $fav->id_annonce;
+            $annonces[$id_annonce] = BDD::getAnnonceTable($this->serviceLocator)->getAnnonce($id_annonce);
+            //$annonce = BDD::getAnnonceTable($this->serviceLocator)->getAnnonce($id_annonce);
+        }
+        $metaAnnonces = array();
+        foreach($annonces as $annonce) {
+            $metaAnnonces[$annonce->id_annonce] = array(
+                'photo'=> BDD::getPhotoTable($this->serviceLocator)->getByIdAnnonce($annonce->id_annonce)->current(),
+                'departement' => BDD::getDepartementTable($this->serviceLocator)->getDepartement($annonce->id_dept),
+                'categorie' => BDD::getCategorieTable($this->serviceLocator)->getCategorie($annonce->id_cat),
+                );
+        }
+    
+        $retour['annonces'] = $annonces;
+        $retour['meta'] = $metaAnnonces;   
+        return $retour;
+    }
+
 }
