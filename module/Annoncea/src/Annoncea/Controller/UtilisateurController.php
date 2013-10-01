@@ -86,19 +86,47 @@ class UtilisateurController extends AbstractActionController
             
             if ($form->isValid()) { //si il passe le validateur (verif que c'est bien un email etc...)
                        
-              $authAdapter->setIdentity($form->get('mail')->getValue());
-              $authAdapter->setCredential($form->get('mdp')->getValue());
+                $authAdapter->setIdentity($form->get('mail')->getValue());
 
-              //$authAdapter->setCredential($bcrypt->verify($form->get('mdp')->getValue(), $securePass); A faire !!!!!
+                $email = $form->get('mail')->getValue(); //récupère l'adresse mail
+                $passw = $form->get('mdp')->getValue(); //récupère le mot de passe
+
+
+                $db = mysql_connect('localhost', 'root', ''); //connexion à la base
+                mysql_select_db('annoncea',$db);
+                $sql =  'SELECT mdp FROM utilisateur where mail="'.$email.'";';
+
+                $req = mysql_query($sql) or die('Erreur SQL !<br>'.$sql.'<br>'.mysql_error());
+
+                while($data = mysql_fetch_assoc($req))
+                {
+                    $resultat = $data['mdp'];
+                    break;
+                } 
+
+                $securePass = $resultat;
+
+                $bcrypt = new Bcrypt();
+
+                if ($bcrypt->verify($passw, $securePass)) 
+                {
+
+                    $authAdapter->setCredential($resultat);
+
+                    $result = $auth->authenticate($authAdapter); //verif si les données sont correctes
+
+                    if ($result->isValid()) {
+                        return $this->redirect()->toRoute('home');
+                    } else {
+                        $retour['erreur'] = 'Email ou mot de passe incorrect';
+                    }
+
+                } else {
+                    echo 'fuck you';    
+                }
               
-              $result = $auth->authenticate($authAdapter); //verif si les données sont correctes
-              
-            if ($result->isValid()) {
-              return $this->redirect()->toRoute('home');
-            } else {
-                $retour['erreur'] = 'Email ou mot de passe incorrect';
+            
             }
-         }
         }
         return $retour; //passé à ce qui crée la vue 
     }
@@ -167,12 +195,12 @@ class UtilisateurController extends AbstractActionController
                 $transport->setOptions($options);
                 $transport->send($message);
                 
-                /*$motDePasse = $form->get('mdp')->getValue();
+                $motDePasse = $form->get('mdp')->getValue();
 
                 $bcrypt = new Bcrypt();
                 $securePass = $bcrypt->create($motDePasse);
 
-                $utilisateur->mdp = $securePass;*/
+                $utilisateur->mdp = $securePass;
 
                 
                 BDD::getUtilisateurTable($this->serviceLocator)->saveUtilisateur($utilisateur);
@@ -181,13 +209,35 @@ class UtilisateurController extends AbstractActionController
                 $authAdapter = $this->serviceLocator->get('AuthAdapter');
                 
                 $authAdapter->setIdentity($form->get('mail')->getValue());
-                $authAdapter->setCredential($form->get('mdp')->getValue());
+                //$authAdapter->setCredential($form->get('mdp')->getValue());
                 
-                //$passw = $form->get('mdp')->getValue();
+                $passw = $form->get('mdp')->getValue();
 
-                //$authAdapter->setCredential($results);
 
-                $result = $auth->authenticate($authAdapter); //verif si les données sont correctes
+                if ($bcrypt->verify($passw, $securePass)) 
+                {
+                    $db = mysql_connect('localhost', 'root', ''); //connexion à la base 
+                    mysql_select_db('annoncea',$db);
+                    $sql =  'SELECT mdp FROM utilisateur where mail="'.$email.'";';
+                    echo $sql;
+
+                    $req = mysql_query($sql) or die('Erreur SQL !<br>'.$sql.'<br>'.mysql_error()); 
+
+                    while($data = mysql_fetch_assoc($req))
+                    {
+                        $resultat = $data['mdp'];
+                        echo $resultat;
+                        break;
+                    } 
+
+                    $authAdapter->setCredential($resultat);
+
+                    $result = $auth->authenticate($authAdapter); //verif si les données sont correctes
+
+
+                } else {
+                    echo 'fuck you';    
+                }
                            
 
                 return $this->redirect()->toRoute('home');
