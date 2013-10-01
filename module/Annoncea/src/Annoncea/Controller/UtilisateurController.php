@@ -217,7 +217,54 @@ class UtilisateurController extends AbstractActionController
             }
         }
         return array('form' => $form);
-    } */  
+    } */
+    
+    public function inscriptionAction()
+    {
+        $form = new InscriptionForm();
+        $form->get('rang')->setValue('membre');
+        
+                       
+        $form->get('id_dept')->setValueOptions(BDD::getSelecteurDepartement($this->serviceLocator));
+        $form->get('submit')->setValue('Inscription'); //change le bouton "submit" en "inscription"
+        
+        $form->get('captcha')->getCaptcha()->setOptions(array(
+            'imgUrl'=> $this->getRequest()->getBasePath() . "/img/captcha",
+            'imgDir'=> $_SERVER['CONTEXT_DOCUMENT_ROOT'] . $this->getRequest()->getBasePath() . "/img/captcha/",
+            'font'=> $_SERVER['CONTEXT_DOCUMENT_ROOT'] . $this->getRequest()->getBasePath() . "/fonts/arial.ttf",
+        ));
+
+        $request = $this->getRequest();//récupère la requete pour voir si c'est la 1ere fois ou pas qu'on vient sur la page
+        if ($request->isPost()) {//si c'est pas la 1ere fois
+            $inscriptionFormValidator = new InscriptionFormValidator();
+            $inscriptionFormValidator->setDbAdapter($this->serviceLocator->get('Zend\Db\Adapter\Adapter'));//lien avec db qui sert pour le validateur qui vérifie que l'email (entrée) n'est pas déjà dans la table
+            $form->setInputFilter($inscriptionFormValidator->getInputFilter());
+            $form->setData($request->getPost()); //on récupère ce qu'il y a dans la requete et on le met dans le formulaire
+            
+            if ($form->isValid()) { //si il passe le validateur 
+                       
+                //création de l'utilisateur
+                $utilisateur = new Utilisateur();
+                $utilisateur->exchangeArray($form->getData()); //remplit l'objet à partir d'un tableau qu'on récupère du formulaire 
+                BDD::getUtilisateurTable($this->serviceLocator)->saveUtilisateur($utilisateur);
+
+                //connexion de l'utilisateur
+                //instancie le service authentification 
+                $auth = new AuthenticationService();
+                //adaptateur d'authentification (sert uniquement à la connexion)
+                $authAdapter = $this->serviceLocator->get('AuthAdapter');
+                
+                $authAdapter->setIdentity($form->get('mail')->getValue());
+                $authAdapter->setCredential($form->get('mdp')->getValue());
+              
+                $result = $auth->authenticate($authAdapter); //verif si les données sont correctes
+              
+
+                return $this->redirect()->toRoute('home');
+            }
+        }
+        return array('form' => $form);
+    }  
     
     public function connexionAction()
     {
@@ -247,13 +294,11 @@ class UtilisateurController extends AbstractActionController
                        
               $authAdapter->setIdentity($form->get('mail')->getValue());
               $authAdapter->setCredential($form->get('mdp')->getValue());
-
-              //$authAdapter->setCredential($bcrypt->verify($form->get('mdp')->getValue(), $securePass); A faire !!!!!
-              
+                            
               $result = $auth->authenticate($authAdapter); //verif si les données sont correctes
               
             if ($result->isValid()) {
-              return $this->redirect()->toUrl($this->getRequest()->getHeader('Referer')->getUri());
+              return $this->redirect()->toRoute('annonce', array('action' => 'index'));
             } else {
                 $retour['erreur'] = 'Email ou mot de passe incorrect';
             }
