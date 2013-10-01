@@ -86,24 +86,7 @@ class AnnonceFormValidator implements InputFilterAwareInterface
             ), 
         ))); 
  
-        $inputFilter->add($factory->createInput(array(
-                'name'     => 'etat',
-                'required' => false,
-                'filters'  => array(
-                    array('name' => 'StripTags'), //pour enlever le html
-                    array('name' => 'StringTrim'), //enlève les espaces au debut et à la fin
-                ),
-                'validators' => array(
-                    array(
-                        'name'    => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8', //encodage de caractères
-                            'min'      => 1,
-                            'max'      => 32, //voir dans la base
-                        ),
-                    ),
-                ),
-            )));
+ 
             
         $inputFilter->add($factory->createInput(array(
             'name' => 'date_crea', 

@@ -59,9 +59,16 @@ class AnnonceForm extends Form
         ));
 		$this->add(array(
             'name' => 'etat',
-            'type' => 'Text',
+            'type' => 'Select',
             'options' => array(
                 'label' => 'Etat : ',
+                'value_options' => array(
+                             'neuf' => 'neuf',
+                             'excellent'=> 'excellent',
+                             'bon' => 'bon', 
+                             'mauvais'=> 'mauvais',
+                             'tresmauvais' => 'tres mauvais'
+                        ),
             ),
         ));	
 		$this->add(array(

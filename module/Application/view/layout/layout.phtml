@@ -36,7 +36,7 @@
                         
                             <!-- Début du menu. --
                             <!-- Le Home est accessible à tous et doit aboutir à la fonction de recherche. -->
-                            <li class="active"><a href="<?php echo $this->url('home') ?>">Annonces</a></li>
+                            <li class="active"><a href="<?php echo $this->url('annonce', array('action'=>'index')) ?>">Annonces</a></li>
                             
                             <!-- Les autres sections doivent être accessible aux membres connectés. -->
                             <!-- Il est à noter qu'il faut remplacer echo $this->url('home') par le bon echo pour adapter le lien. -->
