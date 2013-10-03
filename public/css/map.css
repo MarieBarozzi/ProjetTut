@@ -1,14 +1,14 @@
 .map {
-	width: 755px;
-	height: 696px;
-	background:url(../img/carte/map.png) left top no-repeat;
+	width: 650px;
+	height: 650px;
+	background: url(../img/carte/map.png) left top no-repeat;
 	position: relative;
 }
 
 .map .overlay {
-	width: 755px;
-	height: 696px;
-	background:url(../img/carte/map.png) 755px top no-repeat;
+	width: 650px;
+	height: 650px;
+	background:url(../img/carte/map.png) 650px top no-repeat;
 	position: absolute;
 	top: 0;
 	left: 0;

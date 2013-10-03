@@ -35,7 +35,7 @@ class UtilisateurController extends AbstractActionController
         return array('auth' => $auth);    
     }
     
-    /*public function connexionAction()
+    public function connexionAction()
     {
         //instancie le service authentification 
         $auth = new AuthenticationService();
@@ -217,9 +217,9 @@ class UtilisateurController extends AbstractActionController
             }
         }
         return array('form' => $form);
-    } */
+    }
     
-    public function inscriptionAction()
+    /*public function inscriptionAction()
     {
         $form = new InscriptionForm();
         $form->get('rang')->setValue('membre');
@@ -305,7 +305,7 @@ class UtilisateurController extends AbstractActionController
          }
         }
         return $retour; //passé à ce qui crée la vue 
-    }
+    }*/
 
     public function deconnexionAction(){
         $auth = new AuthenticationService();
