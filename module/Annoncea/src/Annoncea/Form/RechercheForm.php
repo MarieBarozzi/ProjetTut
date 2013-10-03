@@ -81,6 +81,23 @@ class RechercheForm extends Form
             ),
         ));
         
+                
+        $this->add(array(
+            'name' => 'etat',
+            'type' => 'Select',
+            'options' => array(
+                'label' => 'Etat : ',
+                'empty_option' => 'Indifferent',
+                'value_options' => array(                         
+                             4 => 'neuf',
+                             3 => 'excellent',
+                             2 => 'bon', 
+                             1 => 'mauvais',
+                             0 => 'tres mauvais'
+                ),
+             ),
+        ));
+        
            
         $this->add(array(
             'name' => 'submit',

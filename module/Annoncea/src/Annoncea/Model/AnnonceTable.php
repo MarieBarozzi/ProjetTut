@@ -99,7 +99,7 @@ class AnnonceTable
     }
     
     
-    public function filtrageStrict($prixmin, $prixmax, $id_cat, $id_dept, $type_annonce, $id_reg) {
+    public function filtrageStrict($prixmin, $prixmax, $id_cat, $id_dept, $type_annonce, $id_reg, $etat) {
         
         $requete = new Select();
         
@@ -123,7 +123,11 @@ class AnnonceTable
             
          if($id_reg != null)
             $where->equalTo('id_reg', $id_reg);  
-            
+         
+         if($etat != null)
+            $where->greaterThanOrEqualTo('etat', $etat);
+         
+            var_dump($etat);
         $requete->where($where);
         $requete->order('date_modif DESC');
         

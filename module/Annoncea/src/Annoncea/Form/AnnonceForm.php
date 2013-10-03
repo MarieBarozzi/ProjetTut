@@ -63,11 +63,11 @@ class AnnonceForm extends Form
             'options' => array(
                 'label' => 'Etat : ',
                 'value_options' => array(
-                             'neuf' => 'neuf',
-                             'excellent'=> 'excellent',
-                             'bon' => 'bon', 
-                             'mauvais'=> 'mauvais',
-                             'tresmauvais' => 'tres mauvais'
+                             4 => 'neuf',
+                             3 => 'excellent',
+                             2 => 'bon', 
+                             1 => 'mauvais',
+                             0 => 'tres mauvais'
                         ),
             ),
         ));	

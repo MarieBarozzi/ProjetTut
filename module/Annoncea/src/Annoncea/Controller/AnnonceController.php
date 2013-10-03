@@ -35,7 +35,8 @@ class AnnonceController extends AbstractActionController
         $prixmax = null;
         $id_cat = null;
         $id_dept = null;
-        $type_annonce = null;    
+        $type_annonce = null;   
+        $etat = null;   
         $id_reg = (int) $this->params()->fromRoute('id', null); //null = si jamais il ne trouve pas d'id    
         
         $form = new RechercheForm();
@@ -58,25 +59,28 @@ class AnnonceController extends AbstractActionController
                 $id_dept = $form->get('id_dept')->getValue();
                 $type_annonce = $form->get('type_annonce')->getValue();    
                 $id_reg = $form->get('id_reg')->getValue();  
+                $etat = $form->get('etat')->getValue();  
 
              }        
         }
         
         $retour['form'] = $form;
         
-        $annoncesResultSet=BDD::getAnnonceTable($this->serviceLocator)->filtrageStrict($prixmin, $prixmax, $id_cat, $id_dept, $type_annonce, $id_reg);
+        $annoncesResultSet=BDD::getAnnonceTable($this->serviceLocator)->filtrageStrict($prixmin, $prixmax, $id_cat, $id_dept, $type_annonce, $id_reg, $etat);
         
         
         //$annoncesResultSet = BDD::getAnnonceTable($this->serviceLocator)->fetchAll(true);
         $annonces = array();
         $metaAnnonces = array();
         foreach($annoncesResultSet as $annonce) {
-            $annonces[$annonce->id_annonce] = $annonce;
-            $metaAnnonces[$annonce->id_annonce] = array(
-                'photo'=> BDD::getPhotoTable($this->serviceLocator)->getByIdAnnonce($annonce->id_annonce)->current(),
-                'departement' => BDD::getDepartementTable($this->serviceLocator)->getDepartement($annonce->id_dept),
-                'categorie' => BDD::getCategorieTable($this->serviceLocator)->getCategorie($annonce->id_cat),
-            );
+            if($this->pertinent()) {
+                   $annonces[$annonce->id_annonce] = $annonce;
+                   $metaAnnonces[$annonce->id_annonce] = array(
+                    'photo'=> BDD::getPhotoTable($this->serviceLocator)->getByIdAnnonce($annonce->id_annonce)->current(),
+                    'departement' => BDD::getDepartementTable($this->serviceLocator)->getDepartement($annonce->id_dept),
+                    'categorie' => BDD::getCategorieTable($this->serviceLocator)->getCategorie($annonce->id_cat),
+                );
+           }     
         }
         
         $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($annonces));
