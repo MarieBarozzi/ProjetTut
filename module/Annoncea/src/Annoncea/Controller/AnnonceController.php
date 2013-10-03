@@ -65,15 +65,15 @@ class AnnonceController extends AbstractActionController
         }
         
         $retour['form'] = $form;
-        
-        $annoncesResultSet=BDD::getAnnonceTable($this->serviceLocator)->filtrageStrict($prixmin, $prixmax, $id_cat, $id_dept, $type_annonce, $id_reg, $etat);
+         
+       $annoncesResultSet=BDD::getAnnonceTable($this->serviceLocator)->filtrageStrict($prixmin, $prixmax, $id_cat, $id_dept, $type_annonce, $id_reg, $etat);
         
         
         //$annoncesResultSet = BDD::getAnnonceTable($this->serviceLocator)->fetchAll(true);
         $annonces = array();
         $metaAnnonces = array();
         foreach($annoncesResultSet as $annonce) {
-            if($this->pertinent()) {
+            if($annonce->pertinent($form->get('nom')->getValue())) {
                    $annonces[$annonce->id_annonce] = $annonce;
                    $metaAnnonces[$annonce->id_annonce] = array(
                     'photo'=> BDD::getPhotoTable($this->serviceLocator)->getByIdAnnonce($annonce->id_annonce)->current(),
@@ -365,5 +365,7 @@ class AnnonceController extends AbstractActionController
         $retour['form'] = $form;
         return $retour;
     }*/
+    
+
     
 }

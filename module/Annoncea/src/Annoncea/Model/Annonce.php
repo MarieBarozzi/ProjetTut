@@ -45,4 +45,13 @@ class Annonce
         return get_object_vars($this);
     }
     
+    
+        
+    public function pertinent($nom) {
+        return true; 
+    }
+    
+    
+    
+    
 }
