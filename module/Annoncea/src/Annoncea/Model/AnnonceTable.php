@@ -127,7 +127,6 @@ class AnnonceTable
          if($etat != null)
             $where->greaterThanOrEqualTo('etat', $etat);
          
-            var_dump($etat);
         $requete->where($where);
         $requete->order('date_modif DESC');
         

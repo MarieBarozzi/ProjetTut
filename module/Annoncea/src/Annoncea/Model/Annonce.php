@@ -47,8 +47,46 @@ class Annonce
     
     
         
-    public function pertinent($nom) {
-        return true; 
+    public function pertinent($champRecherche) {
+                
+            $pertinenceTotale = 100;
+            
+            $coeffLevDesc = 1; 
+            $coeffSimDesc = 0;
+            $coeffLevTitre = 1; 
+            $coeffSimTitre = 1;
+            
+            
+            
+            if($champRecherche != null) {
+                $pertinenceTotale = 0;
+                $champRecherche = explode(" ", $champRecherche);
+                
+                foreach ($champRecherche as $recherche) {
+                //recherche dans le titre
+                $diffTitre = levenshtein($this->titre, $recherche);
+                $levTitre = $diffTitre - abs(strlen($this->titre) - strlen($recherche));
+                $levTitre = (1 - ($levTitre / (float)min(strlen($this->titre), strlen($recherche))))*100;              
+                similar_text($this->titre, $recherche, $simTitre);
+                
+                $pertinenceTitre = ($simTitre*$coeffSimTitre + $levTitre*$coeffLevTitre) / ($coeffSimTitre + $coeffLevTitre);
+               
+                //recherche dans la description 
+                $diffDesc = levenshtein($this->descr, $recherche);
+                $levDesc = $diffDesc - abs(strlen($this->descr) - strlen($recherche));
+                $levDesc  = (1 - ($levDesc / (float)min(strlen($this->descr), strlen($recherche))))*100;              
+                similar_text($this->descr, $recherche, $simDesc);
+          
+                $pertinenceDesc = ($simDesc*$coeffSimDesc + $levDesc*$coeffLevDesc) / ($coeffLevDesc + $coeffSimDesc);
+                
+                $pertinenceTotale += max($pertinenceDesc, $pertinenceTitre);
+                }
+                
+                $pertinenceTotale /= count($champRecherche);
+                var_dump($pertinenceTotale);
+            }
+        
+        return ($pertinenceTotale > 70); 
     }
     
     

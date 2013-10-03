@@ -73,7 +73,7 @@ class AnnonceController extends AbstractActionController
         $annonces = array();
         $metaAnnonces = array();
         foreach($annoncesResultSet as $annonce) {
-            if($annonce->pertinent($form->get('nom')->getValue())) {
+            if($annonce->pertinent($form->get('recherche')->getValue())) {
                    $annonces[$annonce->id_annonce] = $annonce;
                    $metaAnnonces[$annonce->id_annonce] = array(
                     'photo'=> BDD::getPhotoTable($this->serviceLocator)->getByIdAnnonce($annonce->id_annonce)->current(),

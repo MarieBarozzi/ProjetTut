@@ -14,7 +14,7 @@ class RechercheForm extends Form
 		// Ajout des différentes parties du formulaire simple.
 		// Ecrire un mot/phrase type qui sera recherché dans les titres d'annonces.
 		$this->add(array(
-			'name' => 'nom',
+			'name' => 'recherche',
 			'type' => 'Text',
 			'options' => array(
                 'label' => 'Titre : ',
