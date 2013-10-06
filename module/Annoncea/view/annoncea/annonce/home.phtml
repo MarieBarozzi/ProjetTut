@@ -55,22 +55,63 @@ $this -> headTitle($title);
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 
-    <script type="text/javascript">
-        jQuery(function($) {
-            $('.map').append('<div class="overlay">');
+	<script type="text/javascript">
+		jQuery(function($) {
+			$('.map').append('<div class="overlay">').append('<div class="tooltip">');
+			
+			$('.map .tooltip').hide();
+			
+			var regions = [
+				{name : 'Reunion'},
+				{name : 'Guyane'},
+				{name : 'Martinique'},
+				{name : 'Guadeloupe'},
+				{name : 'Corse'},
+				{name : 'Provence-Alpes Cote d\'Azur'},
+				{name : 'Languedoc-Roussillon'},
+				{name : 'Midi-Pyrenees'},
+				{name : 'Aquitaine'},
+				{name : 'Rhone-Alpes'},
+				{name : 'Auvergne'},
+				{name : 'Limousin'},
+				{name : 'Poitou-Charentes'},
+				{name : 'Franche-Comte'},
+				{name : 'Bourgogne'},
+				{name : 'Centre'},
+				{name : 'Pays de la Loire'},
+				{name : 'Bretagne'},
+				{name : 'Alsace'},
+				{name : 'Lorraine'},
+				{name : 'Champagne-Ardenne'},
+				{name : 'Ile de France'},
+				{name : 'Picardie'},
+				{name : 'Haute-Normandie'},
+				{name : 'Basse-Normandie'},
+				{name : 'Nord Pas de Calais'}
+			];
+			
+			$(document).mousemove(function(e) {
+				$('.map .tooltip').css({
+					top: e.pageY - $('.map .tooltip').height()-20,
+					left: e.pageX - $('.map .tooltip').width()/2-10
+				});
+			});
 
-            $('.map area').mouseover(function() {
-                var index = $(this).index();
-                var left = -index * 650 - 650;
-                $('.map .overlay').css({
-                    backgroundPosition : left + "px 0px"
-                });
-            });
-            $('.map').mouseout(function() {
-                $('.map .overlay').css({
-                    backgroundPosition : "650px 0px"
-                });
-            });
-        });
-    </script>
+			$('.map area').mouseover(function() {
+				var index = $(this).index();
+				var left = -index * 650 - 650;
+				$('.map .tooltip').html(regions[index].name).stop().fadeTo(500, 1);
+				$('.map .overlay').css({
+					backgroundPosition : left + "px 0px"
+				});
+			});
+			
+			$('.map').mouseout(function() {
+				$('.map .overlay').css({
+					backgroundPosition : "650px 0px"
+				});
+				$('.map .tooltip').stop().fadeTo(500, 0);
+			});
+		});
+	</script>
 </html>
