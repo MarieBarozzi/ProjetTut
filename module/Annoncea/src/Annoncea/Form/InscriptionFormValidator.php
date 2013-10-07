@@ -254,6 +254,13 @@ class InscriptionFormValidator implements InputFilterAwareInterface
                 ),
             )));
         
+        
+           $inputFilter->add($factory->createInput(array(
+                'name'     => 'captcha',
+                'required' => true, 
+         
+            )));
+        
          $this->inputFilter = $inputFilter;
                    
         }

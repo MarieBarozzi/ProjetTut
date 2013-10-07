@@ -159,6 +159,9 @@ class InscriptionForm extends Form
                     )
                  )
             ), 
+             'attributes' => array( 
+                'required' => 'required', 
+             ),
         ));
         
        $this->add(array(
