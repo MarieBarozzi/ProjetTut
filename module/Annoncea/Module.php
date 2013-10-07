@@ -16,6 +16,8 @@ use Annoncea\Model\Favoris;
 use Annoncea\Model\FavorisTable;
 use Annoncea\Model\Region;
 use Annoncea\Model\RegionTable;
+use Annoncea\Model\Message;
+use Annoncea\Model\MessageTable;
 use Zend\Authentication\Adapter\DbTable;
 
 
@@ -130,7 +132,18 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Region());
                     return new TableGateway('region', $dbAdapter, null, $resultSetPrototype);
                 }, 
-                
+
+                'Annoncea\Model\MessageTable' => function ($sm) {
+                    $tableGateway = $sm->get('MessageTableGateway');
+                    $table = new MessageTable($tableGateway);
+                    return $table; 
+                },
+                    'MessageTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new message());
+                    return new TableGateway('message', $dbAdapter, null, $resultSetPrototype);
+                },                 
                 
                 
                 

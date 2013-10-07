@@ -6,7 +6,10 @@ use Annoncea\Form\InscriptionForm;
 use Annoncea\Form\InscriptionFormValidator;
 use Annoncea\Form\ConnexionForm;
 use Annoncea\Form\ConnexionFormValidator;
+use Annoncea\Form\MessageForm;
+use Annoncea\Form\MessageFormValidator;
 use Annoncea\Model\Utilisateur;
+use Annoncea\Model\Annonce;
 use Annoncea\Model\BaseAnnoncea as BDD;
 use Zend\Authentication\AuthenticationService;
 use Zend\Mail\Message;
@@ -35,7 +38,7 @@ class UtilisateurController extends AbstractActionController
         return array('auth' => $auth);    
     }
     
- /*   public function connexionAction()
+    public function connexionAction()
     {
         //instancie le service authentification 
         $auth = new AuthenticationService();
@@ -104,14 +107,16 @@ class UtilisateurController extends AbstractActionController
             }
         }
         return $retour; //passé à ce qui crée la vue 
-    }*/
+
+    }
 
     public function deconnexionAction(){
         $auth = new AuthenticationService();
         $auth->clearIdentity();
     } 
+
     
-  /*    public function inscriptionAction()
+    public function inscriptionAction()
     {
         $form = new InscriptionForm();
         $form->get('rang')->setValue('membre');
@@ -217,9 +222,9 @@ class UtilisateurController extends AbstractActionController
             }
         }
         return array('form' => $form);
-    }*/
+    }
     
-    public function inscriptionAction()
+    /*public function inscriptionAction()
     {
         $form = new InscriptionForm();
         $form->get('rang')->setValue('membre');
@@ -264,9 +269,9 @@ class UtilisateurController extends AbstractActionController
             }
         }
         return array('form' => $form);
-    }  
+    } */ 
     
-    public function connexionAction()
+   /*public function connexionAction()
     {
         //instancie le service authentification 
         $auth = new AuthenticationService();
@@ -305,7 +310,15 @@ class UtilisateurController extends AbstractActionController
          }
         }
         return $retour; //passé à ce qui crée la vue 
-    }
+
+    }*/
+
+
+    /*public function deconnexionAction(){
+        $auth = new AuthenticationService();
+        $auth->clearIdentity();
+    }*/
+
 
   
       //les petites affaires de l'utilisateurs 
@@ -365,6 +378,81 @@ class UtilisateurController extends AbstractActionController
         $retour['annonces'] = $annonces;
         $retour['meta'] = $metaAnnonces;   
         return $retour;
+    }
+
+    public function messageAction() {
+        
+        $auth = new AuthenticationService();
+
+        if(!$auth->hasIdentity())
+        {
+            return $this->redirect()->toRoute('utilisateur', array('action' => 'connexion'));
+        }
+
+        $retour['co'] = true;
+
+        $mess = new MessageForm();
+
+        $mess->get('titre');
+        $mess->get('contenu');
+
+        $mess->get('mail_auteur')->setValue($auth->getIdentity());
+
+        $annonce = new Annonce();
+        $annonce->mail_auteur;
+        $annonce->id_annonce = (int) $this->params()->fromRoute('id', 0);
+
+        var_dump($annonce); 
+
+        $request = $this->getRequest();
+
+        if($request->isPost())
+        {
+            $post = array_merge_recursive(
+                $request->getPost()->toArray()
+            );
+
+            $MessageFormValidator = new MessageFormValidator(); 
+            $form->setInputFilter($MessageFormValidator->getInputFilter());
+            $form->setData($post);
+            if ($form->isValid()) {
+
+                $email = $annonce->mail_auteur;
+
+                $message = new Message();
+                $message->addTo($email)
+                    ->addFrom('projetannoncea@gmail.com')
+                    ->setSubject($form->getValue('titre'));
+    
+                // Setup SMTP transport using LOGIN authentication
+                $transport = new SmtpTransport();
+                $options   = new SmtpOptions(array(
+                 'host'              => 'smtp.gmail.com',
+                    'connection_class'  => 'login',
+                    'connection_config' => array(
+                    'ssl'       => 'tls',
+                    'username' => 'projetannoncea@gmail.com',
+                    'password' => 'a1z2e3r4t5'
+                ),
+                'port' => 587,
+                ));
+     
+                $html = new MimePart($form->getValue('contenu'));
+                $html->type = "text/html";
+     
+                $body = new MimeMessage();
+                $body->addPart($html);
+     
+                $message->setBody($body);
+ 
+                $transport->setOptions($options);
+                $transport->send($message);
+                
+
+            }
+        }
+
+
     }
 
 }

@@ -1,0 +1,16 @@
+<?php
+
+$title = 'Message';
+$this->headTitle($title);
+echo $this->message;
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php
+	$form = $this->form;
+
+	$form->setAttribute('message', $this->url('utilisateur', array('action' => 'message')));
+	if(isset($this->erreur))
+	{
+    	echo "<p>" . $this->erreur . "</p>";
+	}
+	echo $this->form($form);
