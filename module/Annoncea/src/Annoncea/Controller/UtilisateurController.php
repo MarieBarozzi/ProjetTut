@@ -391,12 +391,12 @@ class UtilisateurController extends AbstractActionController
 
         $retour['co'] = true;
 
-        $mess = new MessageForm();
+        $form = new MessageForm();
 
-        $mess->get('titre');
-        $mess->get('contenu');
+        $form->get('titre');
+        $form->get('contenu');
 
-        $mess->get('mail_auteur')->setValue($auth->getIdentity());
+        $form->get('mail_auteur')->setValue($auth->getIdentity());
 
         $annonce = new Annonce();
         $annonce->mail_auteur;
@@ -452,7 +452,7 @@ class UtilisateurController extends AbstractActionController
             }
         }
 
-
+	return array('form' => $form);
     }
 
 }
