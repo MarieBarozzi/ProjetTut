@@ -18,7 +18,7 @@ class MessageForm extends Form
             'name' => 'titre', 
             'type' => 'Zend\Form\Element\Text', 
             'attributes' => array( 
-                'placeholder' => 'Type something...', 
+                'placeholder' => 'Sujet du Message', 
                 'required' => 'required', 
             ), 
             'options' => array( 

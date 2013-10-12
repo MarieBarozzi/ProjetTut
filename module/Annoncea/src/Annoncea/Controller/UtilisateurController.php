@@ -395,20 +395,19 @@ class UtilisateurController extends AbstractActionController
 
         $form->get('titre');
         $form->get('contenu');
-
         $form->get('mail_auteur')->setValue($auth->getIdentity());
 		$form->get('submit')->setValue('Envoi');
+		
         $annonce = new Annonce();
         $annonce->mail_auteur;
         $annonce->id_annonce = (int) $this->params()->fromRoute('id', 0);
-
-        var_dump($annonce); 
-
+		
         $request = $this->getRequest();
 
         if($request->isPost())
         {
-            $post = array_merge_recursive(
+            var_dump("test");
+			$post = array_merge_recursive(
                 $request->getPost()->toArray()
             );
 
@@ -416,7 +415,7 @@ class UtilisateurController extends AbstractActionController
             $form->setInputFilter($MessageFormValidator->getInputFilter());
             $form->setData($post);
             if ($form->isValid()) {
-
+				var_dump("test2");
                 $email = $annonce->mail_auteur;
 
                 $message = new Message();

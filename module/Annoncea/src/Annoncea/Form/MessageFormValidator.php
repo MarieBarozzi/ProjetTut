@@ -25,7 +25,7 @@ class MessageFormValidator implements InputFilterAwareInterface
             
         
         $inputFilter->add($factory->createInput(array( 
-            'name' => 'text', 
+            'name' => 'titre', 
             'required' => true, 
             'filters' => array( 
                 array('name' => 'StripTags'), 
@@ -36,7 +36,7 @@ class MessageFormValidator implements InputFilterAwareInterface
         ))); 
  
         $inputFilter->add($factory->createInput(array(
-            'name' => 'paragraph', 
+            'name' => 'contenu', 
             'required' => true, 
             'filters' => array( 
                 array('name' => 'StripTags'), 
@@ -46,9 +46,9 @@ class MessageFormValidator implements InputFilterAwareInterface
             ), 
         ))); 
 
-        $inputFilter->add($factory->createInput(array(
+       $inputFilter->add($factory->createInput(array(
             'name' => 'mail_auteur',
-            'required' => true,
+            'required' => false,
             'filters' => array(
                 array('name' => 'StripTags'),
                 array('name' => 'StringTrim'),
@@ -57,7 +57,7 @@ class MessageFormValidator implements InputFilterAwareInterface
 
         $inputFilter->add($factory->createInput(array(
             'name' => 'id_annonce',
-            'required' => true,
+            'required' => false,
             'filters' => array(
                 array('name' => 'StripTags'),
                 array('name' => 'StringTrim'),
