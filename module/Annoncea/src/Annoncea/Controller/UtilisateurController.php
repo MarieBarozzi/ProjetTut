@@ -372,12 +372,9 @@ class UtilisateurController extends AbstractActionController
         $form->get('contenu');
         $form->get('mail_auteur')->setValue($auth->getIdentity());
 		$form->get('submit')->setValue('Envoi');
-        $annonce = new Annonce();
-     /*   $annonce->mail_auteur;
-        $annonce->id_annonce = (int) $this->params()->fromRoute('id', 0);*/
-		$annonce = BDD::getAnnonceTable($this->serviceLocator)->getAnnonce( (int) $this->params()->fromRoute('id', 0));
 		
-		var_dump($annonce);
+        $annonce = new Annonce();
+		$annonce = BDD::getAnnonceTable($this->serviceLocator)->getAnnonce( (int) $this->params()->fromRoute('id', 0));
 		
         $request = $this->getRequest();
 
@@ -394,10 +391,16 @@ class UtilisateurController extends AbstractActionController
             if ($form->isValid()) {
 
                 $email = $annonce->mail_auteur;
-                
-                $this->sendMessage($email, $form->getValue('titre'), $form->getValue('contenu'));
+				$titre = $form->get('titre')->getValue();
+				$contenu = '<p> Un de nos Utilisateur souhaite prendre contact avec vous au sujet d\'une de vos annonces ('.$annonce->titre.'). Voici son message : </p></ br>
+							<p>'.$form->get('contenu')->getValue().'</p>
+							</ br>
+							</ br>
+							Veuillez reprendre contact avec lui via son adresse mail que voici : '.$auth->getIdentity();
+				
+                $this->sendMessage($email, $titre, $contenu);
 			
-			//	return $this->redirect()->toRoute('home');
+				return $this->redirect()->toRoute('home');
 
             }
         }
@@ -415,7 +418,7 @@ class UtilisateurController extends AbstractActionController
                     
         $message = new MailMessage();
         $message->addFrom('projetannoncea@gmail.com')
-                ->setSubject(sujet)
+                ->setSubject($sujet)
                 ->addTo($dest)
                 ->setBody($body); 
 
