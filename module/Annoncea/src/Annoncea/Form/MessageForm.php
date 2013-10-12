@@ -22,7 +22,7 @@ class MessageForm extends Form
                 'required' => 'required', 
             ), 
             'options' => array( 
-                'label' => 'Text', 
+                'label' => 'Objet : ', 
             ), 
         )); 
  
@@ -33,6 +33,7 @@ class MessageForm extends Form
                 'required' => 'required', 
             ), 
             'options' => array( 
+				'label' => 'Message : '
             ), 
         )); 
  
@@ -40,6 +41,15 @@ class MessageForm extends Form
         $this->add(array(
             'name' => 'mail_auteur',
             'type' => 'Hidden',
+        ));
+		
+		$this->add(array(
+            'name' => 'submit',
+            'type' => 'Submit',
+            'attributes' => array(
+                'value' => 'Go',
+                'id' => 'submitbutton',
+            ),
         ));
 
 

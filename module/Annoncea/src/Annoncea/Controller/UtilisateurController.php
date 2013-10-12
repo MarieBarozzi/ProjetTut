@@ -397,7 +397,7 @@ class UtilisateurController extends AbstractActionController
         $form->get('contenu');
 
         $form->get('mail_auteur')->setValue($auth->getIdentity());
-
+		$form->get('submit')->setValue('Envoi');
         $annonce = new Annonce();
         $annonce->mail_auteur;
         $annonce->id_annonce = (int) $this->params()->fromRoute('id', 0);
