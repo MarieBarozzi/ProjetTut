@@ -31,8 +31,15 @@ class MessageFormValidator implements InputFilterAwareInterface
                 array('name' => 'StripTags'), 
                 array('name' => 'StringTrim'), 
             ), 
-            'validators' => array( 
-            ), 
+               'validators' => array(
+                    array(
+                        'name'    => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8', 
+                            'min'      => 1,
+                        ),
+                    ),
+                ),
         ))); 
  
         $inputFilter->add($factory->createInput(array(
@@ -42,8 +49,15 @@ class MessageFormValidator implements InputFilterAwareInterface
                 array('name' => 'StripTags'), 
                 array('name' => 'StringTrim'), 
             ), 
-            'validators' => array( 
-            ), 
+               'validators' => array(
+                    array(
+                        'name'    => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8', 
+                            'min'      => 1,
+                        ),
+                    ),
+                ),
         ))); 
 
        $inputFilter->add($factory->createInput(array(
