@@ -394,37 +394,9 @@ class UtilisateurController extends AbstractActionController
             if ($form->isValid()) {
 
                 $email = $annonce->mail_auteur;
-
-                $message = new Message();
-                $message->addTo($email)
-                    ->addFrom('projetannoncea@gmail.com')
-                    ->setSubject($form->getValue('titre'));
-    
-                // Setup SMTP transport using LOGIN authentication
-                $transport = new SmtpTransport();
-                $options   = new SmtpOptions(array(
-                 'host'              => 'smtp.gmail.com',
-                    'connection_class'  => 'login',
-                    'connection_config' => array(
-                    'ssl'       => 'tls',
-                    'username' => 'projetannoncea@gmail.com',
-                    'password' => 'a1z2e3r4t5'
-                ),
-                'port' => 587,
-                ));
-     
-                $html = new MimePart($form->getValue('contenu'));
-                $html->type = "text/html";
-     
-                $body = new MimeMessage();
-                $body->addPart($html);
-     
-                $message->setBody($body);
- 
-                $transport->setOptions($options);
-                $transport->send($message);
-				var_dump($message);
-				var_dump("test final envoie");
+                
+                $this->sendMessage($email, $form->getValue('titre'), $form->getValue('contenu'));
+			
 			//	return $this->redirect()->toRoute('home');
 
             }
