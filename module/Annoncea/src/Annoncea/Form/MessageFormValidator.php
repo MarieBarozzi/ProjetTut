@@ -24,7 +24,7 @@ class MessageFormValidator implements InputFilterAwareInterface
             $factory = new InputFactory(); 
             
         
-        $inputFilter->add($factory->createInput([ 
+        $inputFilter->add($factory->createInput(array( 
             'name' => 'text', 
             'required' => true, 
             'filters' => array( 
@@ -33,9 +33,9 @@ class MessageFormValidator implements InputFilterAwareInterface
             ), 
             'validators' => array( 
             ), 
-        ])); 
+        ))); 
  
-        $inputFilter->add($factory->createInput([ 
+        $inputFilter->add($factory->createInput(array(
             'name' => 'paragraph', 
             'required' => true, 
             'filters' => array( 
@@ -44,7 +44,7 @@ class MessageFormValidator implements InputFilterAwareInterface
             ), 
             'validators' => array( 
             ), 
-        ])); 
+        ))); 
 
         $inputFilter->add($factory->createInput(array(
             'name' => 'mail_auteur',
@@ -63,7 +63,12 @@ class MessageFormValidator implements InputFilterAwareInterface
                 array('name' => 'StringTrim'),
                 ),
         )));
-            
-        } 
+        
+		$this->inputFilter = $inputFilter;      
+		
+        }
+		
+		return $this->inputFilter;
+        
     } 
 } 
