@@ -47,7 +47,9 @@ class Annonce
     
     
         
-    public function pertinent($champRecherche) {
+    public function pertinent($champRecherche, $titreUniquement) {
+                
+                
                 
             $pertinenceTotale = 100;
             
@@ -60,6 +62,7 @@ class Annonce
             
             if($champRecherche != null) {
                 $pertinenceTotale = 0;
+                $pertinenceDesc = 0;
                 $champRecherche = explode(" ", $champRecherche);
                 
                 foreach ($champRecherche as $recherche) {
@@ -71,13 +74,16 @@ class Annonce
                 
                 $pertinenceTitre = ($simTitre*$coeffSimTitre + $levTitre*$coeffLevTitre) / ($coeffSimTitre + $coeffLevTitre);
                
-                //recherche dans la description 
-                $diffDesc = levenshtein($this->descr, $recherche);
-                $levDesc = $diffDesc - abs(strlen($this->descr) - strlen($recherche));
-                $levDesc  = (1 - ($levDesc / (float)min(strlen($this->descr), strlen($recherche))))*100;              
-                similar_text($this->descr, $recherche, $simDesc);
+               
+                if(!$titreUniquement){
+                    //recherche dans la description 
+                    $diffDesc = levenshtein($this->descr, $recherche);
+                    $levDesc = $diffDesc - abs(strlen($this->descr) - strlen($recherche));
+                    $levDesc  = (1 - ($levDesc / (float)min(strlen($this->descr), strlen($recherche))))*100;              
+                    similar_text($this->descr, $recherche, $simDesc);
           
-                $pertinenceDesc = ($simDesc*$coeffSimDesc + $levDesc*$coeffLevDesc) / ($coeffLevDesc + $coeffSimDesc);
+                    $pertinenceDesc = ($simDesc*$coeffSimDesc + $levDesc*$coeffLevDesc) / ($coeffLevDesc + $coeffSimDesc);
+                }
                 
                 $pertinenceTotale += max($pertinenceDesc, $pertinenceTitre);
                 }

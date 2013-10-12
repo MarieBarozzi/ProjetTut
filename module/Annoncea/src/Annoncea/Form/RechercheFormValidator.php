@@ -83,8 +83,9 @@ class RechercheFormValidator implements InputFilterAwareInterface
             'name' => 'etat', 
             'required' => false, 
 
-        ))); 
-             	
+        )));             
+                
+                
 			
 			// Argument à vérifié : titre/phrase recherché.
             $inputFilter->add($factory->createInput(array(

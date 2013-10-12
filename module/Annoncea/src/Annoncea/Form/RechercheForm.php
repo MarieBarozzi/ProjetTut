@@ -21,6 +21,23 @@ class RechercheForm extends Form
             ),
 		));
 		
+        
+        
+          $this->add(array(
+                'type' => 'Zend\Form\Element\Checkbox',
+                'name' => 'rechtitre',
+                'options' => array(
+                    'label' => 'Chercher dans le titre uniquement : ',
+                    'use_hidden_element' => true,
+                    'checked_value' => 'good',
+                    'unchecked_value' => 'bad'
+                )
+            ));
+           
+        
+        
+        
+        
 		// selection d'une région.
 		$this->add(array(
 			'name' => 'id_reg',
@@ -99,6 +116,20 @@ class RechercheForm extends Form
         ));
         
            
+              $this->add(array(
+                'type' => 'Zend\Form\Element\Checkbox',
+                'name' => 'enregistrement',
+                'options' => array(
+                    'label' => 'Enregistrer votre recherche : ',
+                    'use_hidden_element' => true,
+                    'checked_value' => 'good',
+                    'unchecked_value' => 'bad'
+                )
+            ));
+           
+           
+           
+           
         $this->add(array(
             'name' => 'submit',
             'type' => 'Submit',
@@ -108,6 +139,7 @@ class RechercheForm extends Form
             ),
         ));  
            
+   
         $this->add(array( 
             'name' => 'csrf', 
             'type' => 'Zend\Form\Element\Csrf', 
