@@ -60,8 +60,11 @@ class AnnonceController extends AbstractActionController
                 $type_annonce = $form->get('type_annonce')->getValue();    
                 $id_reg = $form->get('id_reg')->getValue();  
                 $etat = $form->get('etat')->getValue();  
-
-             }        
+                if($form->get('enregistrement')->isChecked())
+                {
+                 //enregistrer la requete dans la base
+                }
+            }
         }
         
         $retour['form'] = $form;
@@ -73,7 +76,7 @@ class AnnonceController extends AbstractActionController
         $annonces = array();
         $metaAnnonces = array();
         foreach($annoncesResultSet as $annonce) {
-            if($annonce->pertinent($form->get('recherche')->getValue())) {
+            if($annonce->pertinent($form->get('recherche')->getValue(), $form->get('rechtitre')->isChecked())) {
                    $annonces[$annonce->id_annonce] = $annonce;
                    $metaAnnonces[$annonce->id_annonce] = array(
                     'photo'=> BDD::getPhotoTable($this->serviceLocator)->getByIdAnnonce($annonce->id_annonce)->current(),
@@ -85,10 +88,11 @@ class AnnonceController extends AbstractActionController
         
         $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($annonces));
         $paginator->setCurrentPageNumber($this->params()->fromRoute('page', 1));
-        $paginator->setItemCountPerPage(10);
+        $paginator->setItemCountPerPage(3);
         
         $retour['meta'] = $metaAnnonces;
         $retour['pagination'] = $paginator; //contient les annonces
+        var_dump($form->get('submit'));
     	return $retour;
     }
 
