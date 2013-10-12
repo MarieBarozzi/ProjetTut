@@ -12,17 +12,16 @@ use Annoncea\Model\Utilisateur;
 use Annoncea\Model\Annonce;
 use Annoncea\Model\BaseAnnoncea as BDD;
 use Zend\Authentication\AuthenticationService;
-use Zend\Mail\Message;
 use Zend\Mail\Transport\Smtp as SmtpTransport;
-use Zend\Mime\Message as MimeMessage;
-use Zend\Mime\Part as MimePart;
-use Zend\Mail\Transport\SmtpOptions;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Where;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\AdapterInterface;
+use Zend\Mime\Message as MimeMessage;
+use Zend\Mime\Part as MimePart;
+use Zend\Mail\Message as MailMessage;
 
 class UtilisateurController extends AbstractActionController
 {
@@ -100,7 +99,7 @@ class UtilisateurController extends AbstractActionController
                     }
 
                 } else {
-                    echo 'Problème.';    
+                    echo 'Cryptage non réussi';    
                 }
               
             
@@ -145,35 +144,11 @@ class UtilisateurController extends AbstractActionController
                 $utilisateur->exchangeArray($form->getData()); //remplit l'objet à partir d'un tableau qu'on récupère du formulaire 
                 
                 $email = $form->get('mail')->getValue();
-
-              $message = new Message();
-                $message->addTo($email)
-                 ->addFrom('projetannoncea@gmail.com')
-                ->setSubject('Test send mail using ZF2');
-    
-                // Setup SMTP transport using LOGIN authentication
-                $transport = new SmtpTransport();
-                $options   = new SmtpOptions(array(
-                 'host'              => 'smtp.gmail.com',
-                    'connection_class'  => 'login',
-                    'connection_config' => array(
-                    'ssl'       => 'tls',
-                    'username' => 'projetannoncea@gmail.com',
-                    'password' => 'a1z2e3r4t5'
-                ),
-                'port' => 587,
-                ));
-     
-                $html = new MimePart('<b>heii, <i>sorry</i>,Hi its annoncea team</b>');
-                $html->type = "text/html";
-     
-                $body = new MimeMessage();
-                $body->addPart($html);
-     
-                $message->setBody($body);
- 
-                $transport->setOptions($options);
-                $transport->send($message);
+                $sujet = 'Bienvenue sur le site Annoncea';
+                $corps = '<p>L\'équipe d\'annoncea vous souhaite la bienvenue sur son site de petites annonces.<br>
+                          Votre inscription a bien été prise en compte, vous pouvez désormais accéder aux fonctions reservées à nos membres.</p>';
+                
+                $this->sendMessage($email, $sujet, $corps);
                 
                 $motDePasse = $form->get('mdp')->getValue();
 
@@ -397,7 +372,6 @@ class UtilisateurController extends AbstractActionController
         $form->get('contenu');
         $form->get('mail_auteur')->setValue($auth->getIdentity());
 		$form->get('submit')->setValue('Envoi');
-		
         $annonce = new Annonce();
      /*   $annonce->mail_auteur;
         $annonce->id_annonce = (int) $this->params()->fromRoute('id', 0);*/
@@ -452,10 +426,27 @@ class UtilisateurController extends AbstractActionController
 				var_dump($message);
 				var_dump("test final envoie");
 			//	return $this->redirect()->toRoute('home');
+
             }
         }
-
-	return array('form' => $form);
+    
+    return array('form' => $form);
     }
 
+    private function sendMessage($dest, $sujet, $corps){
+        $transport = $this->serviceLocator->get('MailTransport');
+        
+        $html = new MimePart($corps);
+        $html->type = "text/html";
+        $body = new MimeMessage();
+        $body->addPart($html);  
+                    
+        $message = new MailMessage();
+        $message->addFrom('projetannoncea@gmail.com')
+                ->setSubject(sujet)
+                ->addTo($dest)
+                ->setBody($body); 
+
+        $transport->send($message);
+    }
 }

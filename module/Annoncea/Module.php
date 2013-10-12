@@ -19,7 +19,8 @@ use Annoncea\Model\RegionTable;
 use Annoncea\Model\Message;
 use Annoncea\Model\MessageTable;
 use Zend\Authentication\Adapter\DbTable;
-
+use Zend\Mail\Transport\Smtp as SmtpTransport;
+use Zend\Mail\Transport\SmtpOptions;
 
 
 
@@ -119,8 +120,6 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Favoris());
                     return new TableGateway('favoris', $dbAdapter, null, $resultSetPrototype);
                 }, 
-                
-                
                  'Annoncea\Model\RegionTable' =>  function($sm) {
                     $tableGateway = $sm->get('RegionTableGateway');
                     $table = new RegionTable($tableGateway);
@@ -132,7 +131,6 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Region());
                     return new TableGateway('region', $dbAdapter, null, $resultSetPrototype);
                 }, 
-
                 'Annoncea\Model\MessageTable' => function ($sm) {
                     $tableGateway = $sm->get('MessageTableGateway');
                     $table = new MessageTable($tableGateway);
@@ -144,15 +142,26 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new message());
                     return new TableGateway('message', $dbAdapter, null, $resultSetPrototype);
                 },                 
-                
-                
-                
                 'AuthAdapter' => function($sm){
                      $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                      return new DbTable($dbAdapter,'utilisateur','mail','mdp');
-                 }
-                
-                ) 
+                 },
+                 'MailTransport' => function($sm){
+                    $transport = new SmtpTransport();
+                    $options   = new SmtpOptions(array(
+                        'host' => 'smtp.gmail.com',
+                        'connection_class'  => 'login',
+                        'connection_config' => array(
+                            'ssl' => 'tls',
+                            'username' => 'projetannoncea@gmail.com',
+                            'password' => 'a1z2e3r4t5'
+                        ),
+                        'port' => 587,
+                    ));
+                    $transport->setOptions($options);
+                    return $transport;
+                 },
+              ),   
         );
     }
 }
