@@ -37,4 +37,4 @@ $this->headTitle($title);
 </tr>
 <?php endforeach; ?>
 </table>
-<?php echo $this->paginationControl($this->pagination, 'Sliding', 'partial/paginator.phtml', array('route' => 'annonce', 'param' => $this->param)); ?>
+<?php echo $this->paginationControl($this->pagination, 'Sliding', 'partial/paginator.phtml', array('route' => 'annonce', 'action'=>'index','param' => $this->param)); ?>

@@ -48,16 +48,15 @@ class AnnonceController extends AbstractActionController
             $form->get('prixmax')->setValue(urldecode($this->params()->fromRoute('prixmax', null)));
             $form->get('id_cat')->setValue((int) urldecode($this->params()->fromRoute('id_cat', null)));
             $form->get('id_dept')->setValue(urldecode($this->params()->fromRoute('id_dept', null)));
-            $form->get('type_annonce')->setValue((int) urldecode($this->params()->fromRoute('type_annonce', null))); 
+            $form->get('type_annonce')->setValue(urldecode($this->params()->fromRoute('type_annonce', null))); 
             $form->get('etat')->setValue(urldecode($this->params()->fromRoute('etat', null)));  
             $form->get('id_reg')->setValue((int) $this->params()->fromRoute('id_reg', null));
             $form->get('rechtitre')->setChecked((boolean) urldecode($this->params()->fromRoute('rechtitre', null)));
-            $form->get('enregistrement')->setChecked((boolean) urldecode($this->params()->fromRoute('enregistrement', null)));
- 
+             
             $page = (int) urldecode($this->params()->fromRoute('page', 1));
         }
         
-        $param = array('action' => 'index');
+        $param = array();
         $annonces = array();
         $metaAnnonces = array();
         
@@ -73,12 +72,6 @@ class AnnonceController extends AbstractActionController
                 $param['etat'] = $form->get('etat')->getValue();
                 $param['id_reg'] = $form->get('id_reg')->getValue();
                 $param['rechtitre'] = $form->get('rechtitre')->isChecked();
-                $param['enregistrement'] = $form->get('enregistrement')->isChecked();
-                
-                if($param['enregistrement'])
-                {
-                 //enregistrer la requete dans la base
-                }
                 
                 $annoncesResultSet=BDD::getAnnonceTable($this->serviceLocator)->filtrageStrict($param['prixmin'], $param['prixmax'], $param['id_cat'], $param['id_dept'], $param['type_annonce'], $param['id_reg'], $param['etat']);
         
@@ -98,7 +91,6 @@ class AnnonceController extends AbstractActionController
         $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($annonces));
         $paginator->setCurrentPageNumber($page);
         $paginator->setItemCountPerPage(10);
-        
         
         
         $retour['form'] = $form;

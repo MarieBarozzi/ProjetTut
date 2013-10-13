@@ -4,7 +4,7 @@
             <!-- Previous page link -->
             <?php if (isset($this->previous)): ?>
                 <li>
-                    <a href="<?php echo $this->url($this->route, array_merge($this->param, array('page'=>$this->previous))); ?>">
+                    <a href="<?php echo $this->url($this->route, array_merge($this->param, array('page'=>$this->previous, 'action' => $this->action))); ?>">
                         <<
                     </a>
                 </li>
@@ -19,7 +19,7 @@
             <?php foreach ($this->pagesInRange as $page): ?>
                 <?php if ($page != $this->current): ?>
                     <li>
-                        <a href="<?php echo $this->url($this->route, array_merge($this->param, array('page'=>$page))); ?>">
+                        <a href="<?php echo $this->url($this->route, array_merge($this->param, array('page'=>$page, 'action' => $this->action))); ?>">
                             <?php echo $page; ?>
                         </a>
                     </li>
@@ -33,7 +33,7 @@
             <!-- Next page link -->
             <?php if (isset($this->next)): ?>
                 <li>
-                    <a href="<?php echo $this->url($this->route, array_merge($this->param, array('page'=>$this->next))); ?>">
+                    <a href="<?php echo $this->url($this->route, array_merge($this->param, array('page'=>$this->next, 'action' => $this->action))); ?>">
                         >>
                     </a>
                 </li>

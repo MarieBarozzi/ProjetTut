@@ -114,19 +114,6 @@ class RechercheForm extends Form
                 ),
              ),
         ));
-        
-           
-              $this->add(array(
-                'type' => 'Zend\Form\Element\Checkbox',
-                'name' => 'enregistrement',
-                'options' => array(
-                    'label' => 'Enregistrer votre recherche : ',
-                    'use_hidden_element' => true,
-                    'checked_value' => 'good',
-                    'unchecked_value' => 'bad'
-                )
-            ));
- 
            
         $this->add(array(
             'name' => 'submit',

@@ -85,11 +85,6 @@ class RechercheFormValidator implements InputFilterAwareInterface
 
         ))); 
         $inputFilter->add($factory->createInput(array(
-            'name' => 'enregistrement', 
-            'required' => false, 
-
-        ))); 
-        $inputFilter->add($factory->createInput(array(
             'name' => 'rechtitre', 
             'required' => false, 
 
