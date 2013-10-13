@@ -126,9 +126,7 @@ class RechercheForm extends Form
                     'unchecked_value' => 'bad'
                 )
             ));
-           
-           
-           
+ 
            
         $this->add(array(
             'name' => 'submit',
@@ -137,13 +135,7 @@ class RechercheForm extends Form
                 'value' => 'Go',
                 'id' => 'submitbutton',
             ),
-        ));  
-           
-   
-        $this->add(array( 
-            'name' => 'csrf', 
-            'type' => 'Zend\Form\Element\Csrf', 
-        ));        
+        ));       
         
         
 	}

@@ -18,11 +18,12 @@ return array(
             'annonce' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/annonce[/][:action][/:id][/page/:page]',
+                    'route'    => '/annonce[/][:action][/:id][/page/:page][/recherche/:recherche][/prixmin/:prixmin][/prixmax/:prixmax][/id_cat/:id_cat][/id_dept/:id_dept][/type_annonce/:type_annonce][/etat/:etat][/id_reg/:id_reg][/rechtitre/:rechtitre][/enregistrement/:enregistrement]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',
                         'page'   => '[0-9]+',
+                        
                     ),
                     'defaults' => array(
                         'controller' => 'Annoncea\Controller\Annonce',

@@ -1,0 +1,73 @@
+<?php if ($this->pageCount): ?>
+    <div class="pagination pagination-centered">
+        <ul>
+            <!-- Previous page link -->
+            <?php if (isset($this->previous)): ?>
+                <li>
+                    <?php
+                        if(isset($this->form)){
+                            echo "<a href=\"#\" onClick=".$this->form.".elements['page'].value='".$this->previous."';document.".$this->form.".submit()>";
+                        }
+                        else {
+                            echo "<a href=\"".$this->url($this->route, array('action'=>$this->action,'page'=>$this->previous))."\">";
+                        }?>
+                        <<
+                    </a>
+                </li>
+            <?php else: ?>
+                <li class="disabled">
+                    <a href="#">
+                        <<
+                    </a>
+                </li>
+            <?php endif; ?>
+            <!-- Numbered page links -->
+            <?php foreach ($this->pagesInRange as $page): ?>
+                <?php if ($page != $this->current): ?>
+                    <li>
+                        <?php
+                        if(isset($this->form)){
+                            echo "<a href=\"#\" onClick=".$this->form.".elements['page'].value='".$page."';document.".$this->form.".submit()>".$page;
+                        }
+                        else {
+                            echo "<a href=\"".$this->url($this->route, array('action'=>$this->action,'page'=>$page))."\">".$page;
+                        }?>
+                        </a>
+                    </li>
+                <?php else: ?>
+                    <li class="active">
+                        <?php
+                        if(isset($this->form)){
+                            echo "<a href=\"#\" onClick=".$this->form.".elements['page'].value='".$page."';document.".$this->form.".submit()>".$page;
+                        }
+                        else {
+                            echo "<a href=\"".$this->url($this->route, array('action'=>$this->action,'page'=>$page))."\">".$page;
+                        }?>
+                        </a>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+
+            <!-- Next page link -->
+            <?php if (isset($this->next)): ?>
+                <li>
+                    <?php
+                        if(isset($this->form)){
+                            echo "<a href=\"#\" onClick=".$this->form.".elements['page'].value='".$this->next."';document.".$this->form.".submit()>";
+                        }
+                        else {
+                            echo "<a href=\"".$this->url($this->route, array('action'=>$this->action,'page'=>$this->next))."\">";
+                        }?>
+                        >>
+                    </a>
+                </li>
+            <?php else: ?>
+                <li class="disabled">
+                    <a href="#">
+                        >>
+                    </a>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </div>
+<?php endif; ?>

@@ -29,70 +29,83 @@ class AnnonceController extends AbstractActionController
         $auth = new AuthenticationService();
         if($auth->hasIdentity()) {
             $retour['co'] = true;
-        }
-
-        $prixmin = null;
-        $prixmax = null;
-        $id_cat = null;
-        $id_dept = null;
-        $type_annonce = null;   
-        $etat = null;   
-        $id_reg = (int) $this->params()->fromRoute('id', null); //null = si jamais il ne trouve pas d'id    
+        }   
         
         $form = new RechercheForm();
         $form->get('submit')->setValue('Chercher');
         $form->get('id_dept')->setValueOptions(BDD::getSelecteurDepartement($this->serviceLocator));
         $form->get('id_cat')->setValueOptions(BDD::getSelecteurCategorie($this->serviceLocator));  
-        $form->get('id_reg')->setValueOptions(BDD::getSelecteurRegion($this->serviceLocator));  
-        
-        $form->get('id_reg')->setValue((int) $this->params()->fromRoute('id', null));
+        $form->get('id_reg')->setValueOptions(BDD::getSelecteurRegion($this->serviceLocator));     
         
         $request = $this->getRequest();
         if($request->isPost()){//si ça vient du formulaire
             $form->setData($request->getPost()); //remplit l'objet formulaire avec les données qui viennent de la requete post
-            $rechercheFormValidator = new RechercheFormValidator(); 
+            $page = 1; //si on fait une nouvelle recherche, on revient à la page 1
+        } else {
+            $form->setData(array());//dit au formulaire que ses champs ont été remplis (consiedre pas que les champs sont renseignés si on set les valeurs directement)
+            $form->get('recherche')->setValue(urldecode($this->params()->fromRoute('recherche', null)));
+            $form->get('prixmin')->setValue(urldecode($this->params()->fromRoute('prixmin', null)));
+            $form->get('prixmax')->setValue(urldecode($this->params()->fromRoute('prixmax', null)));
+            $form->get('id_cat')->setValue((int) urldecode($this->params()->fromRoute('id_cat', null)));
+            $form->get('id_dept')->setValue(urldecode($this->params()->fromRoute('id_dept', null)));
+            $form->get('type_annonce')->setValue((int) urldecode($this->params()->fromRoute('type_annonce', null))); 
+            $form->get('etat')->setValue(urldecode($this->params()->fromRoute('etat', null)));  
+            $form->get('id_reg')->setValue((int) $this->params()->fromRoute('id_reg', null));
+            $form->get('rechtitre')->setChecked((boolean) urldecode($this->params()->fromRoute('rechtitre', null)));
+            $form->get('enregistrement')->setChecked((boolean) urldecode($this->params()->fromRoute('enregistrement', null)));
+ 
+            $page = (int) urldecode($this->params()->fromRoute('page', 1));
+        }
+        
+        $param = array('action' => 'index');
+        $annonces = array();
+        $metaAnnonces = array();
+        
+        $rechercheFormValidator = new RechercheFormValidator(); 
             $form->setInputFilter($rechercheFormValidator->getInputFilter());
             if ($form->isValid()) {
-                $prixmin = $form->get('prixmin')->getValue();
-                $prixmax = $form->get('prixmax')->getValue();
-                $id_cat = $form->get('id_cat')->getValue();
-                $id_dept = $form->get('id_dept')->getValue();
-                $type_annonce = $form->get('type_annonce')->getValue();    
-                $id_reg = $form->get('id_reg')->getValue();  
-                $etat = $form->get('etat')->getValue();  
-                if($form->get('enregistrement')->isChecked())
+                $param['recherche'] = $form->get('recherche')->getValue();
+                $param['prixmin'] = $form->get('prixmin')->getValue();
+                $param['prixmax'] = $form->get('prixmax')->getValue();
+                $param['id_cat'] = $form->get('id_cat')->getValue();
+                $param['id_dept'] = $form->get('id_dept')->getValue();
+                $param['type_annonce'] = $form->get('type_annonce')->getValue();
+                $param['etat'] = $form->get('etat')->getValue();
+                $param['id_reg'] = $form->get('id_reg')->getValue();
+                $param['rechtitre'] = $form->get('rechtitre')->isChecked();
+                $param['enregistrement'] = $form->get('enregistrement')->isChecked();
+                
+                if($param['enregistrement'])
                 {
                  //enregistrer la requete dans la base
                 }
+                
+                $annoncesResultSet=BDD::getAnnonceTable($this->serviceLocator)->filtrageStrict($param['prixmin'], $param['prixmax'], $param['id_cat'], $param['id_dept'], $param['type_annonce'], $param['id_reg'], $param['etat']);
+        
+                foreach($annoncesResultSet as $annonce) {
+                    if($annonce->pertinent($param['recherche'], $param['rechtitre'])) {
+                        $annonces[$annonce->id_annonce] = $annonce;
+                        $metaAnnonces[$annonce->id_annonce] = array(
+                            'photo'=> BDD::getPhotoTable($this->serviceLocator)->getByIdAnnonce($annonce->id_annonce)->current(),
+                            'departement' => BDD::getDepartementTable($this->serviceLocator)->getDepartement($annonce->id_dept),
+                            'categorie' => BDD::getCategorieTable($this->serviceLocator)->getCategorie($annonce->id_cat),
+                        );
+                    }     
+                }
             }
-        }
         
-        $retour['form'] = $form;
-         
-       $annoncesResultSet=BDD::getAnnonceTable($this->serviceLocator)->filtrageStrict($prixmin, $prixmax, $id_cat, $id_dept, $type_annonce, $id_reg, $etat);
-        
-        
-        //$annoncesResultSet = BDD::getAnnonceTable($this->serviceLocator)->fetchAll(true);
-        $annonces = array();
-        $metaAnnonces = array();
-        foreach($annoncesResultSet as $annonce) {
-            if($annonce->pertinent($form->get('recherche')->getValue(), $form->get('rechtitre')->isChecked())) {
-                   $annonces[$annonce->id_annonce] = $annonce;
-                   $metaAnnonces[$annonce->id_annonce] = array(
-                    'photo'=> BDD::getPhotoTable($this->serviceLocator)->getByIdAnnonce($annonce->id_annonce)->current(),
-                    'departement' => BDD::getDepartementTable($this->serviceLocator)->getDepartement($annonce->id_dept),
-                    'categorie' => BDD::getCategorieTable($this->serviceLocator)->getCategorie($annonce->id_cat),
-                );
-           }     
-        }
         
         $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($annonces));
-        $paginator->setCurrentPageNumber($this->params()->fromRoute('page', 1));
-        $paginator->setItemCountPerPage(3);
+        $paginator->setCurrentPageNumber($page);
+        $paginator->setItemCountPerPage(10);
         
+        
+        
+        $retour['form'] = $form;
         $retour['meta'] = $metaAnnonces;
         $retour['pagination'] = $paginator; //contient les annonces
-        var_dump($form->get('submit'));
+        $retour['param'] = array_filter($param);
+        
     	return $retour;
     }
 
