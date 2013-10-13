@@ -7,6 +7,11 @@ $this->headTitle($title);
 
 <?php echo $this->form($form); ?>
 
+<?php if($this->co)
+            echo "<a href=\""
+            .$this->url($this->route, array_merge($this->param, array('action' => 'sauvegardeRecherche')))
+            ."\">Enregistrer ma recherche</a>";?>
+
 <table class="table">
 <tr>
     <th>Date</th>

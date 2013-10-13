@@ -14,6 +14,7 @@ class BaseAnnoncea{
     public static $categorieTable;
     public static $utilisateurTable;
     public static $regionTable;
+    public static $rechercheTable;
     
     public static function getAnnonceTable($sm)
     {
@@ -74,6 +75,15 @@ class BaseAnnoncea{
             self::$regionTable = $sm->get('Annoncea\Model\RegionTable');
         }
         return self::$regionTable;
+    }
+    
+    
+    public static function getRechercheTable($sm)
+    {
+        if (!self::$rechercheTable) {
+            self::$rechercheTable = $sm->get('Annoncea\Model\RechercheTable');
+        }
+        return self::$rechercheTable;
     }
     
     

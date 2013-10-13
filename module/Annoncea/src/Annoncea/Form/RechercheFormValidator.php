@@ -26,7 +26,7 @@ class RechercheFormValidator implements InputFilterAwareInterface
 
 			
 			$inputFilter->add($factory->createInput(array(
-            'name' => 'primin', 
+            'name' => 'prixmin', 
             'required' => false, 
             'filters' => array( 
                 array('name' => 'StripTags'), 
@@ -41,7 +41,7 @@ class RechercheFormValidator implements InputFilterAwareInterface
         ))); 
 			     
             $inputFilter->add($factory->createInput(array(
-            'name' => 'primax', 
+            'name' => 'prixmax', 
             'required' => false, 
             'filters' => array( 
                 array('name' => 'StripTags'), 

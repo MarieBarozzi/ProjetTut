@@ -1,0 +1,9 @@
+<?php
+
+$title = 'Votre recherche a bien été sauvegardée';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<a href='<?php echo $this->url($this->route, $this->param); ?>'> 
+    <button>Retourner à la recherche</button> 
+</a>

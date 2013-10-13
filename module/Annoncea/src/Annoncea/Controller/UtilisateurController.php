@@ -81,7 +81,7 @@ class UtilisateurController extends AbstractActionController
                     break;
                 } 
 
-                $securePass = $resultat;
+                $securePass = $resultat; //A CORRIGER !!!!!!!!!!!!
 
                 $bcrypt = new Bcrypt();
 

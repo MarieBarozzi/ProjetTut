@@ -48,18 +48,14 @@ class Annonce
     
         
     public function pertinent($champRecherche, $titreUniquement) {
-                
-                
-                
+
             $pertinenceTotale = 100;
             
             $coeffLevDesc = 1; 
             $coeffSimDesc = 0;
             $coeffLevTitre = 1; 
             $coeffSimTitre = 1;
-            
-            
-            
+
             if($champRecherche != null) {
                 $pertinenceTotale = 0;
                 $pertinenceDesc = 0;
@@ -94,8 +90,32 @@ class Annonce
         
         return ($pertinenceTotale > 70); 
     }
+
     
-    
-    
+    public function filtrageStrict($prixmin, $prixmax, $id_cat, $id_dept, $type_annonce, $id_reg, $etat) {
+        if($id_cat != null && $id_cat != $this->id_cat)
+            return false; 
+        
+        if($id_dept != null && $id_dept != $this->id_dept)
+           return false;
+
+        if($type_annonce != null && $type_annonce != $this->type_annonce)
+            return false;
+            
+        if($prixmin != null && $prixmin > $this->prix)
+            return false;   
+        
+        if($prixmax != null && $prixmax < $this->prix)
+            return false; 
+            
+         if($id_reg != null && $id_reg != $this->id_reg)
+            return false;  
+         
+         if($etat != null && $etat > $this->etat)
+            return false;
+         
+        return true;
+        
+      }
     
 }

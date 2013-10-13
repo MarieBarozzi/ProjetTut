@@ -18,6 +18,8 @@ use Annoncea\Model\Region;
 use Annoncea\Model\RegionTable;
 use Annoncea\Model\Message;
 use Annoncea\Model\MessageTable;
+use Annoncea\Model\Recherche;
+use Annoncea\Model\RechercheTable;
 use Zend\Authentication\Adapter\DbTable;
 use Zend\Mail\Transport\Smtp as SmtpTransport;
 use Zend\Mail\Transport\SmtpOptions;
@@ -141,7 +143,23 @@ class Module
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new message());
                     return new TableGateway('message', $dbAdapter, null, $resultSetPrototype);
-                },                 
+                },         
+                
+                
+                 'Annoncea\Model\RechercheTable' =>  function($sm) {
+                    $tableGateway = $sm->get('RechercheTableGateway');
+                    $table = new RechercheTable($tableGateway);
+                    return $table;
+                },
+                  'RechercheTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Recherche());
+                    return new TableGateway('recherche', $dbAdapter, null, $resultSetPrototype);
+                }, 
+                
+                
+                        
                 'AuthAdapter' => function($sm){
                      $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                      return new DbTable($dbAdapter,'utilisateur','mail','mdp');

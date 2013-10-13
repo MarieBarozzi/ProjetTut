@@ -12,17 +12,21 @@ use Annoncea\Form\RechercheForm;
 use Annoncea\Form\RechercheFormValidator;
 use Annoncea\Model\BaseAnnoncea as BDD;
 use Zend\Authentication\AuthenticationService;
+use Annoncea\Model\Recherche;
+use Zend\Mime\Message as MimeMessage;
+use Zend\Mime\Part as MimePart;
+use Zend\Mail\Message as MailMessage;
 
 class AnnonceController extends AbstractActionController
 {
-	public function homeAction(){
-	    $auth = new AuthenticationService();
+    public function homeAction(){
+        $auth = new AuthenticationService();
         $retour = array();
         if($auth->hasIdentity()) {
             $retour['co'] = true;
         }
         return $retour;
-	}
+    }
     
     public function indexAction()
     {         
@@ -98,7 +102,7 @@ class AnnonceController extends AbstractActionController
         $retour['pagination'] = $paginator; //contient les annonces
         $retour['param'] = array_filter($param);
         
-    	return $retour;
+        return $retour;
     }
 
     public function annonceAction() {
@@ -191,6 +195,9 @@ class AnnonceController extends AbstractActionController
                     rename($_SERVER['CONTEXT_DOCUMENT_ROOT'].$this->getRequest()->getBasePath().'/photos/'.$fichier['name'],
                         $_SERVER['CONTEXT_DOCUMENT_ROOT'].$this->getRequest()->getBasePath().'/photos/'.$id_photo);
                 }
+                
+                $this->prevenirInteresses($annonce);
+                
                 return $this->redirect()->toRoute('annonce');
               }
         }
@@ -269,6 +276,7 @@ class AnnonceController extends AbstractActionController
                     rename($_SERVER['CONTEXT_DOCUMENT_ROOT'].$this->getRequest()->getBasePath().'/photos/'.$fichier['name'],
                         $_SERVER['CONTEXT_DOCUMENT_ROOT'].$this->getRequest()->getBasePath().'/photos/'.$id_photo);
                 }
+                $this->prevenirInteresses($annonce);
                 return $this->redirect()->toRoute('annonce');
             }
                   
@@ -334,6 +342,85 @@ class AnnonceController extends AbstractActionController
         $id_annonce = (int) $this->params()->fromRoute('id', 0);
         BDD::getFavorisTable($this->serviceLocator)->deleteFavoris($id_annonce);
         return $this->redirect($this->serviceLocator)->toRoute('utilisateur', array('action'=>'mesfavoris'));
+    }
+    
+    public function sauvegardeRechercheAction(){
+         $auth = new AuthenticationService();
+        if($auth->hasIdentity()) {
+            $retour['co'] = true;
+        }
+        else
+            return $this->redirect()->toRoute('annonce');
+     
+        $param['recherche'] = urldecode($this->params()->fromRoute('recherche', null));
+        $param['prixmin'] = urldecode($this->params()->fromRoute('prixmin', null));
+        $param['prixmax'] = urldecode($this->params()->fromRoute('prixmax', null));
+        $param['id_cat'] = (int) urldecode($this->params()->fromRoute('id_cat', null));
+        $param['id_dept'] = urldecode($this->params()->fromRoute('id_dept', null));
+        $param['type_annonce'] = urldecode($this->params()->fromRoute('type_annonce', null));
+        $param['etat'] = urldecode($this->params()->fromRoute('etat', null));
+        $param['id_reg'] = (int) $this->params()->fromRoute('id_reg', null);
+        $param['rechtitre'] = (boolean) urldecode($this->params()->fromRoute('rechtitre', null));
+        
+        //on verifie les données de la barre d'adresse grâce aux validateurs du formulaire de recherche
+        $form = new RechercheForm(); 
+        $form->setData($param); 
+        $rechercheFormValidator = new RechercheFormValidator(); 
+        $form->setInputFilter($rechercheFormValidator->getInputFilter());
+        if (!$form->isValid())
+            return $this->redirect()->toRoute('annonce');
+        
+        $recherche = new Recherche();
+        $recherche->exchangeArray($param);
+        $recherche->mail = $auth->getIdentity();
+        
+        BDD::getRechercheTable($this->serviceLocator)->saveRecherche($recherche);
+        
+        
+        
+        $retour['param'] = array_filter($param);
+        
+        return $retour;
+    }
+
+ //public function filtrageStrict($prixmin, $prixmax, $id_cat, $id_dept, $type_annonce, $id_reg, $etat) {
+    private function prevenirInteresses($annonce){
+        $recherches = BDD::getRechercheTable($this->serviceLocator)->fetchAll();
+        foreach($recherches as $recherche){
+            if($annonce->filtrageStrict($recherche->prixmin, $recherche->prixmax, $recherche->id_cat, $recherche->id_dept, $recherche->type_annonce, $recherche->id_reg, $recherche->etat)) {
+                if($annonce->pertinent($recherche->recherche, $recherche->rechtitre)){
+                    $dest = $recherche->mail; 
+                    $sujet = "Une annonce correspond à votre recherche"; 
+                    //Quelqu’un a ajouté une annonce qui pourrait vous intéresser
+                    $corps = "<p>Un vendeur a déposé une annonce intitulée ".$annonce->titre."</p>";
+                    //et nous pensons que celà pourrait vous interesser 
+                    //lien vers l'annonce 
+                    //vous pouvez le contacter à cette adresse 
+                    $this->sendMessage($dest, $sujet, $corps);
+                }
+                
+            }
+        
+        
+        
+        }
+    }
+    
+    private function sendMessage($dest, $sujet, $corps){
+        $transport = $this->serviceLocator->get('MailTransport');
+        
+        $html = new MimePart($corps);
+        $html->type = "text/html";
+        $body = new MimeMessage();
+        $body->addPart($html);  
+                    
+        $message = new MailMessage();
+        $message->addFrom('projetannoncea@gmail.com')
+                ->setSubject($sujet)
+                ->addTo($dest)
+                ->setBody($body); 
+
+        $transport->send($message);
     }
     
     /*public function testrechercheAction(){
