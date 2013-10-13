@@ -263,11 +263,11 @@ class UtilisateurController extends AbstractActionController
 													</p>
 
 													<p>
-														Nous espérons que vous puissiez trouver votre bonheur parmit les diverses annonces preésente sur notre site et que vous dénichiez de la perle rare.
+														Nous espérons que vous puissiez trouver votre bonheur parmit les diverses annonces présentes sur notre site et que vous dénichiez de la perle rare.
 													</p>
 
 													<p>
-														Merci de votre confience et à bientôt sur "Annoncea".
+														Merci de votre confiance et à bientôt sur "Annoncea".
 													</p>
 
 													<p>
