@@ -145,8 +145,144 @@ class UtilisateurController extends AbstractActionController
                 
                 $email = $form->get('mail')->getValue();
                 $sujet = 'Bienvenue sur le site Annoncea';
-                $corps = '<p>L\'équipe d\'annoncea vous souhaite la bienvenue sur son site de petites annonces.<br>
-                          Votre inscription a bien été prise en compte, vous pouvez désormais accéder aux fonctions reservées à nos membres.</p>';
+                $corps = '<!doctype html>
+							<html lang="fr">
+								<head>
+									<meta charset="utf-8">
+									<style media="screen">
+										html {
+											height: 100%;
+											background: #bfd255; /* Old browsers */
+											background: -moz-linear-gradient(-45deg,  #bfd255 0%, #8eb92a 50%, #72aa00 51%, #9ecb2d 100%); /* FF3.6+ */
+											background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#bfd255), color-stop(50%,#8eb92a), color-stop(51%,#72aa00), color-stop(100%,#9ecb2d)); /* Chrome,Safari4+ */
+											background: -webkit-linear-gradient(-45deg,  #bfd255 0%,#8eb92a 50%,#72aa00 51%,#9ecb2d 100%); /* Chrome10+,Safari5.1+ */
+											background: -o-linear-gradient(-45deg,  #bfd255 0%,#8eb92a 50%,#72aa00 51%,#9ecb2d 100%); /* Opera 11.10+ */
+											background: -ms-linear-gradient(-45deg,  #bfd255 0%,#8eb92a 50%,#72aa00 51%,#9ecb2d 100%); /* IE10+ */
+											background: linear-gradient(135deg,  #bfd255 0%,#8eb92a 50%,#72aa00 51%,#9ecb2d 100%); /* W3C */
+											filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#bfd255\', endColorstr=\'#9ecb2d\',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+										}
+										body {
+											height: 100%;
+											margin: 0;
+											padding: 0;
+										}
+										#page-table {
+											height: 100%;
+											width: 100%;
+											border-collapse: collapse;
+											text-align: center;
+										}
+										#page-td {
+											height: 100%;
+											padding: 0;
+											vertical-align: middle;
+										}
+										div#global {
+											width: 500px;
+											margin: 20px auto;
+											text-align: left;
+										}
+										div#global {
+											padding: 10px 20px;
+											border: 1px solid black;
+											font-family: Arial, Helvetica, sans-serif;
+											margin: auto;
+											box-shadow: 1px 1px 12px #aaa;
+											border-radius: 4px;
+											background: #e9eaee;
+											border: 2px solid #ffffff;
+											text-align: center;
+											box-shadow: 1px 2px 6px rgba(0,0,0, 0.5);
+											-moz-box-shadow: 1px 2px 6px rgba(0,0,0, 0.5);
+											-webkit-box-shadow: 1px 2px 6px rgba(0,0,0, 0.5);
+										}
+
+										a {
+											text-decoration: none
+										}
+
+										.myButton {
+
+											-moz-box-shadow: inset 0px 1px 0px 0px #a4e271;
+											-webkit-box-shadow: inset 0px 1px 0px 0px #a4e271;
+											box-shadow: inset 0px 1px 0px 0px #a4e271;
+											background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #89c403), color-stop(1, #77a809));
+											background: -moz-linear-gradient(top, #89c403 5%, #77a809 100%);
+											background: -webkit-linear-gradient(top, #89c403 5%, #77a809 100%);
+											background: -o-linear-gradient(top, #89c403 5%, #77a809 100%);
+											background: -ms-linear-gradient(top, #89c403 5%, #77a809 100%);
+											background: linear-gradient(to bottom, #89c403 5%, #77a809 100%);
+											filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=\'#89c403\', endColorstr=\'#77a809\',GradientType=0);
+											background-color: #89c403;
+											-moz-border-radius: 5px;
+											-webkit-border-radius: 5px;
+											border-radius: 5px;
+											border: 3px solid #74b807;
+											display: inline-block;
+											color: #696663;
+											font-family: arial;
+											font-size: 15px;
+											font-weight: bold;
+											padding: 11px 24px;
+											text-decoration: none;
+											text-shadow: 0px 1px 0px #528009;
+										}
+										.myButton:hover {
+
+											background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #77a809), color-stop(1, #89c403));
+											background: -moz-linear-gradient(top, #77a809 5%, #89c403 100%);
+											background: -webkit-linear-gradient(top, #77a809 5%, #89c403 100%);
+											background: -o-linear-gradient(top, #77a809 5%, #89c403 100%);
+											background: -ms-linear-gradient(top, #77a809 5%, #89c403 100%);
+											background: linear-gradient(to bottom, #77a809 5%, #89c403 100%);
+											filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=\'#77a809\', endColorstr=\'#89c403\',GradientType=0);
+											background-color: #77a809;
+										}
+										.myButton:active {
+											position: relative;
+											top: 1px;
+										}
+
+									</style>
+								</head>
+
+								<body>
+									<table id="page-table">
+										<tr>
+											<td id="page-td">
+											<div id="global">
+												<img src="./banniere.png" />
+
+												<div>
+													<p>
+														Bonjour "fonction nom/prenom",
+													</p>
+
+													<p>
+														Vous venez de vous inscrire sur notre site "Annoncea" et nous vous en remercions.
+													</p>
+
+													<p>
+														Nous espérons que vous puissiez trouver votre bonheur parmit les diverses annonces preésente sur notre site et que vous dénichiez de la perle rare.
+													</p>
+
+													<p>
+														Merci de votre confience et à bientôt sur "Annoncea".
+													</p>
+
+													<p>
+														L\'équipe d\'Annoncea.
+													</p>
+
+													<a href="#" class="myButton">Acceder à Annoncea</a>
+												</div>
+											</div><!--#global--></td>
+										</tr>
+									</table><!--#page-table-->
+
+								</body>
+							</html>
+							';
                 
                 $this->sendMessage($email, $sujet, $corps);
                 
