@@ -162,8 +162,9 @@ class Module
                         
                 'AuthAdapter' => function($sm){
                      $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                     return new DbTable($dbAdapter,'utilisateur','mail','mdp');
+                     return new DbTable($dbAdapter,'utilisateur','mail','mdp', 'SHA1(?)');
                  },
+                 
                  'MailTransport' => function($sm){
                     $transport = new SmtpTransport();
                     $options   = new SmtpOptions(array(

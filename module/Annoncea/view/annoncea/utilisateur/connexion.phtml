@@ -8,7 +8,7 @@ echo $this->message;
 <?php
 $form = $this->form;
 $form->setAttribute('connexion', $this->url('utilisateur', array('action' => 'connexion')));
+echo $this->form($form);
 if(isset($this->erreur)){
     echo "<p>" . $this->erreur . "</p>";
 }
-echo $this->form($form);
