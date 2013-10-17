@@ -16,8 +16,6 @@ use Annoncea\Model\Favoris;
 use Annoncea\Model\FavorisTable;
 use Annoncea\Model\Region;
 use Annoncea\Model\RegionTable;
-use Annoncea\Model\Message;
-use Annoncea\Model\MessageTable;
 use Annoncea\Model\Recherche;
 use Annoncea\Model\RechercheTable;
 use Zend\Authentication\Adapter\DbTable;
@@ -132,20 +130,7 @@ class Module
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Region());
                     return new TableGateway('region', $dbAdapter, null, $resultSetPrototype);
-                }, 
-                'Annoncea\Model\MessageTable' => function ($sm) {
-                    $tableGateway = $sm->get('MessageTableGateway');
-                    $table = new MessageTable($tableGateway);
-                    return $table; 
-                },
-                    'MessageTableGateway' => function ($sm) {
-                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new message());
-                    return new TableGateway('message', $dbAdapter, null, $resultSetPrototype);
-                },         
-                
-                
+                },      
                  'Annoncea\Model\RechercheTable' =>  function($sm) {
                     $tableGateway = $sm->get('RechercheTableGateway');
                     $table = new RechercheTable($tableGateway);
@@ -157,9 +142,6 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Recherche());
                     return new TableGateway('recherche', $dbAdapter, null, $resultSetPrototype);
                 }, 
-                
-                
-                        
                 'AuthAdapter' => function($sm){
                      $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                      return new DbTable($dbAdapter,'utilisateur','mail','mdp', 'SHA1(?)');

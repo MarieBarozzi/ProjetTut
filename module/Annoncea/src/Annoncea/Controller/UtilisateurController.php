@@ -380,12 +380,23 @@ class UtilisateurController extends AbstractActionController
 				
                 $this->sendMessage($email, $titre, $contenu);
 			
-				return $this->redirect()->toRoute('home');
+				return $this->redirect()->toRoute('annonce', array('action'=>'annonce','id'=>$annonce->id_annonce));
 
             }
         }
     
     return array('form' => $form);
+    }
+
+    public function mesRecherchesAction(){
+        $auth = new AuthenticationService();
+
+        if(!$auth->hasIdentity())
+        {
+            return $this->redirect()->toRoute('utilisateur', array('action' => 'connexion'));
+        }
+
+        $retour['co'] = true;
     }
 
     private function sendMessage($dest, $sujet, $corps){
