@@ -27,6 +27,6 @@ $this->headTitle($title);
 <br>
 <?php echo $this->escapeHtml($meta[$annonce->id_annonce]['categorie']->lib_cat);?>   
 <br>
-<a href="<?php echo $this->url('annonce', array('action'=>'favoris', 'id' => $annonce->id_annonce));?>">Mettre en favoris</a>
-<br>
-<a href="<?php echo $this->url('utilisateur', array('action'=>'message', 'id' => $annonce->id_annonce));?>">Envoyer un message</a>
+<a class="btn btn-small" href="<?php echo $this->url('annonce', array('action'=>'favoris', 'id' => $annonce->id_annonce));?>"> <i class="icon-black icon-star"></i> Mettre en favoris</a>
+
+<a class="btn btn-small" href="<?php echo $this->url('utilisateur', array('action'=>'message', 'id' => $annonce->id_annonce));?>"> <i class="icon-black icon-envelope"></i> Envoyer un message</a>
