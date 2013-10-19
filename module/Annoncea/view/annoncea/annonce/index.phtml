@@ -5,13 +5,26 @@ $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 
-<?php echo $this->form($form); ?>
-
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                Faire une recherche
+            </a>
+        </div>
+        <div id="collapseOne" class="accordion-body collapse out">
+            <div class="accordion-inner">
+                <?php echo $this->form($form); ?>  
+            </div>
+        </div>
+    </div>
+</div>
 <?php if($this->co)
-            echo "<a href=\""
-            .$this->url($this->route, array_merge($this->param, array('action' => 'sauvegardeRecherche')))
-            ."\">Enregistrer ma recherche</a>";?>
-
+    echo "<a class='btn' href=\""
+    .$this->url($this->route, array_merge($this->param, array('action' => 'sauvegardeRecherche')))
+    ."\">Enregistrer ma recherche</a>";?>
+</br>
+</br>
 <table class="table">
 <tr>
     <th>Date</th>
