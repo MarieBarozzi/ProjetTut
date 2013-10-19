@@ -32,6 +32,6 @@ body {
 
 div.container a.brand {
     background: url("../img/zf2-logo.png") no-repeat scroll 0 10px transparent;
-    margin-left: 0;
+    margin-left: -225px;
     padding: 8px 20px 12px 40px;
 }
