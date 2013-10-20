@@ -43,9 +43,9 @@
                             <!-- Il est à noter qu'il faut remplacer echo $this->url('home') par le bon echo pour adapter le lien. -->
                            
                             <li class="active"><a href="<?php echo $this->url('annonce', array('action'=>'add')) ?>">Ajouter une Annonce</a></li>
-                            <li class="active"><a href="<?php echo $this->url('utilisateur', array('action'=>'mesannonces')) ?>">Mes Annonces</a></li>
-                            <li class="active"><a href="<?php echo $this->url('utilisateur', array('action'=>'mesfavoris')) ?>">Mes Favoris</a></li>
-                            <li class="active"><a href="<?php echo $this->url('utilisateur', array('action'=>'mesrecherches')) ?>">Mes Recherches</a></li>
+                            <!--<li class="active"><a href="<?php echo $this->url('utilisateur', array('action'=>'mesannonces')) ?>">Mes Annonces</a></li>-->
+                            <!--<li class="active"><a href="<?php echo $this->url('utilisateur', array('action'=>'mesfavoris')) ?>">Mes Favoris</a></li>-->
+                            <!--<li class="active"><a href="<?php echo $this->url('utilisateur', array('action'=>'mesrecherches')) ?>">Mes Recherches</a></li>-->
                                                         
                             <!-- Connexion est visible uniquement si la personne est déconnectée. -->
                             
@@ -54,6 +54,9 @@
              
 
                             if($child->co){
+                                echo "<li class=\"active\"><a href=\"".$this->url('utilisateur', array('action'=>'mesannonces'))."\">Mes annonces</a></li>";
+                                echo "<li class=\"active\"><a href=\"" .$this->url('utilisateur', array('action'=>'mesfavoris'))."\">Mes Favoris</a></li>";
+                                echo "<li class=\"active\"><a href=\"" .$this->url('utilisateur', array('action'=>'mesrecherches'))."\">Mes Recherches</a></li>";
                                 echo "<li class=\"active\"><a href=\"".$this->url('utilisateur')."\">Mon Compte</a></li>";
                                 echo "<li class=\"active\"><a href=\"".$this->url('deconnexion')."\">Déconnexion</a></li>";
                             }
