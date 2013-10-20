@@ -192,7 +192,7 @@ class UtilisateurController extends AbstractActionController
                                         <tr>
                                             <td id="page-td">
                                             <div id="global">
-                                                <img src="./banniere.png" />
+                                                <img src="../../../../../public//img/banniere.png" />
 
                                                 <div>
                                                     <p>
