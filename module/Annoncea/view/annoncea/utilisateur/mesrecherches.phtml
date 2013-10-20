@@ -3,3 +3,26 @@
 $title = 'Mes recherches';
 $this->headTitle($title);
 ?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php if($pagination->getTotalItemCount() == 0)
+        echo "Vous n'avez encore aucune recherche enregistrée";
+    else 
+echo"
+<table class=\"table\">
+ <tr>
+    <th>Libellé</th>
+    <th>Actions</th>
+</tr>"?>
+
+<?php foreach ($pagination as $recherche) : ?>
+<tr>
+    <td><?php echo $recherche['lib'];?></td>
+    <td>
+    <a href="<?php echo $this->url('annonce', array_merge(array('action'=>'index'),$recherche['param']));?>">Voir </a>
+    <a href="<?php echo $this->url('utilisateur', array('action'=>'deleterecherche', 'id'=>$recherche['param']['id_rech']));?>"> Supprimer cette recherche</a>
+    </td>
+    
+</tr>
+<?php endforeach; ?>
+</table>
+<?php echo $this->paginationControl($this->pagination, 'Sliding', 'partial/paginator.phtml', array('route' => 'utilisateur', 'action'=>'mesrecherches','param' => $this->param)); ?>

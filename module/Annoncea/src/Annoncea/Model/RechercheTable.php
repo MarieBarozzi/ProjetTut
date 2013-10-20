@@ -31,8 +31,8 @@ class RechercheTable
     
      public function getByMail($mail)
     {
-        $id_rech  = (int) $id_rech;
-        $rowset = $this->tableGateway->select(array('id_rech' => $id_rech));
+        $mail  =  $mail;
+        $rowset = $this->tableGateway->select(array('mail' => $mail));
         return $rowset;
     }
     

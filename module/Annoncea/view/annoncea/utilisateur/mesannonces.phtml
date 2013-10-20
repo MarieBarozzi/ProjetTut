@@ -4,7 +4,12 @@ $title = 'Mes annonces';
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
-<table class="table">
+
+<?php if($pagination->getTotalItemCount() == 0)
+        echo "Vous n'avez encore aucune annonce";
+    else 
+echo"
+<table class=\"table\">
  <tr>
     <th>Date</th>
     <th>Photo</th>
@@ -13,10 +18,11 @@ $this->headTitle($title);
     <th>Catégorie</th>
     <th>Département</th>
     <th>Actions</th>
-</tr>
+</tr>"?>
 
-<?php foreach ($annonces as $annonce) : ?>
-<tr>
+<?php foreach ($pagination as $annonce) : ?>
+<tr class="tableSurvol" onclick="document.location='<?php echo $this->url('annonce',array('action'=>'annonce', 'id' => $annonce->id_annonce));?>'">
+
     <td><?php echo $this->escapeHtml($annonce->date_modif);?></td>
     
     <td><img src="<?php
@@ -39,4 +45,4 @@ $this->headTitle($title);
 </tr>
 <?php endforeach; ?>
 </table>
-
+<?php echo $this->paginationControl($this->pagination, 'Sliding', 'partial/paginator.phtml', array('route' => 'utilisateur', 'action'=>'mesannonces','param' => $this->param)); ?>

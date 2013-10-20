@@ -34,14 +34,15 @@ return array(
             'utilisateur' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/utilisateur[/][:action][/:id]',
+                    'route'    => '/utilisateur[/][:action][/:id][/page/:page]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',
+                        'page'   => '[0-9]+',
                     ),
                     'defaults' => array(
                         'controller' => 'Annoncea\Controller\Utilisateur',
-                        'action'     => 'index',
+                        'action'     => 'moncompte',
                     ),
                 ),
             ),

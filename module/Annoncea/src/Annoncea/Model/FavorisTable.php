@@ -59,9 +59,9 @@ class FavorisTable
     
     
     
-    public function deleteFavoris($id_annonce /*+$mail ?*/)
+    public function deleteFavoris($mail, $id_annonce)
     {
-        $this->tableGateway->delete(array('id_annonce' => $id_annonce));
+        $this->tableGateway->delete(array('mail'=>$mail, 'id_annonce'=>$id_annonce));
     }
  
 }

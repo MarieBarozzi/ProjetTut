@@ -112,7 +112,7 @@ class AnnonceForm extends Form
      $this->add(array( 
             'name' => 'upload', 
             'type' => 'File', 
-            'attributes' => array( 
+           'attributes' => array( 
                 'multiple'=>true,
             ), 
             'options' => array( 

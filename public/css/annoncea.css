@@ -2,9 +2,43 @@
 	max-height : 120px;
 	max-width : 160px;
 }
+
+.grande {
+	max-height : 350px;
+	max-width : 350px;
+}
+
 .tableSurvol{
 	cursor:pointer;
 }
 .tableSurvol:hover{
 	background-color: #EEEEEE;
 }
+
+
+#info {
+	text-align: right;
+}
+
+/*
+form {
+	float: left;
+}
+
+label {
+	text-align: right;
+}
+/*
+span {
+	text-align: right; 
+}
+
+
+#submitbutton{
+	text-align: center;
+}
+/*
+hr {
+	display: inline;
+}
+*/

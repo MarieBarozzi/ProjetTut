@@ -11,11 +11,11 @@ $this->headTitle($title);
 <?php
         if($meta[$annonce->id_annonce]['photo']) {
             foreach($meta[$annonce->id_annonce]['photo'] as $photo) {
-                echo "<img src=\"" . $this->basePath() . "/photos/" . $photo->id_photo . "\"/>"; 
+                echo "<img class=\"grande\" src=\"" . $this->basePath() . "/photos/" . $photo->id_photo . "\"/>"; 
             }
         }
         else
-            echo "<img src=\"" . $this->basePath() . "/photos/no-image.png" . "\"/>";
+            echo "<img class=\"grande\" src=\"" . $this->basePath() . "/photos/no-image.png" . "\"/>";
 ?>
 <br>
 <?php echo "Prix : ";?>
@@ -27,6 +27,12 @@ $this->headTitle($title);
 <br>
 <?php echo $this->escapeHtml($meta[$annonce->id_annonce]['categorie']->lib_cat);?>   
 <br>
+
 <a class="btn" href="<?php echo $this->url('annonce', array('action'=>'favoris', 'id' => $annonce->id_annonce));?>"> <i class="icon-black icon-star"></i> Mettre en favoris</a>
 
 <a class="btn" href="<?php echo $this->url('utilisateur', array('action'=>'message', 'id' => $annonce->id_annonce));?>"> <i class="icon-black icon-envelope"></i> Envoyer un message</a>
+<!--
+<a href="<?php echo $this->url('annonce', array('action'=>'favoris', 'id' => $annonce->id_annonce));?>">Mettre en favoris</a>
+<br>
+<a href="<?php echo $this->url('utilisateur', array('action'=>'message', 'id' => $annonce->id_annonce));?>">Contacter le vendeur</a>
+-->

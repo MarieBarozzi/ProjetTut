@@ -121,8 +121,8 @@ class InscriptionForm extends Form
             'attributes' => array(  
                 'required' => 'required', 
             ), 
-            'options' => array( 
-                'label' => 'Email : ', 
+           'options' => array( 
+               /* 'label' => 'Email : ', */
             ), 
         )); 
          

@@ -68,8 +68,12 @@ class Annonce
                 $levTitre = (1 - ($levTitre / (float)min(strlen($this->titre), strlen($recherche))))*100;              
                 similar_text($this->titre, $recherche, $simTitre);
                 
+                echo 'diffTitre : ' . $diffTitre;
+                echo 'levTitre : ' . $levTitre;
+                
+                
                 $pertinenceTitre = ($simTitre*$coeffSimTitre + $levTitre*$coeffLevTitre) / ($coeffSimTitre + $coeffLevTitre);
-               
+                echo 'pertinence titre : ' . $pertinenceTitre;
                
                 if(!$titreUniquement){
                     //recherche dans la description 
@@ -77,21 +81,25 @@ class Annonce
                     $levDesc = $diffDesc - abs(strlen($this->descr) - strlen($recherche));
                     $levDesc  = (1 - ($levDesc / (float)min(strlen($this->descr), strlen($recherche))))*100;              
                     similar_text($this->descr, $recherche, $simDesc);
+                    
+                    echo 'diffDesc : ' . $diffDesc; 
+                    echo 'levDesc : ' . $levDesc; 
           
                     $pertinenceDesc = ($simDesc*$coeffSimDesc + $levDesc*$coeffLevDesc) / ($coeffLevDesc + $coeffSimDesc);
+                    echo 'pertinence desc : ' . $pertinenceDesc;
                 }
                 
                 $pertinenceTotale += max($pertinenceDesc, $pertinenceTitre);
                 }
                 
                 $pertinenceTotale /= count($champRecherche);
-                var_dump($pertinenceTotale);
+                echo 'pertinence totale : ' . $pertinenceTotale;
             }
         
         return ($pertinenceTotale > 70); 
     }
 
-    
+    //à quoi ça sert déjà ??? 
     public function filtrageStrict($prixmin, $prixmax, $id_cat, $id_dept, $type_annonce, $id_reg, $etat) {
         if($id_cat != null && $id_cat != $this->id_cat)
             return false; 

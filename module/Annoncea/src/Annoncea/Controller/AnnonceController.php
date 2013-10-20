@@ -288,7 +288,13 @@ class AnnonceController extends AbstractActionController
     }
 
     public function deleteAction()
-    {   
+    {
+        
+        $auth = new AuthenticationService();
+        if($auth->hasIdentity()) {
+            $retour['co'] = true;
+        }
+           
         $id_annonce = (int) $this->params()->fromRoute('id', 0);
         if (!$id_annonce) {
             return $this->redirect()->toRoute('annonce');
@@ -304,16 +310,18 @@ class AnnonceController extends AbstractActionController
                 BDD::getAnnonceTable($this->serviceLocator)->deleteAnnonce($id_annonce);
             
             }
-
-            // Redirect to list of albums
+            
            // return $this->redirect($this->serviceLocator)->toRoute('annonce');
             return $this->redirect($this->serviceLocator)->toRoute('utilisateur', array('action'=>'mesannonces'));
         }
 
-        return array(
+        $retour['id_annonce'] = $id_annonce;
+        $retour['annonce'] = BDD::getAnnonceTable($this->serviceLocator)->getAnnonce($id_annonce);
+      /*  return array(
             'id_annonce'    => $id_annonce,
             'annonce' => BDD::getAnnonceTable($this->serviceLocator)->getAnnonce($id_annonce)
-        );
+        );*/
+        return $retour;
     }
     
     
@@ -339,8 +347,12 @@ class AnnonceController extends AbstractActionController
     }
     
     public function deletefavorisAction() {
+        $auth = new AuthenticationService();
+        if(!$auth->hasIdentity()) {
+             return $this->redirect()->toRoute('home');
+        }
         $id_annonce = (int) $this->params()->fromRoute('id', 0);
-        BDD::getFavorisTable($this->serviceLocator)->deleteFavoris($id_annonce);
+        BDD::getFavorisTable($this->serviceLocator)->deleteFavoris($auth->getIdentity(), $id_annonce);
         return $this->redirect($this->serviceLocator)->toRoute('utilisateur', array('action'=>'mesfavoris'));
     }
     

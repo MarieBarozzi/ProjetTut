@@ -26,24 +26,31 @@ class UtilisateurController extends AbstractActionController
 {
     
     
-   public function indexAction(){
+   public function moncompteAction(){
         $auth = new AuthenticationService();
         if(!$auth->hasIdentity()){ //si l'utilisateur n'est pas connecté
             return $this->redirect()->toRoute('utilisateur', array(
                 'action' => 'connexion'
             ));
         }
-        return array('auth' => $auth);    
+        
+        $retour['co'] = true;
+        
+        //recuperer l'utilisateur correspondant au mail
+        $retour['utilisateur'] = BDD::getUtilisateurTable($this->serviceLocator)->getUtilisateur($auth->getIdentity());
+        
+        return $retour;
+      //  return array('auth' => $auth);    
     }
     
     public function inscriptionAction()
     {
         $form = new InscriptionForm();
         $form->get('rang')->setValue('membre');
-        
                        
         $form->get('id_dept')->setValueOptions(BDD::getSelecteurDepartement($this->serviceLocator));
         $form->get('submit')->setValue('Inscription'); //change le bouton "submit" en "inscription"
+        $form->get('mail')->setOptions(array('label', 'Email : '));
         
         $form->get('captcha')->getCaptcha()->setOptions(array(
             'imgUrl'=> $this->getRequest()->getBasePath() . "/img/captcha",
@@ -275,6 +282,50 @@ class UtilisateurController extends AbstractActionController
     }
 
 
+
+    public function editAction() {
+        $auth = new AuthenticationService();
+        if($auth->hasIdentity()) {
+            $retour['co'] = true;
+        }
+
+        try{
+          $utilisateur = BDD::getUtilisateurTable($this->serviceLocator)->getUtilisateur($auth->getIdentity());    
+        } catch (\Exception $ex) {
+            return $this->redirect()->toRoute('annonce', array(
+                'action' => 'index'
+           ));
+        }
+        
+        $form = new InscriptionForm(); 
+        $form->get('mail')->setValue($auth->getIdentity());
+        $form->get('id_dept')->setValueOptions(BDD::getSelecteurDepartement($this->serviceLocator));
+        $form->bind($utilisateur); //pré-remplit
+        $form->get('submit')->setAttribute('value', 'Edition');
+        $form->get('mail')->setAttribute('type', 'hidden');
+        $form->get('captcha')->getCaptcha()->setOptions(array(
+            'imgUrl'=> $this->getRequest()->getBasePath() . "/img/captcha",
+            'imgDir'=> $_SERVER['CONTEXT_DOCUMENT_ROOT'] . $this->getRequest()->getBasePath() . "/img/captcha/",
+            'font'=> $_SERVER['CONTEXT_DOCUMENT_ROOT'] . $this->getRequest()->getBasePath() . "/fonts/arial.ttf",
+        ));
+        
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $inscriptionFormValidator = new InscriptionFormValidator(); 
+            $form->setInputFilter($inscriptionFormValidator->getInputFilter());
+            $form->setData($request->getPost());
+            if($form->isValid()){
+                BDD::getAnnonceTable($this->serviceLocator)->saveUtilisateur($utilisateur);
+                
+            }     
+        }
+        
+        $retour['form'] = $form; 
+        return $retour;
+        
+    }
+
+
   
       //les petites affaires de l'utilisateurs 
           
@@ -286,11 +337,14 @@ class UtilisateurController extends AbstractActionController
                ));
             }
             
-            $retour['co'] = true; 
+           $param = array(); //est ce utile ici ? 
+           $retour['co'] = true; 
             
-            $annonces = BDD::getAnnonceTable($this->serviceLocator)->getAnnonceAuteur($auth->getIdentity());
+           $annonces = array();
+           $annoncesResultSet = BDD::getAnnonceTable($this->serviceLocator)->getAnnonceAuteur($auth->getIdentity(), true);
             $metaAnnonces = array();
-            foreach($annonces as $annonce) {
+            foreach($annoncesResultSet as $annonce) {
+                $annonces[$annonce->id_annonce] = $annonce;
                 $metaAnnonces[$annonce->id_annonce] = array(
                     'photo'=> BDD::getPhotoTable($this->serviceLocator)->getByIdAnnonce($annonce->id_annonce)->current(),
                     'departement' => BDD::getDepartementTable($this->serviceLocator)->getDepartement($annonce->id_dept),
@@ -298,8 +352,15 @@ class UtilisateurController extends AbstractActionController
                 );
             }
         
-            $retour['annonces'] = BDD::getAnnonceTable($this->serviceLocator)->getAnnonceAuteur($auth->getIdentity(), true);
-            $retour['meta'] = $metaAnnonces;   
+            $page = (int) urldecode($this->params()->fromRoute('page', 1));
+            $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($annonces));
+            $paginator->setCurrentPageNumber($page);
+            $paginator->setItemCountPerPage(10);
+        
+            $retour['pagination'] = $paginator; //contient les annonces
+       //   $retour['annonces'] = BDD::getAnnonceTable($this->serviceLocator)->getAnnonceAuteur($auth->getIdentity(), true);
+            $retour['meta'] = $metaAnnonces;  
+            $retour['param'] = array_filter($param); 
             return $retour;
         }
 
@@ -314,9 +375,10 @@ class UtilisateurController extends AbstractActionController
         
         $retour['co'] = true; 
         
-         $favoris = BDD::getFavorisTable($this->serviceLocator)->getByMail($auth->getIdentity());
-         $annonces = array();   
-         foreach($favoris as $fav) {
+        $param = array(); 
+        $favoris = BDD::getFavorisTable($this->serviceLocator)->getByMail($auth->getIdentity());
+        $annonces = array();   
+        foreach($favoris as $fav) {
              $id_annonce = $fav->id_annonce;
              $annonces[$id_annonce] = BDD::getAnnonceTable($this->serviceLocator)->getAnnonce($id_annonce);
              //$annonce = BDD::getAnnonceTable($this->serviceLocator)->getAnnonce($id_annonce);
@@ -330,21 +392,25 @@ class UtilisateurController extends AbstractActionController
                 );
           }
     
-        $retour['annonces'] = $annonces;
-        $retour['meta'] = $metaAnnonces;   
-        return $retour;
+       $page = (int) urldecode($this->params()->fromRoute('page', 1));
+       $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($annonces));
+       $paginator->setCurrentPageNumber($page);
+       $paginator->setItemCountPerPage(10);
+        
+       $retour['pagination'] = $paginator; //contient les annonces
+       //$retour['annonces'] = $annonces;
+       $retour['meta'] = $metaAnnonces;   
+       $retour['param'] = array_filter($param);
+       return $retour;
     }
 
-    public function messageAction() {
+    public function messageAction() { //sert elle a autre chose qu'à contacter un vendeur ??? 
         
         $auth = new AuthenticationService();
 
-        if(!$auth->hasIdentity())
-        {
-            return $this->redirect()->toRoute('utilisateur', array('action' => 'connexion'));
+        if($auth->hasIdentity()) { //n'est pas obligé d'être inscrit/co pour prendre contact (c'est aussi pour ça qu'il faut que le mail vienne du site)
+            $retour['co'] = true; 
         }
-
-        $retour['co'] = true;
 
         $form = new MessageForm();
 
@@ -385,18 +451,83 @@ class UtilisateurController extends AbstractActionController
             }
         }
     
-    return array('form' => $form);
+    $retour['form'] = $form;
+    return $retour; 
+    
+   // return array('form' => $form);
     }
 
-    public function mesRecherchesAction(){
+    public function mesrecherchesAction(){
         $auth = new AuthenticationService();
-
-        if(!$auth->hasIdentity())
-        {
+        if(!$auth->hasIdentity()){
             return $this->redirect()->toRoute('utilisateur', array('action' => 'connexion'));
         }
 
         $retour['co'] = true;
+        
+        $recherchesBDD = BDD::getRechercheTable($this->serviceLocator)->getByMail($auth->getIdentity()); //pas de date pour la recherche
+        
+        $param = array();        
+        $recherches = array();
+        foreach($recherchesBDD as $recherche){
+            $lib = ''; 
+            if($recherche->recherche != null) 
+               $lib .= 'Titre : '. $recherche->recherche . '<br>';
+            if($recherche->id_reg != null) 
+              $lib .= ' Région : ' . BDD::getRegionTable($this->serviceLocator)->getRegion($recherche->id_reg)->lib_reg . '<br>';
+            if($recherche->id_dept!= null) 
+              $lib .= ' Département : ' . BDD::getDepartementTable($this->serviceLocator)->getDepartement($recherche->id_dept)->lib_dept . '<br>';
+            if($recherche->id_cat != null) 
+              $lib .= ' Catégorie : ' . BDD::getCategorieTable($this->serviceLocator)->getCategorie($recherche->id_cat)->lib_cat . '<br>'; 
+            if($recherche->prixmin != null) 
+              $lib .= ' Prix min : ' . $recherche->prixmin . '<br>';
+            if($recherche->prixmax != null) 
+              $lib .= ' Prix max : ' . $recherche->prixmax . '<br>';
+            if($recherche->etat != null) 
+                if($recherche->etat == 0)
+                    $lib .= ' Etat : ' . 'tres mauvais' . '<br>';
+                if($recherche->etat == 1)
+                    $lib .= ' Etat : ' . 'mauvais' . '<br>';
+                if($recherche->etat == 2)
+                    $lib .= ' Etat : ' . 'bon' . '<br>';
+                if($recherche->etat == 3)
+                    $lib .= ' Etat : ' . 'excellent' . '<br>';
+                if($recherche->etat == 4)
+                    $lib .= ' Etat : ' . 'neuf' . '<br>';
+            if($recherche->type_annonce != null) 
+              $lib .= ' Type annonce : ' . $recherche->type_annonce;        
+            
+            $recherches[] = array('lib' => $lib, 'param'=>array_filter($recherche->getArrayCopy()));
+        }
+
+
+       $page = (int) urldecode($this->params()->fromRoute('page', 1));
+       $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($recherches));
+       $paginator->setCurrentPageNumber($page);
+       $paginator->setItemCountPerPage(10);
+        
+       $retour['pagination'] = $paginator; //contient les recherches
+       $retour['param'] = array_filter($param); //sert à quoi ??? 
+       
+     //   $retour['recherches'] = $recherches;
+        return $retour;
+    }
+
+    public function deleteRechercheAction(){
+        $auth = new AuthenticationService();
+        if(!$auth->hasIdentity()) {
+             return $this->redirect()->toRoute('home');
+        }
+        $id_rech = (int) $this->params()->fromRoute('id', 0);
+        try{
+            $recherche = BDD::getRechercheTable($this->serviceLocator)->getRecherche($id_rech);
+        }catch(exception $e){
+            return $this->redirect()->toRoute('home');    
+        }
+        if($auth->getIdentity() != $recherche->mail)
+            return $this->redirect()->toRoute('home');
+        BDD::getRechercheTable($this->serviceLocator)->deleteRecherche($id_rech);
+        return $this->redirect($this->serviceLocator)->toRoute('utilisateur', array('action'=>'mesrecherches'));
     }
 
     private function sendMessage($dest, $sujet, $corps){
