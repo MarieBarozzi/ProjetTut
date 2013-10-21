@@ -122,7 +122,7 @@ class InscriptionForm extends Form
                 'required' => 'required', 
             ), 
            'options' => array( 
-               /* 'label' => 'Email : ', */
+               'label' => 'Email : ', 
             ), 
         )); 
          

@@ -50,7 +50,6 @@ class UtilisateurController extends AbstractActionController
                        
         $form->get('id_dept')->setValueOptions(BDD::getSelecteurDepartement($this->serviceLocator));
         $form->get('submit')->setValue('Inscription'); //change le bouton "submit" en "inscription"
-        $form->get('mail')->setOptions(array('label', 'Email : '));
         
         $form->get('captcha')->getCaptcha()->setOptions(array(
             'imgUrl'=> $this->getRequest()->getBasePath() . "/img/captcha",
@@ -296,11 +295,12 @@ class UtilisateurController extends AbstractActionController
         }
         
         $form = new InscriptionForm(); 
-        $form->get('mail')->setValue($auth->getIdentity());
+      //  $form->get('mail')->setValue($auth->getIdentity());
+        $form->remove('mail');
         $form->get('id_dept')->setValueOptions(BDD::getSelecteurDepartement($this->serviceLocator));
         $form->bind($utilisateur); //pré-remplit
         $form->get('submit')->setAttribute('value', 'Edition');
-        $form->get('mail')->setAttribute('type', 'hidden');
+        
         $form->get('captcha')->getCaptcha()->setOptions(array(
             'imgUrl'=> $this->getRequest()->getBasePath() . "/img/captcha",
             'imgDir'=> $_SERVER['CONTEXT_DOCUMENT_ROOT'] . $this->getRequest()->getBasePath() . "/img/captcha/",
@@ -310,11 +310,15 @@ class UtilisateurController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $inscriptionFormValidator = new InscriptionFormValidator(); 
+            $inscriptionFormValidator->setDbAdapter($this->serviceLocator->get('Zend\Db\Adapter\Adapter'));
+            $inscriptionFormValidator->getInputFilter()->remove('mail');
             $form->setInputFilter($inscriptionFormValidator->getInputFilter());
             $form->setData($request->getPost());
             if($form->isValid()){
-                BDD::getAnnonceTable($this->serviceLocator)->saveUtilisateur($utilisateur);
-                
+                $utilisateur->mail = $auth->getIdentity();
+                $utilisateur->mdp = sha1($utilisateur->mdp);
+                BDD::getUtilisateurTable($this->serviceLocator)->saveUtilisateur($utilisateur);
+                return $this->redirect()->toRoute('utilisateur', array('action' => 'moncompte'));
             }     
         }
         

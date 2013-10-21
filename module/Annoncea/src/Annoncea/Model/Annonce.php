@@ -51,49 +51,71 @@ class Annonce
 
             $pertinenceTotale = 100;
             
-            $coeffLevDesc = 1; 
-            $coeffSimDesc = 0;
-            $coeffLevTitre = 1; 
+            $coeffLevDesc = 0; 
+            $coeffSimDesc = 1;
+            $coeffLevTitre = 0; 
             $coeffSimTitre = 1;
 
             if($champRecherche != null) {
                 $pertinenceTotale = 0;
+                $pertinenceTitre = 0;
                 $pertinenceDesc = 0;
                 $champRecherche = explode(" ", $champRecherche);
                 
+                $motsTitre = explode(" ", $this->titre);
+                $motsDesc = explode(" ", $this->descr);
+                
                 foreach ($champRecherche as $recherche) {
-                //recherche dans le titre
-                $diffTitre = levenshtein($this->titre, $recherche);
-                $levTitre = $diffTitre - abs(strlen($this->titre) - strlen($recherche));
-                $levTitre = (1 - ($levTitre / (float)min(strlen($this->titre), strlen($recherche))))*100;              
-                similar_text($this->titre, $recherche, $simTitre);
-                
-                echo 'diffTitre : ' . $diffTitre;
-                echo 'levTitre : ' . $levTitre;
-                
-                
-                $pertinenceTitre = ($simTitre*$coeffSimTitre + $levTitre*$coeffLevTitre) / ($coeffSimTitre + $coeffLevTitre);
-                echo 'pertinence titre : ' . $pertinenceTitre;
+                    //recherche dans le titre
+                    $maxLev = 0;
+                    $maxSim = 0;
+                    
+                    foreach ($motsTitre as $mot){
+                        if($maxLev > 90 && $maxSim > 90)
+                            break;
+                        $diff= levenshtein($mot, $recherche);
+                        $lev = $diff - abs(strlen($mot) - strlen($recherche));
+                        $lev = (1 - ($lev / (float)min(strlen($mot), strlen($recherche))))*100;              
+                        similar_text($mot, $recherche, $sim);
+                        if($lev > $maxLev){
+                            $maxLev = $lev;
+                        }
+                        if($sim > $maxSim){
+                            $maxSim = $sim;
+                        }
+                    }
+                    
+                      
+                    $pertinenceTitre = ($maxSim*$coeffSimTitre + $maxLev*$coeffLevTitre) / ($coeffSimTitre + $coeffLevTitre);
                
                 if(!$titreUniquement){
                     //recherche dans la description 
-                    $diffDesc = levenshtein($this->descr, $recherche);
-                    $levDesc = $diffDesc - abs(strlen($this->descr) - strlen($recherche));
-                    $levDesc  = (1 - ($levDesc / (float)min(strlen($this->descr), strlen($recherche))))*100;              
-                    similar_text($this->descr, $recherche, $simDesc);
+                    $maxLev = 0;
+                    $maxSim = 0;
                     
-                    echo 'diffDesc : ' . $diffDesc; 
-                    echo 'levDesc : ' . $levDesc; 
+                    foreach ($motsDesc as $mot){
+                        if($maxLev > 90 && $maxSim > 90)
+                            break;
+                        $diff= levenshtein($mot, $recherche);
+                        $lev = $diff - abs(strlen($mot) - strlen($recherche));
+                        $lev = (1 - ($lev / (float)min(strlen($mot), strlen($recherche))))*100;              
+                        similar_text($mot, $recherche, $sim);
+                        if($lev > $maxLev){
+                            $maxLev = $lev;
+                        }
+                        if($sim > $maxSim){
+                            $maxSim = $sim;
+                        }
+                    }
           
-                    $pertinenceDesc = ($simDesc*$coeffSimDesc + $levDesc*$coeffLevDesc) / ($coeffLevDesc + $coeffSimDesc);
-                    echo 'pertinence desc : ' . $pertinenceDesc;
+                    $pertinenceDesc = ($maxSim*$coeffSimDesc + $maxLev*$coeffLevDesc) / ($coeffLevDesc + $coeffSimDesc);
+                    
                 }
                 
                 $pertinenceTotale += max($pertinenceDesc, $pertinenceTitre);
                 }
                 
                 $pertinenceTotale /= count($champRecherche);
-                echo 'pertinence totale : ' . $pertinenceTotale;
             }
         
         return ($pertinenceTotale > 70); 
