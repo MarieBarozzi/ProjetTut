@@ -18,8 +18,8 @@ echo"
 <tr>
     <td><?php echo $recherche['lib'];?></td>
     <td>
-    <a href="<?php echo $this->url('annonce', array_merge(array('action'=>'index'),$recherche['param']));?>">Voir </a>
-    <a href="<?php echo $this->url('utilisateur', array('action'=>'deleterecherche', 'id'=>$recherche['param']['id_rech']));?>"> Supprimer cette recherche</a>
+    <a class="btn btn-info" href="<?php echo $this->url('annonce', array_merge(array('action'=>'index'),$recherche['param']));?>"><i class="icon-black icon-eye-open"></i> Voir </a>
+    <a class="btn btn-danger" href="<?php echo $this->url('utilisateur', array('action'=>'deleterecherche', 'id'=>$recherche['param']['id_rech']));?>"><i class="icon-black icon-remove"></i> Supprimer cette recherche</a>
     </td>
     
 </tr>
