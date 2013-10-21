@@ -12,16 +12,19 @@ class InscriptionForm extends Form
         // we want to ignore the name passed
         parent::__construct('inscription');
         $this->setAttribute('method', 'post');
+
         $this->add(array(
             'name' => 'nom',
             'type' => 'Text',
              'options' => array(
                 'label' => 'Nom : ',
+                'class'=> 'control-label',
             ),
             'attributes' => array( 
                 'required' => 'required', 
              ),
         ));
+
         $this->add(array(
             'name' => 'prenom',
             'type' => 'Text',
