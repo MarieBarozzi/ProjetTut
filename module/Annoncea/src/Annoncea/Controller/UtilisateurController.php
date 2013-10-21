@@ -190,7 +190,9 @@ class UtilisateurController extends AbstractActionController
                                 <body>
                                     <table id="page-table">
                                         <tr>
-                                            <td id="page-td">
+                                            <td id="page-td"> "Annoncea" et nous vous en remercions.
+                                                    </p>
+
                                             <div id="global">
                                                 <div>
                                                     <p>
@@ -198,9 +200,7 @@ class UtilisateurController extends AbstractActionController
                                                     </p>
 
                                                     <p>
-                                                        Vous venez de vous inscrire sur notre site "Annoncea" et nous vous en remercions.
-                                                    </p>
-
+                                                        Vous venez de vous inscrire sur notre site
                                                     <p>
                                                         Nous espérons que vous pourrez trouver votre bonheur parmis les diverses annonces présentes sur notre site et que vous dénichiez la perle rare.
                                                     </p>
@@ -439,9 +439,14 @@ class UtilisateurController extends AbstractActionController
 				$contenu = '<p> Un de nos Utilisateur souhaite prendre contact avec vous au sujet d\'une de vos annonces ('.$annonce->titre.'). Voici son message : </p></ br>
 							<p>'.$form->get('contenu')->getValue().'</p>
 							</ br>
-							</ br>
-							Veuillez reprendre contact avec lui via son adresse mail que voici : '.$auth->getIdentity();
-				
+							</ br>';
+
+                if($auth->getIdentity() != null){   
+					$contenu.='Veuillez reprendre contact avec lui via son adresse mail que voici : '.$auth->getIdentity();
+                }
+
+                $contenu.='<p>Ce message vous a été envoyé de façon automatique. Il n\'est pas nécessaire d\'y répondre, contacter votre interlocuteur directement à parmis du moyen de contact qu\'il vous a fournit.</p>';	
+
                 $this->sendMessage($email, $titre, $contenu);
 			
 				return $this->redirect()->toRoute('annonce', array('action'=>'annonce','id'=>$annonce->id_annonce));
