@@ -192,11 +192,9 @@ class UtilisateurController extends AbstractActionController
                                         <tr>
                                             <td id="page-td">
                                             <div id="global">
-                                                <img src="../../../../../public//img/banniere.png" />
-
                                                 <div>
                                                     <p>
-                                                        Bonjour "fonction nom/prenom",
+                                                        Bonjour '.$utilisateur->nom.' '.$utilisateur->prenom.',
                                                     </p>
 
                                                     <p>
@@ -204,7 +202,7 @@ class UtilisateurController extends AbstractActionController
                                                     </p>
 
                                                     <p>
-                                                        Nous espérons que vous puissiez trouver votre bonheur parmit les diverses annonces présentes sur notre site et que vous dénichiez de la perle rare.
+                                                        Nous espérons que vous pourrez trouver votre bonheur parmis les diverses annonces présentes sur notre site et que vous dénichiez la perle rare.
                                                     </p>
 
                                                     <p>
@@ -215,7 +213,7 @@ class UtilisateurController extends AbstractActionController
                                                         L\'équipe d\'Annoncea.
                                                     </p>
 
-                                                    <a href="#" class="myButton">Acceder à Annoncea</a>
+                                                    <a href="http://localhost/Annoncea/ProjetTut/public/" class="myButton">Acceder à Annoncea</a>
                                                 </div>
                                             </div><!--#global--></td>
                                         </tr>
