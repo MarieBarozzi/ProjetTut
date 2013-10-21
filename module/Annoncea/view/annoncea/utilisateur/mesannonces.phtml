@@ -37,10 +37,10 @@ echo"
     <td><?php echo $this->escapeHtml($meta[$annonce->id_annonce]['departement']->lib_dept);?></td>
     
     <td>
-        <a href="<?php echo $this->url('annonce',
-            array('action'=>'edit', 'id' => $annonce->id_annonce));?>">Modifier</a>
-        <a href="<?php echo $this->url('annonce',
-            array('action'=>'delete', 'id' => $annonce->id_annonce));?>">Supprimer</a>
+        <a class="btn btn-primary" href="<?php echo $this->url('annonce',
+            array('action'=>'edit', 'id' => $annonce->id_annonce));?>"><i class="icon-black icon-edit"></i> Modifier</a>
+        <a class="btn btn-danger" href="<?php echo $this->url('annonce',
+            array('action'=>'delete', 'id' => $annonce->id_annonce));?>"><i class="icon-black icon-remove"></i> Supprimer</a>
     </td>
 </tr>
 <?php endforeach; ?>
