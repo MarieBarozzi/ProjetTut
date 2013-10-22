@@ -1,0 +1,17 @@
+<?php
+
+$title = 'Récupérer un Nouveau mot de Passe';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+	<p> 
+		<b>L'adresse mail doit être celle de votre compte.</b><br/>
+	</p>
+
+<?php
+
+$form = $this->form; 
+$form->setAttribute('recup', $this->url('utilisateur', array('action' => 'recup')));
+$form->prepare();
+
+echo $this->form($form);

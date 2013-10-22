@@ -8,6 +8,8 @@ use Annoncea\Form\ConnexionForm;
 use Annoncea\Form\ConnexionFormValidator;
 use Annoncea\Form\MessageForm;
 use Annoncea\Form\MessageFormValidator;
+use Annoncea\Form\RecupForm;
+use Annoncea\Form\RecupFormValidator;
 use Annoncea\Model\Utilisateur;
 use Annoncea\Model\Annonce;
 use Annoncea\Model\BaseAnnoncea as BDD;
@@ -564,6 +566,49 @@ class UtilisateurController extends AbstractActionController
         return $this->redirect($this->serviceLocator)->toRoute('utilisateur', array('action'=>'mesrecherches'));
     }
 
+    public function recupAction(){
+
+        $form = new RecupForm();
+        $retour=array('form' => $form);
+        
+        $form->get('mail');
+        $form->get('submit')->setValue('Envoyer un nouveau mot de Passe');
+
+        $authAdapter = $this->serviceLocator->get('AuthAdapter');
+
+        $request = $this->getRequest();//récupère la requete pour voir si c'est la 1ere fois ou pas qu'on vient sur la page
+        if ($request->isPost()) {//si c'est pas la 1ere fois
+            $connexionFormValidator = new RecupFormValidator();
+            $form->setInputFilter($connexionFormValidator->getInputFilter());
+            $form->setData($request->getPost()); //on récupère ce qu'il y a dans la requete et on le met dans le formulaire
+            
+            if ($form->isValid()) { //si il passe le validateur (verif que c'est bien un email etc...)
+                       
+            $mail = $form->get('mail')->getValue('mail');
+
+            $sujet = 'Nouveau Mot de Passe';
+
+            $mdp= $this->genRandomString();
+
+            $message ='<p> Bonjour, <br/> Vous nous avez demandé le renvoi d\'un nouveau mot de passe le voici : <br /> 
+            '.$mdp.'<br />
+            Pensez à modifier à votre guise votre mot de passe via l\'onglet "Mon Compte", <br />
+            Nous espérons revoir sous peu sur notre site, <br />
+            Cordialement, <br />
+            L\'équipe d\'Annoncea. </p>';
+
+            $this->sendMessage($mail,$sujet,$message);
+    
+            $mec = BDD::getUtilisateurTable($this->serviceLocator)->getUtilisateur($form->get('mail')->getValue('mail'));
+            $mec->mdp =  sha1($mdp);
+            BDD::getUtilisateurTable($this->serviceLocator)->saveUtilisateur($mec);
+
+            return  $this->redirect()->toRoute('utilisateur', array('action' => 'connexion'));
+            }
+        }
+        return $retour;
+    }
+
     private function sendMessage($dest, $sujet, $corps){
         $transport = $this->serviceLocator->get('MailTransport');
         
@@ -579,5 +624,15 @@ class UtilisateurController extends AbstractActionController
                 ->setBody($body); 
 
         $transport->send($message);
+    }
+
+    function genRandomString($length = 10) {
+         $characters = '0123456789abcdefghijklmnopqrstuvwxyz'; 
+         $string = ''; 
+
+         for ($p = 0; $p < $length; $p++) { 
+            $string .= $characters[mt_rand(0, strlen($characters))]; 
+        } 
+        return $string; 
     }
 }
