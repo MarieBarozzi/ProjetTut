@@ -327,7 +327,34 @@ class UtilisateurController extends AbstractActionController
         
     }
 
+    public function deleteAction() {
+        
+        $auth = new AuthenticationService();
+        if($auth->hasIdentity()) {
+            $retour['co'] = true;
+        }
+           
+        $request = $this->getRequest();
+        if ($request->isPost()) {            
+            $del = $request->getPost('del', 'Non');
+            if ($del == 'Oui') {
+                $mail = $auth->getIdentity();
+                BDD::getUtilisateurTable($this->serviceLocator)->deleteUtilisateur($mail);
+                $retour['co'] = false;
 
+            }
+            
+           // return $this->redirect($this->serviceLocator)->toRoute('annonce');
+            return $this->redirect($this->serviceLocator)->toRoute('annonce', array('action'=>'index'));
+        }
+
+        $retour['mail'] = $auth->getIdentity();
+        $retour['utilisateur'] = BDD::getUtilisateurTable($this->serviceLocator)->getUtilisateur($auth->getIdentity());
+    
+        return $retour;
+    }
+    
+            
   
       //les petites affaires de l'utilisateurs 
           

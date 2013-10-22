@@ -1,0 +1,17 @@
+<?php
+$title = 'Supprimer votre compte';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<p>Etes-vous sûr de vouloir supprimer votre compte ? </p>
+<?php
+$url = $this->url('utilisateur', array('action' => 'delete'));
+?>
+<form action="<?php echo $url; ?>" method="post">
+<div>
+    <input type="hidden" name="mail" value="<?php echo $utilisateur->mail; ?>" />
+    <input type="submit" name="del" value="Oui" />
+    <input type="submit" name="del" value="Non" />
+</div>
+</form>
