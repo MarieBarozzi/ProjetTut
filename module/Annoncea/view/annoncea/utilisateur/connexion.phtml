@@ -12,6 +12,6 @@ echo $this->form($form);
 if(isset($this->erreur)){
     echo "<p class='alert alert-error'>" . $this->erreur . "</p>";
     if($this->erreur == "Email ou mot de passe incorrect"){
-    	echo "<a class ='btn btn-info' href=".$this->url('utilisateur', array('action' => 'recup'))."> <i class ='icon-black icon-share-alt'></i> Mot de Passe Oublié</a>";
+    	echo "<a class ='btn btn-info' href=".$this->url('utilisateur', array('action' => 'recup'))."> <i class ='icon-black icon-share-alt'></i> Mot de passe oublié</a>";
     }
 }

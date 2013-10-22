@@ -387,7 +387,7 @@ class UtilisateurController extends AbstractActionController
             $page = (int) urldecode($this->params()->fromRoute('page', 1));
             $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($annonces));
             $paginator->setCurrentPageNumber($page);
-            $paginator->setItemCountPerPage(10);
+            $paginator->setItemCountPerPage(3);
         
             $retour['pagination'] = $paginator; //contient les annonces
        //   $retour['annonces'] = BDD::getAnnonceTable($this->serviceLocator)->getAnnonceAuteur($auth->getIdentity(), true);
@@ -427,7 +427,7 @@ class UtilisateurController extends AbstractActionController
        $page = (int) urldecode($this->params()->fromRoute('page', 1));
        $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($annonces));
        $paginator->setCurrentPageNumber($page);
-       $paginator->setItemCountPerPage(10);
+       $paginator->setItemCountPerPage(3);
         
        $retour['pagination'] = $paginator; //contient les annonces
        //$retour['annonces'] = $annonces;
@@ -543,7 +543,7 @@ class UtilisateurController extends AbstractActionController
        $page = (int) urldecode($this->params()->fromRoute('page', 1));
        $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\ArrayAdapter($recherches));
        $paginator->setCurrentPageNumber($page);
-       $paginator->setItemCountPerPage(10);
+       $paginator->setItemCountPerPage(3);
         
        $retour['pagination'] = $paginator; //contient les recherches
        $retour['param'] = array_filter($param); //sert à quoi ??? 
@@ -575,7 +575,7 @@ class UtilisateurController extends AbstractActionController
         $retour=array('form' => $form);
         
         $form->get('mail');
-        $form->get('submit')->setValue('Envoyer un nouveau mot de Passe');
+        $form->get('submit')->setValue('Envoyer un nouveau mot de passe');
 
         $authAdapter = $this->serviceLocator->get('AuthAdapter');
 
@@ -590,14 +590,14 @@ class UtilisateurController extends AbstractActionController
             try{       
                 $mail = $form->get('mail')->getValue('mail');
 
-                $sujet = 'Nouveau Mot de Passe';
+                $sujet = 'Nouveau mot de passe';
 
                 $mdp= $this->genRandomString();
 
-                $message ='<p> Bonjour, <br/> Vous nous avez demandé le renvoi d\'un nouveau mot de passe le voici : <br /> 
+                $message ='<p> Bonjour, <br/> Vous nous avez demandé le renvoi d\'un nouveau mot de passe, le voici : <br /> 
                 '.$mdp.'<br />
                 Pensez à modifier à votre guise votre mot de passe via l\'onglet "Mon Compte", <br />
-                Nous espérons revoir sous peu sur notre site, <br />
+                Nous espérons vous revoir sous peu sur notre site, <br />
                 Cordialement, <br />
                 L\'équipe d\'Annoncea. </p>';
 
