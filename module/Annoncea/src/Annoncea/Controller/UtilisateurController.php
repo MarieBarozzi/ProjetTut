@@ -583,26 +583,30 @@ class UtilisateurController extends AbstractActionController
             $form->setData($request->getPost()); //on récupère ce qu'il y a dans la requete et on le met dans le formulaire
             
             if ($form->isValid()) { //si il passe le validateur (verif que c'est bien un email etc...)
-                       
-            $mail = $form->get('mail')->getValue('mail');
+                
+            try{       
+                $mail = $form->get('mail')->getValue('mail');
 
-            $sujet = 'Nouveau Mot de Passe';
+                $sujet = 'Nouveau Mot de Passe';
 
-            $mdp= $this->genRandomString();
+                $mdp= $this->genRandomString();
 
-            $message ='<p> Bonjour, <br/> Vous nous avez demandé le renvoi d\'un nouveau mot de passe le voici : <br /> 
-            '.$mdp.'<br />
-            Pensez à modifier à votre guise votre mot de passe via l\'onglet "Mon Compte", <br />
-            Nous espérons revoir sous peu sur notre site, <br />
-            Cordialement, <br />
-            L\'équipe d\'Annoncea. </p>';
+                $message ='<p> Bonjour, <br/> Vous nous avez demandé le renvoi d\'un nouveau mot de passe le voici : <br /> 
+                '.$mdp.'<br />
+                Pensez à modifier à votre guise votre mot de passe via l\'onglet "Mon Compte", <br />
+                Nous espérons revoir sous peu sur notre site, <br />
+                Cordialement, <br />
+                L\'équipe d\'Annoncea. </p>';
 
-            $this->sendMessage($mail,$sujet,$message);
-    
-            $mec = BDD::getUtilisateurTable($this->serviceLocator)->getUtilisateur($form->get('mail')->getValue('mail'));
-            $mec->mdp =  sha1($mdp);
-            BDD::getUtilisateurTable($this->serviceLocator)->saveUtilisateur($mec);
+                $mec = BDD::getUtilisateurTable($this->serviceLocator)->getUtilisateur($form->get('mail')->getValue('mail'));
+                $this->sendMessage($mail,$sujet,$message);
+                $mec->mdp =  sha1($mdp);
+                BDD::getUtilisateurTable($this->serviceLocator)->saveUtilisateur($mec);
 
+            }catch (\Exception $ex){
+                $retour['erreur'] = 'Email Incorrect';
+                return $retour;
+            }
             return  $this->redirect()->toRoute('utilisateur', array('action' => 'connexion'));
             }
         }

@@ -15,3 +15,7 @@ $form->setAttribute('recup', $this->url('utilisateur', array('action' => 'recup'
 $form->prepare();
 
 echo $this->form($form);
+
+if(isset($this->erreur)){
+    echo "<p class='alert alert-error'>" . $this->erreur . "</p>";
+}
