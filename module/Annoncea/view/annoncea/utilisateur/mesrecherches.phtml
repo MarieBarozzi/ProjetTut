@@ -5,7 +5,7 @@ $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 <?php if($pagination->getTotalItemCount() == 0)
-        echo "Vous n'avez encore aucune recherche enregistrée";
+        echo "<div class=\"alert alert-info\"> Vous n'avez encore aucune recherche enregistrée</div>";
     else 
 echo"
 <table class=\"table\">

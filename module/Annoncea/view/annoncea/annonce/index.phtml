@@ -25,7 +25,13 @@ $this->headTitle($title);
     ."\">Enregistrer ma recherche</a>";?>
 </br>
 </br>
-<table class="table">
+
+
+<?php if($pagination->getTotalItemCount() == 0)
+        echo "<div class=\"alert alert-info\"> Aucune annonce ne correspond à votre recherche </div>";
+    else 
+echo"
+<table class=\"table\">
 <tr>
     <th>Date</th>
     <th>Photo</th>
@@ -33,7 +39,7 @@ $this->headTitle($title);
     <th>Prix</th>
     <th>Catégorie</th>
     <th>Département</th>
-</tr>
+</tr>"?>
 
 <?php foreach ($pagination as $annonce) : ?>
 <tr class="tableSurvol" onclick="document.location='<?php echo $this->url('annonce',array('action'=>'annonce', 'id' => $annonce->id_annonce));?>'">

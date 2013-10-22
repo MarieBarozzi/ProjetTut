@@ -16,8 +16,8 @@ class RechercheForm extends Form
 		$this->add(array(
 			'name' => 'recherche',
 			'type' => 'Text',
-			'options' => array(
-                'label' => 'Titre : ',
+			'attributes' => array(
+                'placeholder' => 'Entrez votre recherche',
             ),
 		));
 		
