@@ -395,7 +395,6 @@ class AnnonceController extends AbstractActionController
         return $retour;
     }
 
- //public function filtrageStrict($prixmin, $prixmax, $id_cat, $id_dept, $type_annonce, $id_reg, $etat) {
     private function prevenirInteresses($annonce){
         $recherches = BDD::getRechercheTable($this->serviceLocator)->fetchAll();
         foreach($recherches as $recherche){
@@ -404,10 +403,10 @@ class AnnonceController extends AbstractActionController
                     $dest = $recherche->mail; 
                     $sujet = "Une annonce correspond à votre recherche"; 
                     //Quelqu’un a ajouté une annonce qui pourrait vous intéresser
-                    $corps = "<p>Un vendeur a déposé une annonce intitulée ".$annonce->titre."</p>";
-                    //et nous pensons que celà pourrait vous interesser 
+                    $corps = "<p>Un vendeur a déposé une annonce intitulée ".$annonce->titre."</p>"
+                    . "<p> et nous pensons que celà pourrait vous interesser <br>" . 
                     //lien vers l'annonce 
-                    //vous pouvez le contacter à cette adresse 
+                    "<p> vous pouvez le contacter à cette adresse : ". $annonce->mail;
                     $this->sendMessage($dest, $sujet, $corps);
                 }
                 

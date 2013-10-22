@@ -6,7 +6,7 @@ $this->headTitle($title);
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 
 <br>
-<?php echo $this->escapeHtml($annonce->date_modif);?>   
+<?php echo $this->escapeHtml($annonce->date_modif);?>  
 <br>
 <?php
         if($meta[$annonce->id_annonce]['photo']) {
@@ -30,7 +30,7 @@ $this->headTitle($title);
 
 <a class="btn" href="<?php echo $this->url('annonce', array('action'=>'favoris', 'id' => $annonce->id_annonce));?>"> <i class="icon-black icon-star"></i> Mettre en favoris</a>
 
-<a class="btn" href="<?php echo $this->url('utilisateur', array('action'=>'message', 'id' => $annonce->id_annonce));?>"> <i class="icon-black icon-envelope"></i> Envoyer un message</a>
+<a class="btn" href="<?php echo $this->url('utilisateur', array('action'=>'message', 'id' => $annonce->id_annonce));?>"> <i class="icon-black icon-envelope"></i> Contacter le vendeur</a>
 </br>
 </br>
 

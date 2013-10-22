@@ -191,27 +191,28 @@ class UtilisateurController extends AbstractActionController
                                 <body>
                                     <table id="page-table">
                                         <tr>
-                                            <td id="page-td"> "Annoncea" et nous vous en remercions.
-                                                    </p>
-
                                             <div id="global">
                                                 <div>
                                                     <p>
-                                                        Bonjour '.$utilisateur->nom.' '.$utilisateur->prenom.',
+                                                        Bonjour '.$utilisateur->prenom.' '.$utilisateur->nom.',
+                                                        <br>
                                                     </p>
 
                                                     <p>
-                                                        Vous venez de vous inscrire sur notre site
+                                                        Vous venez de vous inscrire sur notre site, et nous vous en remercions.
                                                     <p>
-                                                        Nous espérons que vous pourrez trouver votre bonheur parmis les diverses annonces présentes sur notre site et que vous dénichiez la perle rare.
+                                                        Nous espérons que vous trouverez votre bonheur parmis les nombreuses annonces présentes sur notre site !
+                                                        <br>
                                                     </p>
 
                                                     <p>
                                                         Merci de votre confiance et à bientôt sur "Annoncea".
+                                                        <br>
                                                     </p>
 
                                                     <p>
                                                         L\'équipe d\'Annoncea.
+                                                        <br>
                                                     </p>
 
                                                     <a href="http://localhost/Annoncea/ProjetTut/public/" class="myButton">Acceder à Annoncea</a>
@@ -469,16 +470,18 @@ class UtilisateurController extends AbstractActionController
 
                 $email = $annonce->mail_auteur;
 				$titre = $form->get('titre')->getValue();
-				$contenu = '<p> Un de nos Utilisateur souhaite prendre contact avec vous au sujet d\'une de vos annonces ('.$annonce->titre.'). Voici son message : </p></ br>
+				$contenu = '<p> Un de nos utilisateur souhaite prendre contact avec vous au sujet d\'une de vos annonces ('.$annonce->titre.'). <br> Voici son message : </p></ br>
 							<p>'.$form->get('contenu')->getValue().'</p>
 							</ br>
 							</ br>';
 
                 if($auth->getIdentity() != null){   
-					$contenu.='Veuillez reprendre contact avec lui via son adresse mail que voici : '.$auth->getIdentity();
+					$contenu.='Veuillez reprendre contact avec lui via son adresse mail que voici : '.$auth->getIdentity() .' 
+                   <br> ou par téléphone au : ' . BDD::getUtilisateurTable($this->serviceLocator)->getUtilisateur($auth->getIdentity())->tel;
+                } else {
+                    $contenu.='<p>Ce message vous a été envoyé de façon automatique. Il n\'est pas nécessaire d\'y répondre, contacter votre interlocuteur directement à partir du moyen de contact qu\'il vous a fournit.</p>';    
                 }
 
-                $contenu.='<p>Ce message vous a été envoyé de façon automatique. Il n\'est pas nécessaire d\'y répondre, contacter votre interlocuteur directement à parmis du moyen de contact qu\'il vous a fournit.</p>';	
 
                 $this->sendMessage($email, $titre, $contenu);
 			
