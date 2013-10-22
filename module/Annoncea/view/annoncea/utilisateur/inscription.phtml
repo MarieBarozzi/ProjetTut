@@ -5,7 +5,7 @@ $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 
-<p id="infos"> 
+      <?php  echo "<div class=\"alert alert-info\"> 
 <b>LA CRÉATION DE VOTRE COMPTE PERSONNEL EST GRATUITE</b>
 <br>
 Ce service vous permet de déposer vos propres annonces et vous permet de les gérer en toute simplicité. <br>
@@ -13,7 +13,7 @@ Ce service vous permet de déposer vos propres annonces et vous permet de les g�
 - mettre les annonces qui vous intéressent en favoris afin de pouvoir les consulter aisément. <br>
 - enregistrer vos recherches afin d’être averti lorsqu’un produit correspondant est ajouté sur le site ! <br>
 </p>
-
+</div>"; ?>
 
 <?php
 $form = $this->form;
