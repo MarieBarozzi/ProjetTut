@@ -57,13 +57,10 @@ class Annonce
                 $pertinenceDesc = 0;
                 
                 $titre = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $this->titre)));
-                
                 $desc = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $this->descr)));
-                
                 $rech = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $champRecherche)));
                 
                 $motsRecherche = explode(" ", $rech);
-                
                 $motsTitre = explode(" ", $titre);
                 $motsDesc = explode(" ", $desc);
                 
