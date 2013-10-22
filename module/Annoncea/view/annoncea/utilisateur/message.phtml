@@ -5,7 +5,11 @@ $this->headTitle($title);
 echo $this->message;
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
+	<p id="infos"> 
+		<b>Le mail est envoyé depuis notre adresse propre, si vous n'êtes pas inscrit ou non connecté penser à mettre un moyen de contact pour que votre interlocuteur puisse vous joindre directement.</b><br/>
+	</p>
 <?php
+
 	$form = $this->form;
 
 	$form->setAttribute('message', $this->url('utilisateur', array('action' => 'message')));

@@ -11,6 +11,7 @@ class ConnexionForm extends Form
         // we want to ignore the name passed
         parent::__construct('connexion'); //appele le constructeur de Form
         $this->setAttribute('method', 'post');
+
              $this->add(array( 
             'name' => 'mail', 
             'type' => 'Email', 

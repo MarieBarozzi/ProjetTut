@@ -18,10 +18,10 @@ class InscriptionForm extends Form
             'type' => 'Text',
              'options' => array(
                 'label' => 'Nom : ',
-                'class'=> 'control-label',
             ),
             'attributes' => array( 
-                'required' => 'required', 
+                'required' => 'required',
+            /*    'PlaceHolder' => 'Inserer votre Nom', */
              ),
         ));
 
