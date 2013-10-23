@@ -33,7 +33,8 @@ class AnnonceController extends AbstractActionController
         $auth = new AuthenticationService();
         if($auth->hasIdentity()) {
             $retour['co'] = true;
-        }   
+        } 
+       
         
         $form = new RechercheForm();
         $form->get('submit')->setValue('Chercher');
@@ -110,7 +111,7 @@ class AnnonceController extends AbstractActionController
         if($auth->hasIdentity()) {
             $retour['co'] = true;
         }
-        
+ 
         //si il n'y a pas d'id d'annonce dans url
         $id_annonce = (int) $this->params()->fromRoute('id', 0);
         if (!$id_annonce) {
@@ -178,15 +179,13 @@ class AnnonceController extends AbstractActionController
                 $annonce = new Annonce();
                 $annonce->exchangeArray($form->getData()); //remplit l'objet à partir d'un tableau qu'on récupère du formulaire            
                 $annonce->id_reg = BDD::getDepartementTable($this->serviceLocator)->getDepartement($annonce->id_dept)->id_reg;
-              
-                $id_annonce = BDD::getAnnonceTable($this->serviceLocator)->saveAnnonce($annonce);
+                $annonce->id_annonce = BDD::getAnnonceTable($this->serviceLocator)->saveAnnonce($annonce);
                 
-                 
                 //pour les images  
                 $fichiers = $form->get('upload')->getValue();  
                 foreach($fichiers as $fichier){
                     $photo = new Photo(); 
-                    $photo->id_annonce = $id_annonce;
+                    $photo->id_annonce = $annonce->id_annonce;
                     $id_photo = BDD::getPhotoTable($this->serviceLocator)->savePhoto($photo);
                     
                     $adapter = new \Zend\File\Transfer\Adapter\Http(); 
@@ -403,10 +402,14 @@ class AnnonceController extends AbstractActionController
                     $dest = $recherche->mail; 
                     $sujet = "Une annonce correspond à votre recherche"; 
                     //Quelqu’un a ajouté une annonce qui pourrait vous intéresser
-                    $corps = "<p>Un vendeur a déposé une annonce intitulée ".$annonce->titre."</p>"
-                    . "<p> et nous pensons que celà pourrait vous interesser <br>" . 
-                    //lien vers l'annonce 
-                    "<p> vous pouvez le contacter à cette adresse : ". $annonce->mail;
+                    $corps = "<p>Un vendeur a déposé une annonce intitulée : "
+                    ."<a href=\"http://".$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_BASE']."annonce/annonce/".$annonce->id_annonce."\"> ".$annonce->titre." </a> 
+                    </p>
+                    <p> et nous pensons que cela pourrait vous interesser. <br> 
+                    <p> Vous pouvez le contacter à cette adresse : ". $annonce->mail_auteur ."<p>"
+                    . "<p> Si vous n'êtes plus interessé par ce type d'objet, vous pouvez supprimer cette recherche depuis la page suivante : 
+                    <a href=\"http://".$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_BASE']."utilisateur/mesrecherches \"> Mes recherches </a>";                 
+                    
                     $this->sendMessage($dest, $sujet, $corps);
                 }
                 

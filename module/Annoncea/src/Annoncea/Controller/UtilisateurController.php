@@ -215,7 +215,7 @@ class UtilisateurController extends AbstractActionController
                                                         <br>
                                                     </p>
 
-                                                    <a href="http://localhost/Annoncea/ProjetTut/public/" class="myButton">Acceder à Annoncea</a>
+                                                    <a href=http://'.$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_BASE'].' class="myButton">Acceder à Annoncea</a>
                                                 </div>
                                             </div><!--#global--></td>
                                         </tr>

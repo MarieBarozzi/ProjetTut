@@ -80,7 +80,6 @@ class AnnonceTable
           
         }
         
-        
 		/*
 		 * Si ce n'était pas un auto-increment
 		 if ($this->getAnnonce($id_annonce)) {

@@ -46,14 +46,17 @@ class Annonce
     }
     
     
-        
+    //toujours appelée     
     public function pertinent($champRecherche, $titreUniquement) {
 
         $pertinenceTotale = 100;
 
         if($champRecherche != null) {
             $pertinenceTotale = 0;
-                
+            
+            //iconv enlève les accents et remp par des caracteres normaux mais é = 'e
+            //strtolwer met tout en minuscule
+            //ce qui n'est pas a-z0-9 et espace remplace par rien = supp     
             $titre = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $this->titre)));
             $desc = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $this->descr)));
             $rech = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $champRecherche)));
@@ -61,20 +64,27 @@ class Annonce
             $motsRecherche = explode(" ", $rech);
             $motsTitre = explode(" ", $titre);
             $motsDesc = explode(" ", $desc);
-                
+              
+             
+            //pour chaque mot de la recherche    
             foreach ($motsRecherche as $recherche) {
-                //recherche dans le titre
+               //initialise à zéro pour chercher le max (valeur tjs positives)
                 $maxSim = 0;
-                    
+                //pour chaque mot du titre    
                 foreach ($motsTitre as $mot){
+                    //si pourcentage de similarité suffisant / si on a trouvé un mot suffisament pertinent dans le titre
                     if($maxSim > 90)
+                    //on arrete de parcourir le titre
                         break; 
-                        similar_text($mot, $recherche, $sim);
-                        if($sim > $maxSim){
-                            $maxSim = $sim;
-                        }
+                    //on calcule la pertinence    
+                    similar_text($mot, $recherche, $sim);
+                    if($sim > $maxSim){
+                        $maxSim = $sim;
                     }
+               }//on a parcouru tous les mots du titre par rapport à un mot de la recherche OU on a trouvé un mot suffisament pertinent avant (break)
 
+               
+               //si pas titre uniquement 
                 if(!$titreUniquement){
                     //recherche dans la description 
                     foreach ($motsDesc as $mot){
@@ -84,15 +94,19 @@ class Annonce
                         if($sim > $maxSim){
                             $maxSim = $sim;
                         }
-                    }     
+                    }//on a parcouru tous les mots de la description par rapport à un mot de la recherche OU on a trouvé un mot suffisament pertinent avant (break)      
                 }
                 
-                $pertinenceTotale += $maxSim;
-            }
+                //une vaaleur de maxSim à chaque passage dans la boucle (pour chaque mot du champ de recherche) 
+                //pourcentage max de similarite du mot comparé à tous les mots du titre et de la description
                 
-            $pertinenceTotale /= count($champRecherche);
+                $pertinenceTotale += $maxSim; //somme des pertinences de chaque mot de la recherche
+            
+            }//on a parcouru tous les mots du champ de recherche
+                
+            $pertinenceTotale /= count($champRecherche); //divise la pertinence de chaque mot de la recherche par le nombre de mots du champ de recherche
       }
-
+    //on affichera l'annonce/enverra un mail si le score final est suppérieur à 80 
      return ($pertinenceTotale > 80); 
     }
 
