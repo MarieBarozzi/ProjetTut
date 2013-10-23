@@ -57,17 +57,18 @@ class Annonce
             //iconv enlève les accents et remp par des caracteres normaux mais é = 'e
             //strtolwer met tout en minuscule
             //ce qui n'est pas a-z0-9 et espace remplace par rien = supp     
-            $titre = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $this->titre)));
-            $desc = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $this->descr)));
-            $rech = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $champRecherche)));
+            $titre = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', trim($this->titre))));
+            $desc = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', trim($this->descr))));
+            $rech = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', trim($champRecherche))));
                 
-            $motsRecherche = explode(" ", $rech);
-            $motsTitre = explode(" ", $titre);
-            $motsDesc = explode(" ", $desc);
+            $motsRecherche = preg_split("# +#", $rech);
+            $motsTitre = preg_split("# +#", $titre);
+            $motsDesc = preg_split("# +#", $desc);
               
              
             //pour chaque mot de la recherche    
             foreach ($motsRecherche as $recherche) {
+                
                //initialise à zéro pour chercher le max (valeur tjs positives)
                 $maxSim = 0;
                 //pour chaque mot du titre    
@@ -96,17 +97,16 @@ class Annonce
                         }
                     }//on a parcouru tous les mots de la description par rapport à un mot de la recherche OU on a trouvé un mot suffisament pertinent avant (break)      
                 }
-                
+                   
                 //une vaaleur de maxSim à chaque passage dans la boucle (pour chaque mot du champ de recherche) 
                 //pourcentage max de similarite du mot comparé à tous les mots du titre et de la description
-                
                 $pertinenceTotale += $maxSim; //somme des pertinences de chaque mot de la recherche
-            
             }//on a parcouru tous les mots du champ de recherche
                 
-            $pertinenceTotale /= count($champRecherche); //divise la pertinence de chaque mot de la recherche par le nombre de mots du champ de recherche
+            $pertinenceTotale /= count($motsRecherche); //divise la pertinence de chaque mot de la recherche par le nombre de mots du champ de recherche
       }
-    //on affichera l'annonce/enverra un mail si le score final est suppérieur à 80 
+    //on affichera l'annonce/enverra un mail si le score final est suppérieur à 80
+
      return ($pertinenceTotale > 80); 
     }
 
