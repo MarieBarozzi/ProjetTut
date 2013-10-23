@@ -49,28 +49,26 @@ class Annonce
         
     public function pertinent($champRecherche, $titreUniquement) {
 
-            $pertinenceTotale = 100;
+        $pertinenceTotale = 100;
 
-            if($champRecherche != null) {
-                $pertinenceTotale = 0;
-                $pertinenceTitre = 0;
-                $pertinenceDesc = 0;
+        if($champRecherche != null) {
+            $pertinenceTotale = 0;
                 
-                $titre = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $this->titre)));
-                $desc = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $this->descr)));
-                $rech = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $champRecherche)));
+            $titre = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $this->titre)));
+            $desc = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $this->descr)));
+            $rech = preg_replace('#[^a-z0-9 ]#', '', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $champRecherche)));
                 
-                $motsRecherche = explode(" ", $rech);
-                $motsTitre = explode(" ", $titre);
-                $motsDesc = explode(" ", $desc);
+            $motsRecherche = explode(" ", $rech);
+            $motsTitre = explode(" ", $titre);
+            $motsDesc = explode(" ", $desc);
                 
-                foreach ($motsRecherche as $recherche) {
-                    //recherche dans le titre
-                    $maxSim = 0;
+            foreach ($motsRecherche as $recherche) {
+                //recherche dans le titre
+                $maxSim = 0;
                     
-                    foreach ($motsTitre as $mot){
-                        if($maxSim > 90)
-                            break; 
+                foreach ($motsTitre as $mot){
+                    if($maxSim > 90)
+                        break; 
                         similar_text($mot, $recherche, $sim);
                         if($sim > $maxSim){
                             $maxSim = $sim;
@@ -79,26 +77,23 @@ class Annonce
 
                 if(!$titreUniquement){
                     //recherche dans la description 
-                    
                     foreach ($motsDesc as $mot){
-                         if($maxSim > 90)
+                        if($maxSim > 90)
                             break;   
                         similar_text($mot, $recherche, $sim);
                         if($sim > $maxSim){
                             $maxSim = $sim;
                         }
-                    }
-          
-                    
+                    }     
                 }
                 
                 $pertinenceTotale += $maxSim;
-                }
-                
-                $pertinenceTotale /= count($champRecherche);
             }
+                
+            $pertinenceTotale /= count($champRecherche);
+      }
 
-        return ($pertinenceTotale > 80); 
+     return ($pertinenceTotale > 80); 
     }
 
     //quand on créer ou edit et qu'on veut envoyer le mail

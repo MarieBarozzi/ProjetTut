@@ -343,6 +343,8 @@ class UtilisateurController extends AbstractActionController
             if ($del == 'Oui') {
                 $mail = $auth->getIdentity();
                 BDD::getUtilisateurTable($this->serviceLocator)->deleteUtilisateur($mail);
+                $auth = new AuthenticationService();
+                $auth->clearIdentity();
                 $retour['co'] = false;
 
             }
